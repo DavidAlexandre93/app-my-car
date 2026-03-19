@@ -565,12 +565,11 @@ O sistema poderá trabalhar com diferentes tipos de notificação:
 
 ## Diferenciais do projeto
 
-* acompanhamento do serviço em tempo real;
-* centralização do histórico do veículo;
-* comunicação mais clara entre cliente e oficina;
-* estímulo à recorrência com lembretes de revisão;
-* aumento de oportunidades de venda com catálogo e promoções;
-* proposta moderna e escalável para oficinas mecânicas.
+* aumenta a confiança do cliente;
+* melhora a comunicação entre oficina e consumidor;
+* gera mais retorno com promoções e revisões recorrentes;
+* organiza o histórico do veículo;
+* digitaliza o processo de orçamento e acompanhamento.
 
 ---
 
