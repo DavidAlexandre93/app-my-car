@@ -350,6 +350,36 @@ export const mockDashboardData: DashboardData = {
       read: true,
     },
   ],
+  reminderCadences: [
+    {
+      id: 'rem-1',
+      title: 'Lembrete trimestral padrão',
+      cadence: 'A cada 3 meses',
+      trigger: 'Data da última revisão concluída',
+      description: 'Envia push lembrando o cliente sobre revisão preventiva e novas campanhas relacionadas.',
+    },
+    {
+      id: 'rem-2',
+      title: 'Campanha pré-viagem',
+      cadence: '15 dias antes de feriados prolongados',
+      trigger: 'Calendário promocional da oficina',
+      description: 'Ativa campanhas sazonais com foco em revisão, pneus e alinhamento.',
+    },
+  ],
+  adminWorkspace: [
+    {
+      id: 'workspace-1',
+      owner: 'Marketing',
+      title: 'Central de campanhas promocionais',
+      description: 'Planeja disparos segmentados de troca de óleo, pneus, revisão preventiva e campanhas sazonais.',
+    },
+    {
+      id: 'workspace-2',
+      owner: 'Atendimento',
+      title: 'Fila de notificações transacionais',
+      description: 'Controla status do serviço, retirada do veículo e lembretes automáticos de revisão.',
+    },
+  ],
   screenSuggestions: [
     {
       id: 'screen-1',

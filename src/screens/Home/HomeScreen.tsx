@@ -3,28 +3,7 @@ import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from
 import { SectionCard } from '../../components/SectionCard';
 import { fetchDashboardData } from '../../services/api/mockApi';
 import { colors } from '../../utils/colors';
-import {
-  ActiveService,
-  AdminTask,
-  AppModule,
-  AppNotification,
-  CatalogItem,
-  DashboardData,
-  DomainEntity,
-  FeatureHighlight,
-  AppScreenSuggestion,
-  KPI,
-  AdminWorkspaceItem,
-  AppNotification,
-  CatalogItem,
-  DashboardData,
-  Promotion,
-  ReminderCadence,
-  ServiceHistoryItem,
-  ServiceStatusStep,
-  Shortcut,
-  Vehicle,
-} from '../../types';
+import { AppModule, AppScreenSuggestion, DashboardData, DomainEntity, KPI, Promotion, ServiceHistoryItem, ServiceStatusStep } from '../../types';
 
 export function HomeScreen() {
   const [data, setData] = useState<DashboardData | null>(null);
@@ -343,6 +322,23 @@ const styles = StyleSheet.create({
     gap: 10,
     backgroundColor: colors.surfaceAlt,
   },
+  listItemTitle: {
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: '700',
+    flex: 1,
+  },
+  listItemDescription: {
+    color: colors.textMuted,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  metaLabel: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
   architectureTag: {
     color: colors.primary,
     fontSize: 12,
@@ -415,6 +411,16 @@ const styles = StyleSheet.create({
     color: colors.accent,
     fontSize: 12,
     fontWeight: '600',
+  },
+  kpiValue: {
+    color: colors.primary,
+    fontSize: 24,
+    fontWeight: '800',
+  },
+  kpiLabel: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 18,
   },
   kpiCard: {
     flexGrow: 1,

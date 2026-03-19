@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LoginScreen } from './src/screens/Login';
 import { RegisterScreen } from './src/screens/Register';
+import { NotificationsScreen } from './src/screens/Notifications';
 import { ProfileScreen } from './src/screens/Profile';
 import { VehiclesScreen } from './src/screens/Vehicles';
 import { SectionCard } from './src/components/SectionCard';
@@ -91,6 +92,7 @@ export default function App() {
                 <Text style={styles.outlineButtonText}>Sair</Text>
               </Pressable>
             </View>
+            <NotificationsScreen />
             <ProfileScreen />
             <VehiclesScreen />
           </>
