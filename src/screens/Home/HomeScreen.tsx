@@ -13,12 +13,14 @@ import { colors } from '../../utils/colors';
 import {
   ActiveService,
   AdminTask,
+  AdminWorkspaceItem,
   AppNotification,
   CatalogItem,
   DashboardData,
   FeatureHighlight,
   KPI,
   Promotion,
+  ReminderCadence,
   ServiceHistoryItem,
   ServiceStatusStep,
   Shortcut,
@@ -69,9 +71,9 @@ export function HomeScreen() {
     <View style={styles.container}>
       <View style={styles.hero}>
         <Text style={styles.brand}>Impacto Prime AutoCare</Text>
-        <Text style={styles.heroTitle}>Demo do app da unidade Taboão da Serra.</Text>
+        <Text style={styles.heroTitle}>Aplicativo do cliente + operação administrativa integrada.</Text>
         <Text style={styles.heroText}>
-          Experiência digital para acompanhar serviços, receber promoções, solicitar orçamentos e manter o histórico do veículo sempre acessível.
+          Uma visão de produto para aproximar oficina e cliente com notificações, status em tempo real, orçamento digital, histórico e lembretes recorrentes de revisão.
         </Text>
         <View style={styles.heroBadgeRow}>
           <View style={styles.heroBadge}>
@@ -85,6 +87,18 @@ export function HomeScreen() {
         </View>
         <Text style={styles.heroFootnote}>{data.customer.unit} • {data.customer.memberSince}</Text>
       </View>
+
+      <SectionCard title="Objetivo do aplicativo" subtitle="Escopo consolidado para cliente e empresa">
+        <View style={styles.objectiveGrid}>
+          {data.objectives.map((objective) => (
+            <View key={objective.id} style={styles.objectiveCard}>
+              <Text style={styles.objectiveTag}>{objective.audience}</Text>
+              <Text style={styles.listItemTitle}>{objective.title}</Text>
+              <Text style={styles.listItemDescription}>{objective.description}</Text>
+            </View>
+          ))}
+        </View>
+      </SectionCard>
 
       <SectionCard title="MVP do demo" subtitle="Escopo essencial para apresentar valor rapidamente">
         <View style={styles.kpiGrid}>
@@ -115,7 +129,6 @@ export function HomeScreen() {
           </View>
         </View>
       </SectionCard>
-
 
       <SectionCard title="Stack solicitado para este projeto" subtitle="Base tecnológica escolhida para mobile, backend, autenticação e painel web">
         <View style={styles.stack}>
@@ -286,8 +299,32 @@ export function HomeScreen() {
         </View>
       </SectionCard>
 
+      <SectionCard title="Lembretes periódicos" subtitle="Automação de revisão a cada 3 meses e reengajamento">
+        <View style={styles.stack}>
+          {data.reminderCadences.map((reminder: ReminderCadence) => (
+            <View key={reminder.id} style={styles.reminderCard}>
+              <View style={styles.vehicleHeader}>
+                <Text style={styles.listItemTitle}>{reminder.title}</Text>
+                <Text style={styles.highlight}>{reminder.cadence}</Text>
+              </View>
+              <Text style={styles.listItemDescription}>{reminder.description}</Text>
+              <Text style={styles.notificationDate}>{reminder.trigger}</Text>
+            </View>
+          ))}
+        </View>
+      </SectionCard>
+
       <SectionCard title="Painel administrativo" subtitle="Área web ou interna conectada ao mesmo backend">
         <View style={styles.stack}>
+          <View style={styles.adminGrid}>
+            {data.adminWorkspace.map((item: AdminWorkspaceItem) => (
+              <View key={item.id} style={styles.adminModuleCard}>
+                <Text style={styles.objectiveTag}>{item.owner}</Text>
+                <Text style={styles.listItemTitle}>{item.title}</Text>
+                <Text style={styles.listItemDescription}>{item.description}</Text>
+              </View>
+            ))}
+          </View>
           {data.adminTasks.map((task: AdminTask) => (
             <View key={task.id} style={styles.adminTaskCard}>
               <View style={styles.vehicleHeader}>
@@ -366,6 +403,24 @@ const styles = StyleSheet.create({
   heroFootnote: {
     color: colors.accent,
     fontSize: 12,
+  },
+  objectiveGrid: {
+    gap: 12,
+  },
+  objectiveCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  objectiveTag: {
+    color: colors.info,
+    fontSize: 11,
+    fontWeight: '800',
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
   },
   kpiGrid: {
     flexDirection: 'row',
@@ -638,6 +693,25 @@ const styles = StyleSheet.create({
     color: colors.accent,
     fontSize: 12,
     marginTop: 4,
+  },
+  reminderCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  adminGrid: {
+    gap: 12,
+  },
+  adminModuleCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   adminTaskCard: {
     backgroundColor: colors.surfaceAlt,

@@ -1,3 +1,25 @@
+export type AppObjective = {
+  id: string;
+  audience: string;
+  title: string;
+  description: string;
+};
+
+export type ReminderCadence = {
+  id: string;
+  title: string;
+  cadence: string;
+  trigger: string;
+  description: string;
+};
+
+export type AdminWorkspaceItem = {
+  id: string;
+  owner: string;
+  title: string;
+  description: string;
+};
+
 export type Vehicle = {
   id: string;
   plate: string;
@@ -93,6 +115,7 @@ export type KPI = {
 };
 
 export type DashboardData = {
+  objectives: AppObjective[];
   customer: {
     name: string;
     unit: string;
@@ -108,5 +131,7 @@ export type DashboardData = {
   catalog: CatalogItem[];
   history: ServiceHistoryItem[];
   notifications: AppNotification[];
+  reminderCadences: ReminderCadence[];
+  adminWorkspace: AdminWorkspaceItem[];
   adminTasks: AdminTask[];
 };
