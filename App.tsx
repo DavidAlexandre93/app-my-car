@@ -5,6 +5,7 @@ import { LoginScreen } from './src/screens/Login';
 import { RegisterScreen } from './src/screens/Register';
 import { SectionCard } from './src/components/SectionCard';
 import { HomeScreen } from './src/screens/Home';
+import { QuoteRequestScreen } from './src/screens/QuoteRequest';
 import { useAuthStore } from './src/store';
 import { colors } from './src/utils/colors';
 
@@ -91,6 +92,7 @@ export default function App() {
               </Pressable>
             </View>
             <HomeScreen customerName={currentUser.name} />
+            <QuoteRequestScreen customerName={currentUser.name} vehicles={currentUser.vehicles} />
           </>
         )}
       </ScrollView>

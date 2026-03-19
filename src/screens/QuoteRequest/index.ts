@@ -1,1 +1,1 @@
-export const QuoteRequestScreen = 'QuoteRequest';
+export { QuoteRequestScreen, QuoteRequestScreenRoute } from './QuoteRequestScreen';

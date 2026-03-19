@@ -19,6 +19,6 @@ export const submitQuoteRequest = async (payload: QuoteRequest) => {
   return {
     success: true,
     protocol: `IP-${payload.vehicleId.toUpperCase()}-0326`,
-    message: `Pedido registrado e enviado ao administrador para análise: ${requestedItems}.`,
+    message: `Pedido registrado no sistema e enviado ao administrador para análise e retorno ao cliente: ${requestedItems}.`,
   };
 };
