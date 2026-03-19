@@ -6,6 +6,13 @@ import { colors } from '../../utils/colors';
 import {
   ActiveService,
   AdminTask,
+  AppModule,
+  AppNotification,
+  CatalogItem,
+  DashboardData,
+  DomainEntity,
+  FeatureHighlight,
+  KPI,
   AdminWorkspaceItem,
   AppNotification,
   CatalogItem,
@@ -89,13 +96,50 @@ export function HomeScreen() {
         </View>
       </View>
 
-      <SectionCard title="Atalhos rápidos" subtitle="Acesse as principais funções da tela inicial.">
-        <View style={styles.shortcutsGrid}>
-          {data.shortcuts.map((shortcut: Shortcut) => (
-            <Pressable key={shortcut.id} style={styles.shortcutCard}>
-              <Text style={styles.shortcutLabel}>{shortcut.label}</Text>
-              <Text style={styles.shortcutDescription}>{shortcut.description}</Text>
-            </Pressable>
+      <SectionCard title="Estrutura técnica sugerida" subtitle="Módulos funcionais recomendados para escalar o app">
+        <View style={styles.stack}>
+          {data.appModules.map((module: AppModule) => (
+            <View key={module.id} style={styles.architectureCard}>
+              <View style={styles.vehicleHeader}>
+                <Text style={styles.listItemTitle}>{module.name}</Text>
+                <Text style={styles.architectureTag}>Módulo</Text>
+              </View>
+              <Text style={styles.listItemDescription}>{module.description}</Text>
+              <View style={styles.responsibilityRow}>
+                {module.responsibilities.map((responsibility) => (
+                  <View key={responsibility} style={styles.responsibilityChip}>
+                    <Text style={styles.responsibilityText}>{responsibility}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          ))}
+        </View>
+      </SectionCard>
+
+      <SectionCard title="Entidades principais" subtitle="Base de domínio sugerida para API, store e persistência">
+        <View style={styles.stack}>
+          {data.domainEntities.map((entity: DomainEntity) => (
+            <View key={entity.id} style={styles.architectureCard}>
+              <View style={styles.vehicleHeader}>
+                <Text style={styles.listItemTitle}>{entity.name}</Text>
+                <Text style={styles.architectureTag}>Entidade</Text>
+              </View>
+              <Text style={styles.listItemDescription}>{entity.description}</Text>
+              <Text style={styles.metaLabel}>Campos-chave</Text>
+              <Text style={styles.entityFields}>{entity.keyFields.join(' • ')}</Text>
+            </View>
+          ))}
+        </View>
+      </SectionCard>
+
+      <SectionCard title="MVP do demo" subtitle="Escopo essencial para apresentar valor rapidamente">
+        <View style={styles.kpiGrid}>
+          {data.kpis.map((item: KPI) => (
+            <View key={item.id} style={styles.kpiCard}>
+              <Text style={styles.kpiValue}>{item.value}</Text>
+              <Text style={styles.kpiLabel}>{item.label}</Text>
+            </View>
           ))}
         </View>
       </SectionCard>
@@ -272,7 +316,44 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  shortcutsGrid: {
+  architectureCard: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 18,
+    padding: 16,
+    gap: 10,
+    backgroundColor: colors.surfaceAlt,
+  },
+  architectureTag: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
+  responsibilityRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  responsibilityChip: {
+    borderRadius: 999,
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  responsibilityText: {
+    color: colors.text,
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  entityFields: {
+    color: colors.text,
+    fontSize: 13,
+    lineHeight: 20,
+  },
+  kpiGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 12,
