@@ -1,1 +1,1 @@
-export const NotificationsScreen = 'Notifications';
+export { NotificationsScreen } from './NotificationsScreen';

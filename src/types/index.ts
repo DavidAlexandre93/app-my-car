@@ -1,3 +1,25 @@
+export type AppObjective = {
+  id: string;
+  audience: string;
+  title: string;
+  description: string;
+};
+
+export type ReminderCadence = {
+  id: string;
+  title: string;
+  cadence: string;
+  trigger: string;
+  description: string;
+};
+
+export type AdminWorkspaceItem = {
+  id: string;
+  owner: string;
+  title: string;
+  description: string;
+};
+
 export type Vehicle = {
   id: string;
   plate: string;
@@ -7,6 +29,35 @@ export type Vehicle = {
   mileage: number;
   notes: string;
   statusLabel: string;
+};
+
+export type CustomerProfile = {
+  name: string;
+  phone: string;
+  email: string;
+};
+
+export type AuthUser = CustomerProfile & {
+  id: string;
+  password: string;
+  vehicles: Vehicle[];
+};
+
+export type LoginPayload = {
+  email: string;
+  password: string;
+};
+
+export type RegisterPayload = CustomerProfile & {
+  password: string;
+};
+
+export type VehiclePayload = {
+  plate: string;
+  brand: string;
+  model: string;
+  year: string;
+  mileage: string;
 };
 
 export type ServiceStatusStep = {
@@ -52,6 +103,12 @@ export type ServiceHistoryItem = {
   amount: string;
 };
 
+export type NotificationDetails = {
+  finalAmount?: string;
+  businessHours?: string;
+  technicianNotes?: string;
+};
+
 export type AppNotification = {
   id: string;
   type: 'promo' | 'service' | 'pickup' | 'revision' | 'quote';
@@ -59,6 +116,7 @@ export type AppNotification = {
   message: string;
   date: string;
   read: boolean;
+  details?: NotificationDetails;
 };
 
 export type QuoteCategory =
@@ -88,6 +146,14 @@ export type FeatureHighlight = {
   description: string;
 };
 
+export type FunctionalRequirement = {
+  id: string;
+  title: string;
+  description: string;
+  appArea: string;
+  status: 'Disponível no MVP' | 'Disponível na demo' | 'Fluxo administrativo';
+};
+
 export type AdminTask = {
   id: string;
   title: string;
@@ -101,7 +167,16 @@ export type KPI = {
   value: string;
 };
 
+export type UserFlow = {
+  id: string;
+  title: string;
+  summary: string;
+  steps: string[];
+  outcome: string;
+};
+
 export type DashboardData = {
+  objectives: AppObjective[];
   customer: {
     name: string;
     unit: string;
@@ -109,13 +184,19 @@ export type DashboardData = {
     memberSince: string;
   };
   kpis: KPI[];
+  appModules: AppModule[];
+  domainEntities: DomainEntity[];
   shortcuts: Shortcut[];
   featureHighlights: FeatureHighlight[];
+  requirements: FunctionalRequirement[];
   vehicles: Vehicle[];
   activeServices: ActiveService[];
   promotions: Promotion[];
   catalog: CatalogItem[];
   history: ServiceHistoryItem[];
   notifications: AppNotification[];
+  reminderCadences: ReminderCadence[];
+  adminWorkspace: AdminWorkspaceItem[];
   adminTasks: AdminTask[];
+  screenSuggestions: AppScreenSuggestion[];
 };
