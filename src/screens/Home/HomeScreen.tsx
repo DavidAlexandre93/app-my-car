@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { SectionCard } from '../../components/SectionCard';
+import { ServiceProgressTracker } from '../../components/ServiceProgressTracker';
 import { fetchDashboardData, submitQuoteRequest } from '../../services/api/mockApi';
 import { colors } from '../../utils/colors';
 import {
@@ -20,7 +21,6 @@ import {
   KPI,
   Promotion,
   ServiceHistoryItem,
-  ServiceStatusStep,
   Shortcut,
   Vehicle,
 } from '../../types';
@@ -185,24 +185,9 @@ export function HomeScreen() {
           <View style={styles.serviceSummary}>
             <Text style={styles.serviceBudget}>Orçamento atual: {service.budget}</Text>
             <Text style={styles.metaLabel}>{service.technician}</Text>
-            <Text style={styles.metaLabel}>Status em tempo real</Text>
+            <Text style={styles.metaLabel}>Timeline visual com barra de progresso para o demo</Text>
           </View>
-          <View style={styles.timeline}>
-            {service.steps.map((step: ServiceStatusStep) => (
-              <View key={step.label} style={styles.timelineItem}>
-                <View
-                  style={[
-                    styles.timelineDot,
-                    step.completed ? styles.timelineDotDone : undefined,
-                    step.current ? styles.timelineDotCurrent : undefined,
-                  ]}
-                />
-                <Text style={[styles.timelineText, step.current ? styles.timelineTextCurrent : undefined]}>
-                  {step.label}
-                </Text>
-              </View>
-            ))}
-          </View>
+          <ServiceProgressTracker service={service} />
         </SectionCard>
       ))}
 
@@ -487,42 +472,6 @@ const styles = StyleSheet.create({
   serviceBudget: {
     color: colors.accent,
     fontSize: 16,
-    fontWeight: '700',
-  },
-  timeline: {
-    gap: 10,
-    marginTop: 4,
-  },
-  timelineItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  timelineDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 999,
-    borderWidth: 2,
-    borderColor: colors.border,
-  },
-  timelineDotDone: {
-    backgroundColor: colors.success,
-    borderColor: colors.success,
-  },
-  timelineDotCurrent: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-    shadowColor: colors.primary,
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 0 },
-  },
-  timelineText: {
-    color: colors.textMuted,
-    fontSize: 14,
-  },
-  timelineTextCurrent: {
-    color: colors.text,
     fontWeight: '700',
   },
   listItem: {
