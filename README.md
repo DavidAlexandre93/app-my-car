@@ -274,16 +274,21 @@ Tela com dados do cliente e preferências.
 
 Além do aplicativo para o cliente, a solução prevê um painel administrativo para a oficina, com funcionalidades como:
 
-* cadastro e gerenciamento de clientes;
-* cadastro de veículos;
-* atualização do status dos serviços;
+* lista e gerenciamento de clientes;
+* lista de veículos vinculados aos clientes;
 * recebimento e gestão de solicitações de orçamento;
-* publicação de promoções;
-* envio de notificações;
-* gerenciamento do catálogo de pneus e peças;
-* consulta ao histórico de serviços.
+* atualização do status dos serviços;
+* cadastro e publicação de promoções;
+* envio de notificações operacionais e campanhas;
+* cadastro de pneus, peças e serviços;
+* consulta do histórico de serviços.
 
-Esse painel pode ser implementado como aplicação web em React.
+Para esta fase do demo, há duas opções válidas de entrega:
+
+1. **Web admin em React** para uso da equipe interna em desktop;
+2. **Área interna simplificada conectada ao mesmo backend**, reaproveitando a mesma modelagem de dados do app para acelerar a validação do fluxo operacional.
+
+A implementação atual do demo segue a segunda abordagem como vitrine funcional, mantendo compatibilidade com uma futura evolução para um painel web dedicado em React + Material UI.
 
 ---
 

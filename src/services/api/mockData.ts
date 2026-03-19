@@ -624,4 +624,57 @@ export const mockDashboardData: DashboardData = {
       status: 'Ativo',
     },
   ],
+  adminPanel: {
+    customers: [
+      { id: 'cust-1', name: 'Lucas Martins', contact: 'lucas@email.com • (11) 99800-1001', vehicles: 2, segment: 'Cliente recorrente' },
+      { id: 'cust-2', name: 'Fernanda Lima', contact: 'fernanda@email.com • (11) 99710-4567', vehicles: 1, segment: 'Lead pós-promoção' },
+      { id: 'cust-3', name: 'Ricardo Alves', contact: 'ricardo@email.com • (11) 99620-3344', vehicles: 3, segment: 'Frota familiar' },
+    ],
+    vehicles: [
+      { id: 'adm-veh-1', plate: 'BRA2E19', model: 'Jeep Compass Longitude 2021', owner: 'Lucas Martins', serviceStatus: 'Em execução' },
+      { id: 'adm-veh-2', plate: 'GOL9A45', model: 'Volkswagen Gol 1.6 MSI 2019', owner: 'Lucas Martins', serviceStatus: 'Revisão pendente' },
+      { id: 'adm-veh-3', plate: 'QXP4J82', model: 'Toyota Corolla XEi 2022', owner: 'Fernanda Lima', serviceStatus: 'Aguardando orçamento' },
+    ],
+    quoteRequests: [
+      { id: 'quote-1', customerName: 'Lucas Martins', vehicleLabel: 'Compass • BRA2E19', request: '4 pneus aro 18 + alinhamento + revisão preventiva', status: 'Novo' },
+      { id: 'quote-2', customerName: 'Fernanda Lima', vehicleLabel: 'Corolla • QXP4J82', request: 'Troca de bateria e scanner', status: 'Em análise' },
+      { id: 'quote-3', customerName: 'Ricardo Alves', vehicleLabel: 'Onix • HTR8M11', request: 'Pastilhas + discos dianteiros', status: 'Respondido' },
+    ],
+    serviceUpdates: [
+      { id: 'upd-1', vehicleLabel: 'Compass • BRA2E19', currentStage: 'Em execução', nextAction: 'Marcar como finalizado e disparar retirada' },
+      { id: 'upd-2', vehicleLabel: 'Corolla • QXP4J82', currentStage: 'Aguardando aprovação', nextAction: 'Enviar orçamento com validade de 48h' },
+      { id: 'upd-3', vehicleLabel: 'Gol • GOL9A45', currentStage: 'Revisão preventiva pendente', nextAction: 'Agendar contato automático em 3 dias' },
+    ],
+    promotions: [
+      {
+        id: 'admin-pro-1',
+        title: 'Campanha troca de óleo premium',
+        description: 'Oferta publicada no app e no painel interno com foco em revisão rápida.',
+        highlight: 'Ativa até 31 mar',
+        cta: 'Editar campanha',
+      },
+      {
+        id: 'admin-pro-2',
+        title: 'Semana do alinhamento',
+        description: 'Promoção preparada para disparo segmentado para clientes com revisão pendente.',
+        highlight: 'R$ 99,90',
+        cta: 'Publicar agora',
+      },
+    ],
+    notificationCampaigns: [
+      { id: 'camp-1', title: 'Veículo pronto para retirada', audience: 'Clientes com serviço finalizado', channel: 'Push + WhatsApp', status: 'Automático' },
+      { id: 'camp-2', title: 'Lembrete de revisão trimestral', audience: 'Base ativa 90 dias', channel: 'Push', status: 'Agendado' },
+      { id: 'camp-3', title: 'Promoção pneus premium', audience: 'SUVs e sedãs médios', channel: 'Push + e-mail', status: 'Rascunho' },
+    ],
+    catalogItems: [
+      { id: 'adm-cat-1', name: 'Pneu Pirelli Scorpion', category: 'Pneus', description: 'SKU interno habilitado para cotação e venda.', price: 'R$ 829,00', stock: '14 unidades' },
+      { id: 'adm-cat-2', name: 'Amortecedor Cofap Turbo Gas', category: 'Peças', description: 'Item com alerta de estoque mínimo.', price: 'R$ 389,00', stock: '5 unidades' },
+      { id: 'adm-cat-3', name: 'Kit revisão 10 mil km', category: 'Serviços', description: 'Pacote interno disponível para campanhas sazonais.', price: 'R$ 499,00', stock: 'Oferta ativa' },
+    ],
+    serviceHistory: [
+      { id: 'adm-his-1', vehicleId: 'adm-veh-1', title: 'Revisão 40 mil km', date: '05 fev 2026', details: 'Histórico completo consultável pelo admin e pelo cliente.', amount: 'R$ 1.120,00' },
+      { id: 'adm-his-2', vehicleId: 'adm-veh-2', title: 'Troca de bateria', date: '17 dez 2025', details: 'Registro sincronizado com observação da equipe técnica.', amount: 'R$ 580,00' },
+      { id: 'adm-his-3', vehicleId: 'adm-veh-3', title: 'Freios dianteiros', date: '11 jan 2026', details: 'Laudo e peças aplicadas disponíveis para consulta.', amount: 'R$ 760,00' },
+    ],
+  },
 };
