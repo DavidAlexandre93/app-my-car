@@ -2,6 +2,7 @@
   "expo": {
     "name": "Impacto Prime App",
     "slug": "impacto-prime-app",
+    "scheme": "impactoprimeapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
@@ -13,6 +14,11 @@
     ],
     "web": {
       "bundler": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c15bbf4a-6423-4579-b407-ab4020da5bfd"
+      }
     }
   }
 }

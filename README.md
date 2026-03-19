@@ -634,6 +634,17 @@ Depois, você pode abrir em:
 * Expo Go
 * navegador com `npm run web`
 
+### Configuração do Expo / EAS
+
+O projeto já está vinculado ao EAS com o `projectId` `c15bbf4a-6423-4579-b407-ab4020da5bfd` no `app.json`, então você não precisa rodar novamente o `eas init` para conectar este app ao painel do Expo.
+
+Se quiser publicar builds depois, use por exemplo:
+
+```bash
+npx eas build --platform android
+npx eas build --platform ios
+```
+
 ### Stack alvo do MVP
 
 Para seguir exatamente a stack pedida, a próxima etapa de implementação deve conectar esta interface a:
