@@ -115,6 +115,10 @@ export type NotificationDetails = {
   finalAmount?: string;
   businessHours?: string;
   technicianNotes?: string;
+  vehicleId?: string;
+  vehicleLabel?: string;
+  nextRevisionDate?: string;
+  protocol?: string;
 };
 
 export type AppNotification = {

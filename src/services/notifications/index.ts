@@ -41,6 +41,12 @@ export const pickupNotificationExample: PickupNotificationExample = {
 export const getPickupNotifications = (notifications: AppNotification[]) =>
   notifications.filter((notification) => notification.type === 'pickup');
 
+export const getRevisionNotifications = (notifications: AppNotification[]) =>
+  notifications.filter((notification) => notification.type === 'revision');
+
+export const getQuoteNotifications = (notifications: AppNotification[]) =>
+  notifications.filter((notification) => notification.type === 'quote');
+
 export type PromotionCampaignPlan = {
   id: string;
   title: string;

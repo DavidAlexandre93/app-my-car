@@ -21,6 +21,7 @@ O projeto foi idealizado como uma **demo funcional** de uma solução para ofici
 * [Estrutura do projeto](#estrutura-do-projeto)
 * [Modelagem inicial de entidades](#modelagem-inicial-de-entidades)
 * [Requisitos funcionais](#requisitos-funcionais)
+* [Especificação funcional detalhada](docs/requisitos-funcionais.md)
 * [Requisitos não funcionais](#requisitos-não-funcionais)
 * [Protótipo de jornadas](#protótipo-de-jornadas)
 * [Notificações do sistema](#notificações-do-sistema)
@@ -517,6 +518,8 @@ src/
 ## Requisitos funcionais
 
 Os requisitos funcionais definidos para o aplicativo são:
+
+> Documento complementar: consulte a [especificação funcional detalhada](docs/requisitos-funcionais.md) para regras de negócio e critérios de aceite.
 
 * **RF01:** o sistema deve permitir cadastro e login de clientes.
 * **RF02:** o sistema deve permitir cadastrar veículos vinculados ao cliente.
