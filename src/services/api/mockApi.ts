@@ -14,9 +14,11 @@ export const fetchDashboardData = async (): Promise<DashboardData> => {
 export const submitQuoteRequest = async (payload: QuoteRequest) => {
   await simulateDelay(700);
 
+  const requestedItems = payload.categories.join(', ');
+
   return {
     success: true,
     protocol: `IP-${payload.vehicleId.toUpperCase()}-0326`,
-    message: 'Solicitação enviada para a equipe da Impacto Prime.'
+    message: `Pedido registrado e enviado ao administrador para análise: ${requestedItems}.`,
   };
 };
