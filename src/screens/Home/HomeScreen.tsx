@@ -23,6 +23,7 @@ import {
   CatalogItem,
   DashboardData,
   Promotion,
+  QuoteCategory,
   ReminderCadence,
   ServiceHistoryItem,
   Shortcut,
@@ -30,16 +31,23 @@ import {
   Vehicle,
 } from '../../types';
 
-const parseHistoryDate = (value: string) => {
-  const [day, month, year] = value.split('/').map(Number);
-  return new Date(year, month - 1, day);
-};
-
-const formatVehicleLabel = (vehicle: Vehicle) => `${vehicle.brand} ${vehicle.model} • ${vehicle.plate}`;
+const quoteOptions: QuoteCategory[] = [
+  'pneus',
+  'peças',
+  'revisão',
+  'troca de óleo',
+  'freio',
+  'suspensão',
+  'outro serviço',
+];
 
 export function HomeScreen() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedQuoteOptions, setSelectedQuoteOptions] = useState<QuoteCategory[]>(['pneus', 'revisão']);
+  const [quoteDescription, setQuoteDescription] = useState('Preciso de orçamento para revisão preventiva e avaliação dos pneus do meu veículo.');
+  const [quoteFeedback, setQuoteFeedback] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchDashboardData()
@@ -49,52 +57,29 @@ export function HomeScreen() {
 
   const activeVehicle = useMemo(() => data?.vehicles[0], [data]);
 
-  const historyByVehicle = useMemo(() => {
-    if (!data) {
-      return [];
-    }
-
-    return data.vehicles
-      .map((vehicle) => {
-        const entries = data.history
-          .filter((entry) => entry.vehicleId === vehicle.id)
-          .sort((a, b) => parseHistoryDate(a.date).getTime() - parseHistoryDate(b.date).getTime());
-
-        return {
-          vehicle,
-          entries,
-          totalSpent: entries.reduce((sum, entry) => sum + Number(entry.amount.replace(/[^\d,]/g, '').replace('.', '').replace(',', '.')), 0),
-        };
-      })
-      .filter((group) => group.entries.length > 0);
-  }, [data]);
+  const toggleQuoteOption = (option: QuoteCategory) => {
+    setSelectedQuoteOptions((current) =>
+      current.includes(option)
+        ? current.filter((item) => item !== option)
+        : [...current, option],
+    );
+  };
 
   const handleSubmitQuote = async () => {
-    if (!activeVehicle) {
+    if (!activeVehicle || selectedQuoteOptions.length === 0) {
       return;
     }
 
-    return [
-      {
-        id: 'rec-1',
-        title: 'Revisão preventiva recomendada',
-        description: `${activeVehicle?.brand ?? 'Seu veículo'} ${activeVehicle?.model ?? ''} está próximo da revisão prevista em ${data.customer.nextRevision}.`,
-        tag: 'Prioridade alta',
-      },
-      {
-        id: 'rec-2',
-        title: 'Check-up de freios e suspensão',
-        description: 'Ideal para manter segurança e evitar desgaste irregular antes da próxima viagem.',
-        tag: 'Segurança',
-      },
-      {
-        id: 'rec-3',
-        title: 'Alinhamento e balanceamento',
-        description: 'Indicado para melhorar estabilidade, preservar pneus e reduzir consumo.',
-        tag: 'Conforto',
-      },
-    ];
-  }, [activeVehicle, data]);
+    setSubmitting(true);
+    const response = await submitQuoteRequest({
+      vehicleId: activeVehicle.id,
+      categories: selectedQuoteOptions,
+      description: quoteDescription,
+    });
+
+    setQuoteFeedback(`${response.message} Protocolo ${response.protocol}. O administrador receberá a solicitação, fará a análise e enviará o retorno ao cliente.`);
+    setSubmitting(false);
+  };
 
   if (loading || !data || !activeVehicle) {
     return (
@@ -289,20 +274,49 @@ export function HomeScreen() {
         </View>
       </SectionCard>
 
-      <SectionCard title="Solicitar orçamento" subtitle="Fluxo: cliente solicita → admin analisa → cliente recebe retorno">
+      <SectionCard title="Enviar orçamento para o administrador" subtitle="Cliente seleciona itens → sistema registra pedido → admin recebe e responde">
+        <Text style={styles.sectionHelper}>Selecione o que deseja incluir no pedido de orçamento:</Text>
+        <View style={styles.optionGrid}>
+          {quoteOptions.map((option) => {
+            const selected = selectedQuoteOptions.includes(option);
+
+            return (
+              <Pressable
+                key={option}
+                onPress={() => toggleQuoteOption(option)}
+                style={[styles.optionChip, selected ? styles.optionChipSelected : undefined]}
+              >
+                <Text style={[styles.optionChipText, selected ? styles.optionChipTextSelected : undefined]}>
+                  {option}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
         <TextInput
           value={quoteDescription}
           onChangeText={setQuoteDescription}
           multiline
-          placeholder="Descreva o item ou serviço desejado"
+          placeholder="Descreva detalhes do pedido para análise do administrador"
           placeholderTextColor={colors.textMuted}
           style={styles.input}
         />
-        <Pressable style={styles.primaryButton} onPress={handleSubmitQuote} disabled={submitting}>
+        <View style={styles.flowCard}>
+          <Text style={styles.flowTitle}>Fluxo operacional</Text>
+          <Text style={styles.flowText}>Cliente solicita orçamento → sistema registra pedido → admin recebe → admin analisa → responde orçamento → cliente recebe notificação</Text>
+        </View>
+        <Pressable
+          style={[styles.primaryButton, selectedQuoteOptions.length === 0 ? styles.primaryButtonDisabled : undefined]}
+          onPress={handleSubmitQuote}
+          disabled={submitting || selectedQuoteOptions.length === 0}
+        >
           <Text style={styles.primaryButtonText}>
-            {submitting ? 'Enviando...' : 'Enviar solicitação'}
+            {submitting ? 'Enviando...' : 'Enviar orçamento'}
           </Text>
         </Pressable>
+        {selectedQuoteOptions.length === 0 ? (
+          <Text style={styles.warningText}>Selecione ao menos uma opção para enviar a solicitação ao administrador.</Text>
+        ) : null}
         {quoteFeedback ? <Text style={styles.feedback}>{quoteFeedback}</Text> : null}
       </SectionCard>
 
@@ -803,28 +817,91 @@ const styles = StyleSheet.create({
     gap: 12,
     alignItems: 'flex-start',
   },
-  historySummaryBadge: {
-    minWidth: 120,
-    borderRadius: 16,
-    backgroundColor: colors.surface,
+  catalogPrice: {
+    color: colors.primary,
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  sectionHelper: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  optionGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+  },
+  optionChip: {
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surfaceAlt,
+  },
+  optionChipSelected: {
+    borderColor: colors.primary,
+    backgroundColor: colors.primaryStrong,
+  },
+  optionChipText: {
+    color: colors.textMuted,
+    fontSize: 13,
+    fontWeight: '700',
+    textTransform: 'capitalize',
+  },
+  optionChipTextSelected: {
+    color: colors.primary,
+  },
+  input: {
+    minHeight: 110,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: colors.border,
     paddingHorizontal: 12,
     paddingVertical: 10,
     gap: 2,
   },
-  historySummaryLabel: {
-    color: colors.textMuted,
-    fontSize: 11,
-    textTransform: 'uppercase',
+  flowCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 18,
+    padding: 14,
+    gap: 6,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
-  historySummaryValue: {
-    color: colors.accent,
+  flowTitle: {
+    color: colors.text,
     fontSize: 14,
+    fontWeight: '700',
+  },
+  flowText: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 20,
+  },
+  primaryButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 18,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  primaryButtonDisabled: {
+    opacity: 0.45,
+  },
+  primaryButtonText: {
+    color: '#171717',
     fontWeight: '800',
   },
-  historyTimeline: {
-    gap: 2,
+  warningText: {
+    color: colors.warning,
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  feedback: {
+    color: colors.success,
+    fontSize: 13,
+    lineHeight: 18,
   },
   historyTimelineItem: {
     flexDirection: 'row',

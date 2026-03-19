@@ -119,9 +119,18 @@ export type AppNotification = {
   details?: NotificationDetails;
 };
 
+export type QuoteCategory =
+  | 'pneus'
+  | 'peças'
+  | 'revisão'
+  | 'troca de óleo'
+  | 'freio'
+  | 'suspensão'
+  | 'outro serviço';
+
 export type QuoteRequest = {
   vehicleId: string;
-  type: string;
+  categories: QuoteCategory[];
   description: string;
 };
 
