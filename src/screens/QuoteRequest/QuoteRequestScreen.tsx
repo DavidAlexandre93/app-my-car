@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SectionCard } from '../../components/SectionCard';
-import { submitQuoteRequest } from '../../services/api/mockApi';
-import { QuoteCategory, Vehicle } from '../../types';
+import { fetchDashboardData, submitQuoteRequest } from '../../services/api/mockApi';
+import { DashboardData, QuoteCategory, Vehicle } from '../../types';
 import { colors } from '../../utils/colors';
 
 type QuoteRequestScreenProps = {
@@ -72,11 +72,16 @@ export function QuoteRequestScreen({ customerName, vehicles }: QuoteRequestScree
   const [submitting, setSubmitting] = useState(false);
   const [feedback, setFeedback] = useState('Selecione o veículo e os itens desejados para enviar o orçamento ao administrador.');
   const [protocol, setProtocol] = useState<string | null>(null);
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
 
   const selectedVehicle = useMemo(
     () => vehicles.find((vehicle) => vehicle.id === selectedVehicleId) ?? vehicles[0],
     [selectedVehicleId, vehicles],
   );
+
+  useEffect(() => {
+    fetchDashboardData().then(setDashboardData);
+  }, []);
 
   const flow = useMemo(() => flowSteps(selectedCategories, protocol ?? undefined), [protocol, selectedCategories]);
 
@@ -110,13 +115,19 @@ export function QuoteRequestScreen({ customerName, vehicles }: QuoteRequestScree
     }
 
     setSubmitting(true);
-    const response = await submitQuoteRequest({
-      vehicleId: selectedVehicle.id,
-      categories: selectedCategories,
-      description: description.trim() || 'Cliente solicita retorno do administrador com orçamento detalhado.',
-    });
+    const response = await submitQuoteRequest(
+      {
+        vehicleId: selectedVehicle.id,
+        categories: selectedCategories,
+        description: description.trim() || 'Cliente solicita retorno do administrador com orçamento detalhado.',
+      },
+      {
+        customerName,
+      },
+    );
     setProtocol(response.protocol);
     setFeedback(response.message);
+    setDashboardData(await fetchDashboardData());
     setSubmitting(false);
   };
 
@@ -215,6 +226,21 @@ export function QuoteRequestScreen({ customerName, vehicles }: QuoteRequestScree
         <Text style={styles.panelMeta}>Próxima ação: analisar disponibilidade e responder orçamento ao cliente.</Text>
       </View>
 
+      <View style={styles.adminQueueCard}>
+        <Text style={styles.panelTitle}>Fila administrativa atual</Text>
+        <Text style={styles.panelMeta}>Pedidos em aberto: {dashboardData?.adminPanel.quoteRequests.length ?? 0}</Text>
+        <View style={styles.queueList}>
+          {(dashboardData?.adminPanel.quoteRequests ?? []).slice(0, 3).map((request) => (
+            <View key={request.id} style={styles.queueItem}>
+              <Text style={styles.queueTitle}>{request.customerName}</Text>
+              <Text style={styles.queueMeta}>{request.vehicleLabel}</Text>
+              <Text style={styles.queueRequest}>{request.request}</Text>
+              <Text style={styles.queueStatus}>{request.status}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+
       <View style={styles.notificationCard}>
         <Text style={styles.panelTitle}>Notificação esperada para o cliente</Text>
         <Text style={styles.notificationText}>
@@ -258,26 +284,27 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   vehicleCard: {
-    backgroundColor: colors.surfaceAlt,
     borderRadius: 18,
     borderWidth: 1,
     borderColor: colors.border,
+    backgroundColor: colors.surfaceAlt,
     padding: 14,
     gap: 4,
   },
   vehicleCardActive: {
-    borderColor: colors.primary,
     backgroundColor: '#2B2412',
+    borderColor: colors.primary,
   },
   vehicleTitle: {
     color: colors.text,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   vehicleTitleActive: {
     color: colors.primary,
   },
   vehicleMeta: {
     color: colors.textMuted,
+    fontSize: 12,
   },
   categoriesGrid: {
     flexDirection: 'row',
@@ -386,6 +413,42 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     padding: 16,
     gap: 8,
+  },
+  adminQueueCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: 16,
+    gap: 10,
+  },
+  queueList: {
+    gap: 10,
+  },
+  queueItem: {
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: 14,
+    gap: 4,
+  },
+  queueTitle: {
+    color: colors.text,
+    fontWeight: '800',
+  },
+  queueMeta: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  queueRequest: {
+    color: colors.textMuted,
+    lineHeight: 20,
+  },
+  queueStatus: {
+    color: colors.success,
+    fontWeight: '700',
   },
   panelTitle: {
     color: colors.text,

@@ -59,11 +59,16 @@ export function CatalogScreen({ items, vehicle }: CatalogScreenProps) {
 
   const handleQuoteRequest = async (item: CatalogItem) => {
     setSelectedItemId(item.id);
-    const response = await submitQuoteRequest({
-      vehicleId: vehicle.id,
-      categories: [normalizeCategory(item.category)],
-      description: `Solicito orçamento para ${item.name}. ${item.description}`,
-    });
+    const response = await submitQuoteRequest(
+      {
+        vehicleId: vehicle.id,
+        categories: [normalizeCategory(item.category)],
+        description: `Solicito orçamento para ${item.name}. ${item.description}`,
+      },
+      {
+        sourceLabel: `Catálogo • ${item.name}`,
+      },
+    );
 
     setFeedback(`${item.name}: ${response.message} Protocolo ${response.protocol}.`);
     setSelectedItemId(null);

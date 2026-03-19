@@ -5,6 +5,8 @@ import { fetchDashboardData } from '../../services/api/mockApi';
 import {
   getPickupNotifications,
   getPromotionNotifications,
+  getQuoteNotifications,
+  getRevisionNotifications,
   pickupNotificationExample,
   promotionCampaignPlans,
   promotionNotificationCategories,
@@ -30,6 +32,14 @@ export function NotificationsScreen() {
   );
   const pickupNotifications = useMemo(
     () => (data ? getPickupNotifications(data.notifications) : []),
+    [data],
+  );
+  const revisionNotifications = useMemo(
+    () => (data ? getRevisionNotifications(data.notifications) : []),
+    [data],
+  );
+  const quoteNotifications = useMemo(
+    () => (data ? getQuoteNotifications(data.notifications) : []),
     [data],
   );
 
@@ -111,6 +121,40 @@ export function NotificationsScreen() {
               ) : null}
               {notification.details?.technicianNotes ? (
                 <Text style={styles.notificationDetail}>Técnico: {notification.details.technicianNotes}</Text>
+              ) : null}
+              <Text style={styles.notificationStatus}>{notification.read ? 'Lida' : 'Nova'}</Text>
+            </View>
+          ))}
+        </ScrollView>
+      </SectionCard>
+
+      <SectionCard title="Lembretes de revisão periódica" subtitle="Notificações calculadas para reforçar o retorno do cliente a cada ciclo preventivo.">
+        <View style={styles.planList}>
+          {revisionNotifications.map((notification) => (
+            <View key={notification.id} style={styles.planCard}>
+              <Text style={styles.planTitle}>{notification.title}</Text>
+              <Text style={styles.planMeta}>{notification.details?.vehicleLabel ?? 'Veículo vinculado'}</Text>
+              {notification.details?.nextRevisionDate ? (
+                <Text style={styles.planMeta}>Próxima revisão sugerida: {notification.details.nextRevisionDate}</Text>
+              ) : null}
+              <Text style={styles.planObjective}>{notification.message}</Text>
+            </View>
+          ))}
+        </View>
+      </SectionCard>
+
+      <SectionCard title="Confirmações de orçamento" subtitle="Retornos automáticos para avisar que o pedido entrou na fila administrativa.">
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.notificationRow}>
+          {quoteNotifications.map((notification) => (
+            <View key={notification.id} style={styles.notificationCard}>
+              <Text style={styles.notificationDate}>{notification.date}</Text>
+              <Text style={styles.notificationTitle}>{notification.title}</Text>
+              <Text style={styles.notificationMessage}>{notification.message}</Text>
+              {notification.details?.protocol ? (
+                <Text style={styles.notificationDetail}>Protocolo: {notification.details.protocol}</Text>
+              ) : null}
+              {notification.details?.vehicleLabel ? (
+                <Text style={styles.notificationDetail}>Veículo: {notification.details.vehicleLabel}</Text>
               ) : null}
               <Text style={styles.notificationStatus}>{notification.read ? 'Lida' : 'Nova'}</Text>
             </View>
