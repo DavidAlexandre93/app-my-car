@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SectionCard } from '../../components/SectionCard';
-import { fetchDashboardData, submitQuoteRequest } from '../../services/api/mockApi';
-import { DashboardData, QuoteCategory, Vehicle } from '../../types';
+import { useDashboardData } from '../../hooks';
+import { submitQuoteRequest } from '../../services/api/mockApi';
+import { QuoteCategory, Vehicle } from '../../types';
 import { colors } from '../../utils/colors';
 
 type QuoteRequestScreenProps = {
@@ -72,16 +73,12 @@ export function QuoteRequestScreen({ customerName, vehicles }: QuoteRequestScree
   const [submitting, setSubmitting] = useState(false);
   const [feedback, setFeedback] = useState('Selecione o veículo e os itens desejados para enviar o orçamento ao administrador.');
   const [protocol, setProtocol] = useState<string | null>(null);
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const { data, retry } = useDashboardData();
 
   const selectedVehicle = useMemo(
     () => vehicles.find((vehicle) => vehicle.id === selectedVehicleId) ?? vehicles[0],
     [selectedVehicleId, vehicles],
   );
-
-  useEffect(() => {
-    fetchDashboardData().then(setDashboardData);
-  }, []);
 
   const flow = useMemo(() => flowSteps(selectedCategories, protocol ?? undefined), [protocol, selectedCategories]);
 
@@ -115,20 +112,26 @@ export function QuoteRequestScreen({ customerName, vehicles }: QuoteRequestScree
     }
 
     setSubmitting(true);
-    const response = await submitQuoteRequest(
-      {
-        vehicleId: selectedVehicle.id,
-        categories: selectedCategories,
-        description: description.trim() || 'Cliente solicita retorno do administrador com orçamento detalhado.',
-      },
-      {
-        customerName,
-      },
-    );
-    setProtocol(response.protocol);
-    setFeedback(response.message);
-    setDashboardData(await fetchDashboardData());
-    setSubmitting(false);
+
+    try {
+      const response = await submitQuoteRequest(
+        {
+          vehicleId: selectedVehicle.id,
+          categories: selectedCategories,
+          description: description.trim() || 'Cliente solicita retorno do administrador com orçamento detalhado.',
+        },
+        {
+          customerName,
+        },
+      );
+      setProtocol(response.protocol);
+      setFeedback(response.message);
+      retry();
+    } catch (submitError) {
+      setFeedback(submitError instanceof Error ? submitError.message : 'Não foi possível enviar o orçamento.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -228,9 +231,9 @@ export function QuoteRequestScreen({ customerName, vehicles }: QuoteRequestScree
 
       <View style={styles.adminQueueCard}>
         <Text style={styles.panelTitle}>Fila administrativa atual</Text>
-        <Text style={styles.panelMeta}>Pedidos em aberto: {dashboardData?.adminPanel.quoteRequests.length ?? 0}</Text>
+        <Text style={styles.panelMeta}>Pedidos em aberto: {data?.adminPanel.quoteRequests.length ?? 0}</Text>
         <View style={styles.queueList}>
-          {(dashboardData?.adminPanel.quoteRequests ?? []).slice(0, 3).map((request) => (
+          {(data?.adminPanel.quoteRequests ?? []).slice(0, 3).map((request) => (
             <View key={request.id} style={styles.queueItem}>
               <Text style={styles.queueTitle}>{request.customerName}</Text>
               <Text style={styles.queueMeta}>{request.vehicleLabel}</Text>
@@ -341,13 +344,13 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   textArea: {
-    minHeight: 110,
+    minHeight: 104,
     textAlignVertical: 'top',
   },
   submitButton: {
     backgroundColor: colors.primary,
     borderRadius: 16,
-    paddingVertical: 15,
+    paddingVertical: 14,
     alignItems: 'center',
   },
   submitButtonDisabled: {
@@ -362,16 +365,16 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   flowList: {
-    gap: 10,
+    gap: 12,
   },
   flowCard: {
     flexDirection: 'row',
     gap: 12,
-    padding: 14,
+    backgroundColor: colors.surfaceAlt,
     borderRadius: 18,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: colors.surfaceAlt,
+    padding: 14,
   },
   flowBadge: {
     width: 28,
@@ -379,7 +382,6 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 2,
   },
   flowBadgeDone: {
     backgroundColor: colors.success,
@@ -388,11 +390,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   flowBadgePending: {
-    backgroundColor: colors.border,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   flowBadgeText: {
     color: colors.background,
-    fontWeight: '900',
+    fontWeight: '800',
   },
   flowCopy: {
     flex: 1,
@@ -407,12 +411,29 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   adminPanelCard: {
-    backgroundColor: colors.background,
-    borderRadius: 18,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: colors.border,
     padding: 16,
     gap: 8,
+  },
+  panelTitle: {
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: '800',
+  },
+  panelText: {
+    color: colors.textMuted,
+    lineHeight: 20,
+  },
+  panelDivider: {
+    height: 1,
+    backgroundColor: colors.border,
+  },
+  panelMeta: {
+    color: colors.accent,
+    lineHeight: 20,
   },
   adminQueueCard: {
     backgroundColor: colors.surfaceAlt,
@@ -420,7 +441,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     padding: 16,
-    gap: 10,
+    gap: 12,
   },
   queueList: {
     gap: 10,
@@ -431,7 +452,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     padding: 14,
-    gap: 4,
+    gap: 6,
   },
   queueTitle: {
     color: colors.text,
@@ -450,36 +471,15 @@ const styles = StyleSheet.create({
     color: colors.success,
     fontWeight: '700',
   },
-  panelTitle: {
-    color: colors.text,
-    fontWeight: '800',
-    fontSize: 15,
-  },
-  panelText: {
-    color: colors.textMuted,
-    lineHeight: 21,
-  },
-  panelDivider: {
-    height: 1,
-    backgroundColor: colors.border,
-    marginVertical: 4,
-  },
-  panelMeta: {
-    color: colors.primary,
-    fontSize: 12,
-    fontWeight: '700',
-    lineHeight: 18,
-  },
   notificationCard: {
-    backgroundColor: '#11241A',
-    borderRadius: 18,
+    backgroundColor: '#2A2417',
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#25543A',
+    borderColor: colors.primaryStrong,
     padding: 16,
-    gap: 8,
   },
   notificationText: {
-    color: '#D8F7E5',
+    color: colors.text,
     lineHeight: 21,
   },
 });

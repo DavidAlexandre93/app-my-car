@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SectionCard } from '../../components/SectionCard';
-import { fetchDashboardData } from '../../services/api/mockApi';
-import { DashboardData, ServiceHistoryItem, Vehicle } from '../../types';
+import { useDashboardData } from '../../hooks';
+import { ServiceHistoryItem, Vehicle } from '../../types';
 import { colors } from '../../utils/colors';
 
 const formatVehicleLabel = (vehicle: Vehicle) => `${vehicle.brand} ${vehicle.model} • ${vehicle.plate}`;
@@ -10,40 +9,36 @@ const formatVehicleLabel = (vehicle: Vehicle) => `${vehicle.brand} ${vehicle.mod
 const getLatestServiceDate = (items: ServiceHistoryItem[]) => items[items.length - 1]?.date ?? 'Sem registros';
 
 export function HistoryScreen() {
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data, loading, error, retry } = useDashboardData();
 
-  useEffect(() => {
-    fetchDashboardData()
-      .then(setData)
-      .finally(() => setLoading(false));
-  }, []);
-
-  const primaryVehicle = data?.vehicles[0] ?? null;
-
-  const historyByVehicle = useMemo(() => {
-    if (!data) {
-      return [];
-    }
-
-    return data.vehicles.map((vehicle) => ({
-      vehicle,
-      items: data.history.filter((item) => item.vehicleId === vehicle.id),
-    }));
-  }, [data]);
-
-  if (loading || !data) {
+  if (loading && !data) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator color={colors.primary} size="large" />
-        <Text style={styles.loaderText}>Carregando histórico de serviços...</Text>
+        <Text style={styles.loaderTitle}>Carregando histórico de serviços...</Text>
+        <Text style={styles.loaderText}>Buscando registros por veículo.</Text>
       </View>
     );
   }
 
+  if (error || !data) {
+    return (
+      <View style={styles.loaderContainer}>
+        <Text style={styles.loaderTitle}>Não foi possível carregar o histórico.</Text>
+        <Text style={styles.loaderText}>Tente novamente para atualizar os registros da oficina.</Text>
+        <Text onPress={retry} style={styles.retryLink}>Tentar novamente</Text>
+      </View>
+    );
+  }
+
+  const primaryVehicle = data.vehicles[0] ?? null;
+  const historyByVehicle = data.vehicles.map((vehicle) => ({
+    vehicle,
+    items: data.history.filter((item) => item.vehicleId === vehicle.id),
+  }));
+
   return (
     <SectionCard
-      title="8. Histórico de serviços realizados"
+      title="Histórico de serviços realizados"
       subtitle="O cliente pode ver tudo o que já foi feito em seu carro para manter controle completo da manutenção do veículo."
       rightLabel={`${data.history.length} serviços`}
     >
@@ -121,6 +116,7 @@ export function HistoryScreen() {
 
 const styles = StyleSheet.create({
   loaderContainer: {
+    margin: 16,
     backgroundColor: colors.surface,
     borderRadius: 24,
     borderWidth: 1,
@@ -130,8 +126,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 12,
   },
+  loaderTitle: {
+    color: colors.text,
+    fontSize: 18,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
   loaderText: {
     color: colors.textMuted,
+    textAlign: 'center',
+  },
+  retryLink: {
+    color: colors.primary,
+    fontWeight: '700',
   },
   heroCard: {
     backgroundColor: colors.surfaceAlt,
@@ -220,7 +227,6 @@ const styles = StyleSheet.create({
   vehicleHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
     gap: 12,
   },
   vehicleHeaderCopy: {
@@ -229,47 +235,44 @@ const styles = StyleSheet.create({
   },
   vehicleTitle: {
     color: colors.text,
+    fontSize: 16,
     fontWeight: '800',
-    fontSize: 17,
   },
   vehicleMeta: {
     color: colors.textMuted,
+    lineHeight: 20,
   },
   vehicleBadge: {
-    backgroundColor: '#2B2412',
+    backgroundColor: colors.surface,
     borderRadius: 999,
-    borderWidth: 1,
-    borderColor: colors.primary,
     paddingHorizontal: 12,
     paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   vehicleBadgeText: {
     color: colors.primary,
+    fontWeight: '700',
     fontSize: 12,
-    fontWeight: '800',
   },
   historyRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
     gap: 12,
-    backgroundColor: colors.surface,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: 14,
+    alignItems: 'flex-start',
   },
   historyDateBadge: {
-    backgroundColor: '#2B2412',
+    minWidth: 80,
+    backgroundColor: colors.surface,
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
     paddingHorizontal: 10,
     paddingVertical: 8,
-    minWidth: 92,
   },
   historyDateText: {
     color: colors.primary,
+    fontWeight: '700',
     fontSize: 12,
-    fontWeight: '800',
-    textAlign: 'center',
   },
   historyContent: {
     flex: 1,
@@ -277,8 +280,7 @@ const styles = StyleSheet.create({
   },
   historyTitle: {
     color: colors.text,
-    fontWeight: '800',
-    fontSize: 15,
+    fontWeight: '700',
   },
   historyDetails: {
     color: colors.textMuted,
@@ -293,8 +295,8 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: 14,
-    gap: 6,
+    padding: 16,
+    gap: 8,
   },
   emptyTitle: {
     color: colors.text,
