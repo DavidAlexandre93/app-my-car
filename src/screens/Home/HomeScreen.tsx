@@ -5,6 +5,7 @@ import { ServiceProgressTracker } from '../../components/ServiceProgressTracker'
 import { fetchDashboardData, submitQuoteRequest } from '../../services/api/mockApi';
 import { fetchDashboardData } from '../../services/api/mockApi';
 import { colors } from '../../utils/colors';
+import { AppModule, AppScreenSuggestion, DashboardData, DomainEntity, KPI, Promotion, ServiceHistoryItem, ServiceStatusStep } from '../../types';
 import {
   ActiveService,
   AdminTask,
@@ -460,6 +461,23 @@ const styles = StyleSheet.create({
     gap: 10,
     backgroundColor: colors.surfaceAlt,
   },
+  listItemTitle: {
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: '700',
+    flex: 1,
+  },
+  listItemDescription: {
+    color: colors.textMuted,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  metaLabel: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
   architectureTag: {
     color: colors.primary,
     fontSize: 12,
@@ -532,6 +550,16 @@ const styles = StyleSheet.create({
     color: colors.accent,
     fontSize: 12,
     fontWeight: '600',
+  },
+  kpiValue: {
+    color: colors.primary,
+    fontSize: 24,
+    fontWeight: '800',
+  },
+  kpiLabel: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 18,
   },
   kpiCard: {
     flexGrow: 1,

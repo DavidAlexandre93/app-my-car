@@ -576,6 +576,22 @@ O sistema poderá trabalhar com diferentes tipos de notificação:
 * **Revisão periódica:** lembrete automático após 3 meses.
 * **Retorno de orçamento:** resposta da equipe administrativa.
 
+### Notificações de promoções
+
+A empresa poderá enviar promoções como:
+
+* troca de óleo com desconto;
+* alinhamento e balanceamento em promoção;
+* ofertas de pneus;
+* revisão preventiva;
+* campanhas sazonais.
+
+**Exemplo de notificação**
+
+> Impacto Prime: revisão completa com 15% de desconto nesta semana. Aproveite!
+
+**Tecnologia sugerida:** Firebase Cloud Messaging (FCM) para push notifications.
+
 ---
 
 ## Possíveis integrações futuras
