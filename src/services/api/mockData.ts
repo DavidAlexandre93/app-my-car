@@ -332,6 +332,11 @@ export const mockDashboardData: DashboardData = {
       message: 'Seu veículo já está pronto para retirada na Impacto Prime: Taboão da Serra.',
       date: 'Hoje • 17:45',
       read: false,
+      details: {
+        finalAmount: 'R$ 1.280,00',
+        businessHours: 'Segunda a sexta, das 8h às 18h • Sábado, das 8h às 12h',
+        technicianNotes: 'Alinhamento concluído e pressão dos pneus revisada. Recomendado retorno em 5.000 km para inspeção preventiva.',
+      },
     },
     {
       id: 'not-3',

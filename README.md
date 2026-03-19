@@ -164,7 +164,7 @@ Exemplo de fluxo de status:
 
 ### 5. Notificação de retirada
 
-Quando o serviço for concluído, o cliente recebe uma notificação informando que o veículo está pronto para ser retirado.
+Quando o serviço for concluído, o cliente recebe uma notificação informando que o veículo está pronto para ser retirado. A mensagem também pode apresentar valor final, horário de funcionamento da unidade e observações do técnico para dar mais contexto no momento da retirada.
 
 ### 6. Catálogo de pneus e peças
 
