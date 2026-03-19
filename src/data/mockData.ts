@@ -4,8 +4,53 @@ export const mockDashboardData: DashboardData = {
   customer: {
     name: 'Lucas Martins',
     unit: 'Impacto Prime • Taboão da Serra',
-    nextRevision: '20 jun 2026'
+    nextRevision: '20 jun 2026',
+    memberSince: 'Cliente desde jan 2024',
   },
+  kpis: [
+    { id: 'kpi-1', label: 'Veículos cadastrados', value: '2' },
+    { id: 'kpi-2', label: 'Serviço em andamento', value: '1 ativo' },
+    { id: 'kpi-3', label: 'Solicitações de orçamento', value: '3 este mês' },
+  ],
+  shortcuts: [
+    {
+      id: 'short-1',
+      label: 'Acompanhar serviço',
+      description: 'Timeline em tempo real do carro na oficina.',
+    },
+    {
+      id: 'short-2',
+      label: 'Solicitar orçamento',
+      description: 'Envio rápido de pneus, peças e revisões.',
+    },
+    {
+      id: 'short-3',
+      label: 'Loja de pneus',
+      description: 'Catálogo com itens em destaque da unidade.',
+    },
+    {
+      id: 'short-4',
+      label: 'Histórico do veículo',
+      description: 'Tudo o que já foi feito no carro.',
+    },
+  ],
+  featureHighlights: [
+    {
+      id: 'feature-1',
+      title: 'RF04 • Status do serviço',
+      description: 'Cliente acompanha cada etapa: recebimento, análise, aprovação, execução e retirada.',
+    },
+    {
+      id: 'feature-2',
+      title: 'RF07/RF08 • Orçamento digital',
+      description: 'Solicitação vai para o admin e retorna para o cliente com protocolo.',
+    },
+    {
+      id: 'feature-3',
+      title: 'RF10 • Lembrete trimestral',
+      description: 'Notificações automatizadas ajudam na retenção e recorrência de revisão.',
+    },
+  ],
   vehicles: [
     {
       id: 'veh-1',
@@ -14,7 +59,8 @@ export const mockDashboardData: DashboardData = {
       model: 'Compass Longitude',
       year: 2021,
       mileage: 48210,
-      notes: 'Cliente prefere contato via WhatsApp após 18h.'
+      notes: 'Cliente prefere contato via WhatsApp após 18h.',
+      statusLabel: 'Em atendimento',
     },
     {
       id: 'veh-2',
@@ -23,46 +69,52 @@ export const mockDashboardData: DashboardData = {
       model: 'Gol 1.6 MSI',
       year: 2019,
       mileage: 76340,
-      notes: 'Uso diário para trabalho, priorizar revisão rápida.'
-    }
+      notes: 'Uso diário para trabalho, priorizar revisão rápida.',
+      statusLabel: 'Revisão trimestral pendente',
+    },
   ],
   activeServices: [
     {
       id: 'srv-1',
       vehicleId: 'veh-1',
       title: 'Revisão completa + alinhamento',
-      description: 'Troca de óleo, filtros, alinhamento e inspeção do sistema de freios.',
+      description: 'Troca de óleo, filtros, alinhamento, scanner e inspeção do sistema de freios.',
       eta: 'Hoje, 17:40',
       budget: 'R$ 1.280,00',
+      technician: 'Técnico responsável: Marcos',
       steps: [
         { label: 'Veículo recebido', completed: true },
         { label: 'Em análise', completed: true },
-        { label: 'Orçamento aprovado', completed: true },
-        { label: 'Serviço em execução', completed: true, current: true },
+        { label: 'Orçamento em preparação', completed: true },
+        { label: 'Serviço aprovado', completed: true },
+        { label: 'Em execução', completed: true, current: true },
         { label: 'Finalizado', completed: false },
-        { label: 'Pronto para retirada', completed: false }
-      ]
-    }
+        { label: 'Pronto para retirada', completed: false },
+      ],
+    },
   ],
   promotions: [
     {
       id: 'pro-1',
-      title: 'Combo de troca de óleo premium',
-      description: 'Mão de obra + filtro de óleo + checklist de 20 itens.',
-      highlight: 'Até 20% OFF'
+      title: 'Revisão completa com desconto',
+      description: 'Troca de óleo premium + filtro + checklist com 20 itens em promoção nesta semana.',
+      highlight: '15% OFF',
+      cta: 'Agendar agora',
     },
     {
       id: 'pro-2',
       title: 'Pneus aro 18 com instalação grátis',
       description: 'Marcas premium com alinhamento e balanceamento inclusos.',
-      highlight: '4x sem juros'
+      highlight: '4x sem juros',
+      cta: 'Solicitar orçamento',
     },
     {
       id: 'pro-3',
-      title: 'Campanha de freios e suspensão',
-      description: 'Avaliação gratuita para pastilhas, discos e amortecedores.',
-      highlight: 'Check-up grátis'
-    }
+      title: 'Campanha freios + suspensão',
+      description: 'Avaliação gratuita para pastilhas, discos, amortecedores e pivôs.',
+      highlight: 'Check-up grátis',
+      cta: 'Receber detalhes',
+    },
   ],
   catalog: [
     {
@@ -71,7 +123,7 @@ export const mockDashboardData: DashboardData = {
       category: 'Pneus',
       description: 'Alta aderência e conforto para uso urbano e rodoviário.',
       price: 'R$ 899,00',
-      stock: '8 unidades'
+      stock: '8 unidades',
     },
     {
       id: 'cat-2',
@@ -79,7 +131,7 @@ export const mockDashboardData: DashboardData = {
       category: 'Baterias',
       description: 'Excelente partida e durabilidade para veículos leves.',
       price: 'R$ 579,00',
-      stock: '12 unidades'
+      stock: '12 unidades',
     },
     {
       id: 'cat-3',
@@ -87,7 +139,7 @@ export const mockDashboardData: DashboardData = {
       category: 'Freios',
       description: 'Reposição com baixo ruído e maior vida útil.',
       price: 'R$ 249,00',
-      stock: '15 kits'
+      stock: '15 kits',
     },
     {
       id: 'cat-4',
@@ -95,34 +147,42 @@ export const mockDashboardData: DashboardData = {
       category: 'Serviços',
       description: 'Inspeção geral com scanner, fluidos e filtros essenciais.',
       price: 'Sob consulta',
-      stock: 'Agenda disponível'
-    }
+      stock: 'Agenda disponível',
+    },
   ],
   history: [
     {
       id: 'his-1',
       vehicleId: 'veh-1',
-      title: 'Troca de óleo e filtro',
-      date: '12 mar 2026',
-      details: 'Aplicado óleo sintético 5W30 e substituído filtro de óleo.',
-      amount: 'R$ 390,00'
+      title: 'Troca de óleo',
+      date: '10 jan 2026',
+      details: 'Óleo sintético 5W30, filtro de óleo e revisão visual de vazamentos.',
+      amount: 'R$ 390,00',
     },
     {
       id: 'his-2',
       vehicleId: 'veh-1',
       title: 'Alinhamento e balanceamento',
-      date: '18 dez 2025',
-      details: 'Correção da geometria e balanceamento das quatro rodas.',
-      amount: 'R$ 180,00'
+      date: '10 jan 2026',
+      details: 'Ajuste da geometria e balanceamento das quatro rodas.',
+      amount: 'R$ 180,00',
     },
     {
       id: 'his-3',
+      vehicleId: 'veh-1',
+      title: 'Troca de pastilhas de freio',
+      date: '22 mar 2026',
+      details: 'Substituição do jogo dianteiro com limpeza do conjunto.',
+      amount: 'R$ 420,00',
+    },
+    {
+      id: 'his-4',
       vehicleId: 'veh-2',
-      title: 'Troca de bateria',
-      date: '21 nov 2025',
-      details: 'Instalação de bateria Moura 60Ah com teste de alternador.',
-      amount: 'R$ 620,00'
-    }
+      title: 'Revisão preventiva',
+      date: '15 jun 2026',
+      details: 'Checklist de segurança, bateria, freios, suspensão e fluidos.',
+      amount: 'R$ 610,00',
+    },
   ],
   notifications: [
     {
@@ -131,23 +191,51 @@ export const mockDashboardData: DashboardData = {
       title: 'Serviço em andamento',
       message: 'Seu Compass já está em execução na oficina e segue dentro do prazo estimado.',
       date: 'Hoje • 14:32',
-      read: false
+      read: false,
     },
     {
       id: 'not-2',
       type: 'pickup',
-      title: 'Retirada prevista para hoje',
-      message: 'Assim que o checklist final for concluído, avisaremos para retirada do veículo.',
-      date: 'Hoje • 10:18',
-      read: false
+      title: 'Veículo pronto para retirada',
+      message: 'Seu veículo já está pronto para retirada na Impacto Prime: Taboão da Serra.',
+      date: 'Hoje • 17:45',
+      read: false,
     },
     {
       id: 'not-3',
+      type: 'promo',
+      title: 'Promoção da semana',
+      message: 'Revisão completa com 15% de desconto nesta semana. Aproveite!',
+      date: '19 mar 2026',
+      read: true,
+    },
+    {
+      id: 'not-4',
       type: 'revision',
       title: 'Lembrete de revisão periódica',
-      message: 'Seu Gol está próximo da revisão trimestral preventiva.',
+      message: 'Já faz 3 meses desde sua última revisão. Agende uma nova visita na Impacto Prime.',
       date: '18 mar 2026',
-      read: true
-    }
-  ]
+      read: true,
+    },
+  ],
+  adminTasks: [
+    {
+      id: 'adm-1',
+      title: 'Responder orçamento de pneus',
+      description: 'Cliente Lucas Martins solicitou cotação para 4 pneus aro 18.',
+      status: 'Pendente',
+    },
+    {
+      id: 'adm-2',
+      title: 'Atualizar status do Compass',
+      description: 'Mover serviço para etapa Finalizado e liberar retirada.',
+      status: 'Em andamento',
+    },
+    {
+      id: 'adm-3',
+      title: 'Cadastrar campanha sazonal',
+      description: 'Subir promoção de alinhamento e balanceamento de abril.',
+      status: 'Planejado',
+    },
+  ],
 };

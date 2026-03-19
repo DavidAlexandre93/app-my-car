@@ -573,6 +573,21 @@ A versão inicial do projeto pode focar em:
 
 ---
 
+## Status atual do demo implementado
+
+A versão atual do app demonstra em uma experiência única de dashboard os principais pontos do projeto pedido para a **Impacto Prime: Taboão da Serra**:
+
+* hero inicial com branding da unidade e próxima revisão do cliente;
+* resumo do MVP com indicadores de negócio;
+* jornada do cliente com login/cadastro, atalhos e múltiplos veículos;
+* acompanhamento do serviço com timeline visual;
+* promoções, catálogo e fluxo de solicitação de orçamento;
+* histórico de serviços, notificações e visão resumida do painel administrativo.
+
+Essa abordagem mantém o demo simples para apresentação, sem exigir backend real neste estágio, mas já organiza o front-end para futura integração com API REST, Firebase ou backend Node.js.
+
+---
+
 ## Como executar o projeto
 
 ### Pré-requisitos
