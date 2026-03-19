@@ -14,6 +14,7 @@ import {
   DashboardData,
   DomainEntity,
   FeatureHighlight,
+  FunctionalRequirement,
   AppScreenSuggestion,
   KPI,
   AdminWorkspaceItem,
@@ -165,7 +166,23 @@ export function HomeScreen() {
         </View>
       </SectionCard>
 
-      <SectionCard title="Promoções em destaque" subtitle="Ofertas e campanhas ativas para você aproveitar agora.">
+      <SectionCard title="Matriz de requisitos funcionais" subtitle="Rastreabilidade dos RF01 ao RF10 dentro da solução">
+        <View style={styles.stack}>
+          {data.requirements.map((requirement: FunctionalRequirement) => (
+            <View key={requirement.id} style={styles.requirementCard}>
+              <View style={styles.requirementHeader}>
+                <Text style={styles.requirementId}>{requirement.id}</Text>
+                <Text style={styles.requirementStatus}>{requirement.status}</Text>
+              </View>
+              <Text style={styles.listItemTitle}>{requirement.title}</Text>
+              <Text style={styles.listItemDescription}>{requirement.description}</Text>
+              <Text style={styles.requirementArea}>Área do app: {requirement.appArea}</Text>
+            </View>
+          ))}
+        </View>
+      </SectionCard>
+
+      <SectionCard title="Meus veículos" subtitle="Cliente pode cadastrar múltiplos veículos" rightLabel={`${data.vehicles.length} ativos`}>
         <View style={styles.stack}>
           {data.promotions.map((promotion: Promotion) => (
             <View key={promotion.id} style={styles.promotionCard}>
@@ -485,6 +502,37 @@ const styles = StyleSheet.create({
     color: colors.accent,
     fontSize: 13,
     fontWeight: '600',
+  },
+  requirementCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+    gap: 6,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  requirementHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+    alignItems: 'center',
+  },
+  requirementId: {
+    color: colors.primary,
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  requirementStatus: {
+    color: colors.accent,
+    fontSize: 11,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
+  requirementArea: {
+    color: colors.info,
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 2,
   },
   vehicleCard: {
     backgroundColor: colors.surfaceAlt,

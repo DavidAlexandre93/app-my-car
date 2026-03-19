@@ -505,18 +505,33 @@ src/
 
 ## Requisitos funcionais
 
-* Permitir cadastro e autenticação de usuários.
-* Permitir cadastro de um ou mais veículos por cliente.
-* Exibir promoções e campanhas publicadas pela oficina.
-* Mostrar o andamento do serviço do veículo.
-* Notificar o cliente quando o veículo estiver pronto para retirada.
-* Exibir um catálogo de pneus, peças e serviços.
-* Permitir solicitar orçamento.
-* Enviar a solicitação de orçamento ao administrador.
-* Exibir histórico de manutenções realizadas.
-* Enviar lembretes de revisão a cada 3 meses.
+Os requisitos funcionais definidos para o aplicativo são:
 
----
+* **RF01:** o sistema deve permitir cadastro e login de clientes.
+* **RF02:** o sistema deve permitir cadastrar veículos vinculados ao cliente.
+* **RF03:** o sistema deve exibir promoções enviadas pela oficina.
+* **RF04:** o sistema deve permitir acompanhar o status do serviço do veículo.
+* **RF05:** o sistema deve notificar quando o veículo estiver pronto para retirada.
+* **RF06:** o sistema deve exibir catálogo de pneus e peças.
+* **RF07:** o sistema deve permitir solicitar orçamento de produtos e serviços.
+* **RF08:** o sistema deve enviar a solicitação de orçamento para o administrador.
+* **RF09:** o sistema deve mostrar o histórico de serviços do veículo.
+* **RF10:** o sistema deve enviar lembrete de revisão periódica a cada 3 meses.
+
+### Matriz de rastreabilidade dos requisitos
+
+| Requisito | Implementação demonstrada | Evidência no app demo |
+| --- | --- | --- |
+| RF01 | Cadastro e login do cliente | Jornada inicial e card de autenticação na home |
+| RF02 | Cadastro e listagem de veículos vinculados | Seção **Meus veículos** |
+| RF03 | Promoções publicadas pela oficina | Seção **Promoções e campanhas** |
+| RF04 | Timeline do serviço em andamento | Cards de **Serviço ativo** |
+| RF05 | Aviso de retirada | Notificação do tipo **pickup** |
+| RF06 | Catálogo de pneus, peças e serviços | Seção **Loja / catálogo** |
+| RF07 | Solicitação de orçamento pelo cliente | Formulário **Solicitar orçamento** |
+| RF08 | Encaminhamento para administração | Mock API + seção **Painel administrativo** |
+| RF09 | Histórico de manutenção por veículo | Seção **Histórico de serviços** |
+| RF10 | Lembrete trimestral de revisão | Notificação do tipo **revision** |
 
 ## Requisitos não funcionais
 

@@ -137,11 +137,12 @@ export type FeatureHighlight = {
   description: string;
 };
 
-export type AppScreenSuggestion = {
+export type FunctionalRequirement = {
   id: string;
   title: string;
-  subtitle: string;
-  highlights: string[];
+  description: string;
+  appArea: string;
+  status: 'Disponível no MVP' | 'Disponível na demo' | 'Fluxo administrativo';
 };
 
 export type AdminTask = {
@@ -178,7 +179,7 @@ export type DashboardData = {
   domainEntities: DomainEntity[];
   shortcuts: Shortcut[];
   featureHighlights: FeatureHighlight[];
-  userFlows: UserFlow[];
+  requirements: FunctionalRequirement[];
   vehicles: Vehicle[];
   activeServices: ActiveService[];
   promotions: Promotion[];
