@@ -388,7 +388,7 @@ export const mockDashboardData: DashboardData = {
       category: 'Pneus',
       imageUrl: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80',
       description: 'Alta aderência e conforto para uso urbano e rodoviário.',
-      price: 'R$ 899,00',
+      price: 'Preço estimado: R$ 899,00',
       stock: '8 unidades',
     },
     {
@@ -397,7 +397,7 @@ export const mockDashboardData: DashboardData = {
       category: 'Baterias',
       imageUrl: 'https://images.unsplash.com/photo-1605664041954-6d6f3b5f89a9?auto=format&fit=crop&w=1200&q=80',
       description: 'Excelente partida e durabilidade para veículos leves.',
-      price: 'R$ 579,00',
+      price: 'Preço estimado: R$ 579,00',
       stock: '12 unidades',
     },
     {
@@ -406,7 +406,7 @@ export const mockDashboardData: DashboardData = {
       category: 'Freios',
       imageUrl: 'https://images.unsplash.com/photo-1613214149922-f1809c99b414?auto=format&fit=crop&w=1200&q=80',
       description: 'Reposição com baixo ruído e maior vida útil.',
-      price: 'R$ 249,00',
+      price: 'Preço estimado: R$ 249,00',
       stock: '15 kits',
     },
     {
@@ -415,7 +415,7 @@ export const mockDashboardData: DashboardData = {
       category: 'Filtros',
       imageUrl: 'https://images.unsplash.com/photo-1632823471565-1ecf4e8df567?auto=format&fit=crop&w=1200&q=80',
       description: 'Filtragem eficiente para manter o motor protegido no uso diário.',
-      price: 'R$ 42,90',
+      price: 'Preço estimado: R$ 42,90',
       stock: '24 unidades',
     },
     {
@@ -424,7 +424,7 @@ export const mockDashboardData: DashboardData = {
       category: 'Óleos',
       imageUrl: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80',
       description: 'Lubrificante premium para melhor desempenho e proteção térmica.',
-      price: 'R$ 69,90',
+      price: 'Preço estimado: R$ 69,90',
       stock: 'Sob encomenda',
     },
     {
