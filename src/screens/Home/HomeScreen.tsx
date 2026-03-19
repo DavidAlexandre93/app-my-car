@@ -1,9 +1,41 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SectionCard } from '../../components/SectionCard';
+import { ServiceProgressTracker } from '../../components/ServiceProgressTracker';
+import { fetchDashboardData, submitQuoteRequest } from '../../services/api/mockApi';
 import { fetchDashboardData } from '../../services/api/mockApi';
 import { colors } from '../../utils/colors';
 import { AppModule, AppScreenSuggestion, DashboardData, DomainEntity, KPI, Promotion, ServiceHistoryItem, ServiceStatusStep } from '../../types';
+import {
+  ActiveService,
+  AdminTask,
+  AppModule,
+  AppNotification,
+  CatalogItem,
+  DashboardData,
+  DomainEntity,
+  FeatureHighlight,
+  FunctionalRequirement,
+  AppScreenSuggestion,
+  KPI,
+  AdminWorkspaceItem,
+  AppNotification,
+  CatalogItem,
+  DashboardData,
+  Promotion,
+  ReminderCadence,
+  ServiceHistoryItem,
+  Shortcut,
+  UserFlow,
+  Vehicle,
+} from '../../types';
+
+const parseHistoryDate = (value: string) => {
+  const [day, month, year] = value.split('/').map(Number);
+  return new Date(year, month - 1, day);
+};
+
+const formatVehicleLabel = (vehicle: Vehicle) => `${vehicle.brand} ${vehicle.model} • ${vehicle.plate}`;
 
 export function HomeScreen() {
   const [data, setData] = useState<DashboardData | null>(null);
@@ -16,9 +48,30 @@ export function HomeScreen() {
   }, []);
 
   const activeVehicle = useMemo(() => data?.vehicles[0], [data]);
-  const recommendedServices = useMemo(() => {
+
+  const historyByVehicle = useMemo(() => {
     if (!data) {
       return [];
+    }
+
+    return data.vehicles
+      .map((vehicle) => {
+        const entries = data.history
+          .filter((entry) => entry.vehicleId === vehicle.id)
+          .sort((a, b) => parseHistoryDate(a.date).getTime() - parseHistoryDate(b.date).getTime());
+
+        return {
+          vehicle,
+          entries,
+          totalSpent: entries.reduce((sum, entry) => sum + Number(entry.amount.replace(/[^\d,]/g, '').replace('.', '').replace(',', '.')), 0),
+        };
+      })
+      .filter((group) => group.entries.length > 0);
+  }, [data]);
+
+  const handleSubmitQuote = async () => {
+    if (!activeVehicle) {
+      return;
     }
 
     return [
@@ -142,7 +195,23 @@ export function HomeScreen() {
         </View>
       </SectionCard>
 
-      <SectionCard title="Promoções em destaque" subtitle="Ofertas e campanhas ativas para você aproveitar agora.">
+      <SectionCard title="Matriz de requisitos funcionais" subtitle="Rastreabilidade dos RF01 ao RF10 dentro da solução">
+        <View style={styles.stack}>
+          {data.requirements.map((requirement: FunctionalRequirement) => (
+            <View key={requirement.id} style={styles.requirementCard}>
+              <View style={styles.requirementHeader}>
+                <Text style={styles.requirementId}>{requirement.id}</Text>
+                <Text style={styles.requirementStatus}>{requirement.status}</Text>
+              </View>
+              <Text style={styles.listItemTitle}>{requirement.title}</Text>
+              <Text style={styles.listItemDescription}>{requirement.description}</Text>
+              <Text style={styles.requirementArea}>Área do app: {requirement.appArea}</Text>
+            </View>
+          ))}
+        </View>
+      </SectionCard>
+
+      <SectionCard title="Stack solicitado para este projeto" subtitle="Base tecnológica escolhida para mobile, backend, autenticação e painel web">
         <View style={styles.stack}>
           {data.promotions.map((promotion: Promotion) => (
             <View key={promotion.id} style={styles.promotionCard}>
@@ -157,7 +226,27 @@ export function HomeScreen() {
         </View>
       </SectionCard>
 
-      <SectionCard title="Próximos serviços recomendados" subtitle="Sugestões com base no histórico e na revisão planejada.">
+      <SectionCard title="Fluxos principais do usuário" subtitle="Jornadas centrais do cliente e do admin dentro do MVP">
+        <View style={styles.stack}>
+          {data.userFlows.map((flow: UserFlow) => (
+            <View key={flow.id} style={styles.flowCard}>
+              <Text style={styles.listItemTitle}>{flow.title}</Text>
+              <Text style={styles.listItemDescription}>{flow.summary}</Text>
+              <View style={styles.flowSteps}>
+                {flow.steps.map((step, index) => (
+                  <View key={`${flow.id}-${index + 1}`} style={styles.flowStepItem}>
+                    <Text style={styles.flowStepIndex}>{index + 1}</Text>
+                    <Text style={styles.flowStepText}>{step}</Text>
+                  </View>
+                ))}
+              </View>
+              <Text style={styles.flowOutcome}>{flow.outcome}</Text>
+            </View>
+          ))}
+        </View>
+      </SectionCard>
+
+      <SectionCard title="Meus veículos" subtitle="Cliente pode cadastrar múltiplos veículos" rightLabel={`${data.vehicles.length} ativos`}>
         <View style={styles.stack}>
           {recommendedServices.map((service) => (
             <View key={service.id} style={styles.recommendationCard}>
@@ -175,43 +264,12 @@ export function HomeScreen() {
           subtitle={`${activeVehicle.brand} ${activeVehicle.model} • ${activeVehicle.plate}`}
           rightLabel={activeService.eta}
         >
-          <View style={styles.statusHeader}>
-            <View>
-              <Text style={styles.statusTitle}>{activeService.title}</Text>
-              <Text style={styles.cardDescription}>{activeService.description}</Text>
-            </View>
-            <View style={styles.statusBadge}>
-              <Text style={styles.statusBadgeText}>{activeVehicle.statusLabel}</Text>
-            </View>
+          <View style={styles.serviceSummary}>
+            <Text style={styles.serviceBudget}>Orçamento atual: {service.budget}</Text>
+            <Text style={styles.metaLabel}>{service.technician}</Text>
+            <Text style={styles.metaLabel}>Timeline visual com barra de progresso para o demo</Text>
           </View>
-
-          <View style={styles.infoRow}>
-            <View style={styles.infoBox}>
-              <Text style={styles.infoLabel}>Orçamento atual</Text>
-              <Text style={styles.infoValue}>{activeService.budget}</Text>
-            </View>
-            <View style={styles.infoBox}>
-              <Text style={styles.infoLabel}>Responsável</Text>
-              <Text style={styles.infoValue}>{activeService.technician}</Text>
-            </View>
-          </View>
-
-          <View style={styles.timeline}>
-            {activeService.steps.map((step: ServiceStatusStep) => (
-              <View key={step.label} style={styles.timelineItem}>
-                <View
-                  style={[
-                    styles.timelineDot,
-                    step.completed ? styles.timelineDotDone : undefined,
-                    step.current ? styles.timelineDotCurrent : undefined,
-                  ]}
-                />
-                <Text style={[styles.timelineText, step.current ? styles.timelineTextCurrent : undefined]}>
-                  {step.label}
-                </Text>
-              </View>
-            ))}
-          </View>
+          <ServiceProgressTracker service={service} />
         </SectionCard>
       ) : null}
 
@@ -227,13 +285,94 @@ export function HomeScreen() {
               <Text style={styles.infoLabel}>Ano</Text>
               <Text style={styles.infoValue}>{activeVehicle.year}</Text>
             </View>
-            <View>
-              <Text style={styles.infoLabel}>Quilometragem</Text>
-              <Text style={styles.infoValue}>{activeVehicle.mileage.toLocaleString('pt-BR')} km</Text>
+          ))}
+        </View>
+      </SectionCard>
+
+      <SectionCard title="Solicitar orçamento" subtitle="Fluxo: cliente solicita → admin analisa → cliente recebe retorno">
+        <TextInput
+          value={quoteDescription}
+          onChangeText={setQuoteDescription}
+          multiline
+          placeholder="Descreva o item ou serviço desejado"
+          placeholderTextColor={colors.textMuted}
+          style={styles.input}
+        />
+        <Pressable style={styles.primaryButton} onPress={handleSubmitQuote} disabled={submitting}>
+          <Text style={styles.primaryButtonText}>
+            {submitting ? 'Enviando...' : 'Enviar solicitação'}
+          </Text>
+        </Pressable>
+        {quoteFeedback ? <Text style={styles.feedback}>{quoteFeedback}</Text> : null}
+      </SectionCard>
+
+      <SectionCard
+        title="Histórico de serviços realizados"
+        subtitle="O cliente visualiza tudo que já foi feito em cada carro e mantém o controle da manutenção preventiva."
+      >
+        <Text style={styles.historyIntro}>
+          Linha do tempo consolidada com data, descrição e valor dos serviços já concluídos na oficina.
+        </Text>
+        <View style={styles.stack}>
+          {historyByVehicle.map(({ vehicle, entries, totalSpent }) => (
+            <View key={vehicle.id} style={styles.historyVehicleCard}>
+              <View style={styles.historyVehicleHeader}>
+                <View style={styles.listItemText}>
+                  <Text style={styles.listItemTitle}>{formatVehicleLabel(vehicle)}</Text>
+                  <Text style={styles.listItemDescription}>
+                    {entries.length} serviços registrados para consulta rápida do cliente.
+                  </Text>
+                </View>
+                <View style={styles.historySummaryBadge}>
+                  <Text style={styles.historySummaryLabel}>Total investido</Text>
+                  <Text style={styles.historySummaryValue}>
+                    {totalSpent.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.historyTimeline}>
+                {entries.map((entry, index) => (
+                  <View key={entry.id} style={styles.historyTimelineItem}>
+                    <View style={styles.historyTimelineRail}>
+                      <View style={styles.historyTimelineDot} />
+                      {index < entries.length - 1 ? <View style={styles.historyTimelineLine} /> : null}
+                    </View>
+                    <View style={styles.historyContentCard}>
+                      <View style={styles.historyContentHeader}>
+                        <Text style={styles.listItemTitle}>{entry.title}</Text>
+                        <Text style={styles.historyDate}>{entry.date}</Text>
+                      </View>
+                      <Text style={styles.listItemDescription}>{entry.details}</Text>
+                      <Text style={styles.historyAmount}>{entry.amount}</Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
             </View>
-            <View>
-              <Text style={styles.infoLabel}>Último serviço</Text>
-              <Text style={styles.infoValue}>{lastHistory?.date ?? 'Sem histórico'}</Text>
+          ))}
+        </View>
+      </SectionCard>
+
+      <SectionCard title="Central de notificações" subtitle="Promoções, carro pronto e lembrete trimestral">
+        <View style={styles.stack}>
+          {data.notifications.map((notification: AppNotification) => (
+            <View key={notification.id} style={styles.notificationItem}>
+              <View style={[styles.notificationBullet, !notification.read ? styles.notificationUnread : undefined]} />
+              <View style={styles.listItemText}>
+                <Text style={styles.listItemTitle}>{notification.title}</Text>
+                <Text style={styles.listItemDescription}>{notification.message}</Text>
+                {notification.details?.finalAmount ? (
+                  <Text style={styles.notificationDetail}>Valor final: {notification.details.finalAmount}</Text>
+                ) : null}
+                {notification.details?.businessHours ? (
+                  <Text style={styles.notificationDetail}>Horário de funcionamento: {notification.details.businessHours}</Text>
+                ) : null}
+                {notification.details?.technicianNotes ? (
+                  <Text style={styles.notificationDetail}>Observações do técnico: {notification.details.technicianNotes}</Text>
+                ) : null}
+                <Text style={styles.notificationDate}>{notification.date}</Text>
+              </View>
             </View>
           </View>
 
@@ -445,9 +584,76 @@ const styles = StyleSheet.create({
   stack: {
     gap: 12,
   },
-  promotionCard: {
-    backgroundColor: colors.background,
-    borderRadius: 18,
+  flowCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+    gap: 10,
+  },
+  flowSteps: {
+    gap: 8,
+  },
+  flowStepItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+  },
+  flowStepIndex: {
+    width: 22,
+    height: 22,
+    borderRadius: 999,
+    backgroundColor: colors.primary,
+    color: '#171717',
+    textAlign: 'center',
+    fontSize: 12,
+    fontWeight: '800',
+    lineHeight: 22,
+  },
+  flowStepText: {
+    flex: 1,
+    color: colors.text,
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  flowOutcome: {
+    color: colors.accent,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  requirementCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+    gap: 6,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  requirementHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+    alignItems: 'center',
+  },
+  requirementId: {
+    color: colors.primary,
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  requirementStatus: {
+    color: colors.accent,
+    fontSize: 11,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
+  requirementArea: {
+    color: colors.info,
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 2,
+  },
+  vehicleCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
     padding: 16,
     gap: 8,
     borderWidth: 1,
@@ -544,51 +750,163 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
   },
-  timeline: {
-    gap: 10,
-  },
-  timelineItem: {
+  listItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
+    justifyContent: 'space-between',
+    gap: 12,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
   },
-  timelineDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 999,
-    backgroundColor: colors.border,
+  listItemText: {
+    flex: 1,
+    gap: 4,
   },
-  timelineDotDone: {
-    backgroundColor: colors.success,
-  },
-  timelineDotCurrent: {
-    backgroundColor: colors.primary,
-    transform: [{ scale: 1.15 }],
-  },
-  timelineText: {
-    color: colors.textMuted,
-    fontSize: 14,
-  },
-  timelineTextCurrent: {
+  listItemTitle: {
     color: colors.text,
+    fontSize: 15,
     fontWeight: '700',
   },
-  vehicleCard: {
-    backgroundColor: colors.background,
-    borderRadius: 18,
+  listItemDescription: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  highlight: {
+    color: colors.primary,
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  catalogCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
     padding: 16,
     gap: 12,
     borderWidth: 1,
     borderColor: colors.border,
   },
-  vehicleHeader: {
+  historyIntro: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 20,
+  },
+  historyVehicleCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 22,
+    padding: 16,
+    gap: 16,
+  },
+  historyVehicleHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: 12,
+    alignItems: 'flex-start',
   },
-  plateBadge: {
+  historySummaryBadge: {
+    minWidth: 120,
+    borderRadius: 16,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    gap: 2,
+  },
+  historySummaryLabel: {
+    color: colors.textMuted,
+    fontSize: 11,
+    textTransform: 'uppercase',
+  },
+  historySummaryValue: {
+    color: colors.accent,
+    fontSize: 14,
+    fontWeight: '800',
+  },
+  historyTimeline: {
+    gap: 2,
+  },
+  historyTimelineItem: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  historyTimelineRail: {
+    alignItems: 'center',
+    width: 18,
+  },
+  historyTimelineDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 999,
+    backgroundColor: colors.primary,
+    marginTop: 6,
+  },
+  historyTimelineLine: {
+    flex: 1,
+    width: 2,
+    backgroundColor: colors.border,
+    marginTop: 6,
+    marginBottom: -6,
+  },
+  historyContentCard: {
+    flex: 1,
+    backgroundColor: colors.surface,
+    borderRadius: 18,
+    padding: 14,
+    gap: 8,
+    marginBottom: 10,
+  },
+  historyContentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+    flexWrap: 'wrap',
+  },
+  historyDate: {
     color: colors.primary,
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  historyAmount: {
+    color: colors.accent,
+    fontWeight: '700',
+  },
+  notificationItem: {
+    flexDirection: 'row',
+    gap: 12,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+  },
+  notificationBullet: {
+    width: 12,
+    height: 12,
+    borderRadius: 999,
+    marginTop: 4,
+    backgroundColor: colors.border,
+  },
+  notificationUnread: {
+    backgroundColor: colors.primary,
+  },
+  notificationDetail: {
+    color: colors.text,
+    fontSize: 13,
+    lineHeight: 18,
+    marginTop: 4,
+  },
+  notificationDate: {
+    color: colors.accent,
+    fontSize: 12,
+    marginTop: 4,
+  },
+  adminTaskCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+    gap: 6,
+  },
+  adminStatus: {
+    color: colors.warning,
     fontSize: 12,
     fontWeight: '800',
     textTransform: 'uppercase',

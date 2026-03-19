@@ -103,6 +103,12 @@ export type ServiceHistoryItem = {
   amount: string;
 };
 
+export type NotificationDetails = {
+  finalAmount?: string;
+  businessHours?: string;
+  technicianNotes?: string;
+};
+
 export type AppNotification = {
   id: string;
   type: 'promo' | 'service' | 'pickup' | 'revision' | 'quote';
@@ -110,6 +116,7 @@ export type AppNotification = {
   message: string;
   date: string;
   read: boolean;
+  details?: NotificationDetails;
 };
 
 export type QuoteRequest = {
@@ -130,11 +137,12 @@ export type FeatureHighlight = {
   description: string;
 };
 
-export type AppScreenSuggestion = {
+export type FunctionalRequirement = {
   id: string;
   title: string;
-  subtitle: string;
-  highlights: string[];
+  description: string;
+  appArea: string;
+  status: 'Disponível no MVP' | 'Disponível na demo' | 'Fluxo administrativo';
 };
 
 export type AdminTask = {
@@ -150,18 +158,12 @@ export type KPI = {
   value: string;
 };
 
-export type AppModule = {
+export type UserFlow = {
   id: string;
-  name: string;
-  description: string;
-  responsibilities: string[];
-};
-
-export type DomainEntity = {
-  id: string;
-  name: string;
-  description: string;
-  keyFields: string[];
+  title: string;
+  summary: string;
+  steps: string[];
+  outcome: string;
 };
 
 export type DashboardData = {
@@ -177,6 +179,7 @@ export type DashboardData = {
   domainEntities: DomainEntity[];
   shortcuts: Shortcut[];
   featureHighlights: FeatureHighlight[];
+  requirements: FunctionalRequirement[];
   vehicles: Vehicle[];
   activeServices: ActiveService[];
   promotions: Promotion[];
