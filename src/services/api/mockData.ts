@@ -1,4 +1,4 @@
-import { DashboardData } from '../types';
+import { DashboardData } from '../../types';
 
 export const mockDashboardData: DashboardData = {
   customer: {

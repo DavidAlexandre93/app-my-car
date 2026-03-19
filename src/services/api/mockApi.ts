@@ -1,5 +1,5 @@
-import { mockDashboardData } from '../data/mockData';
-import { DashboardData, QuoteRequest } from '../types';
+import { mockDashboardData } from './mockData';
+import { DashboardData, QuoteRequest } from '../../types';
 
 const simulateDelay = async (time = 450) =>
   new Promise((resolve) => {
