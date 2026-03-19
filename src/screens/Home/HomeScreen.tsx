@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SectionCard } from '../../components/SectionCard';
+import { CatalogScreen } from '../Catalog';
 import { ServiceProgressTracker } from '../../components/ServiceProgressTracker';
 import { fetchDashboardData, submitQuoteRequest } from '../../services/api/mockApi';
 import { fetchDashboardData } from '../../services/api/mockApi';
@@ -11,7 +12,6 @@ import {
   AdminTask,
   AppModule,
   AppNotification,
-  CatalogItem,
   DashboardData,
   DomainEntity,
   FeatureHighlight,
@@ -265,14 +265,7 @@ export function HomeScreen() {
             <Text style={styles.plateBadge}>{activeVehicle.plate}</Text>
           </View>
 
-          <View style={styles.vehicleMetaRow}>
-            <View>
-              <Text style={styles.infoLabel}>Ano</Text>
-              <Text style={styles.infoValue}>{activeVehicle.year}</Text>
-            </View>
-          ))}
-        </View>
-      </SectionCard>
+      <CatalogScreen items={data.catalog} vehicle={activeVehicle} />
 
       <SectionCard title="Enviar orçamento para o administrador" subtitle="Cliente seleciona itens → sistema registra pedido → admin recebe e responde">
         <Text style={styles.sectionHelper}>Selecione o que deseja incluir no pedido de orçamento:</Text>
@@ -790,68 +783,6 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 13,
     fontWeight: '800',
-  },
-  catalogCard: {
-    backgroundColor: colors.surfaceAlt,
-    borderRadius: 20,
-    padding: 16,
-    gap: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  historyIntro: {
-    color: colors.textMuted,
-    fontSize: 13,
-    lineHeight: 20,
-  },
-  historyVehicleCard: {
-    backgroundColor: colors.surfaceAlt,
-    borderRadius: 22,
-    padding: 16,
-    gap: 16,
-  },
-  historyVehicleHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: 12,
-    alignItems: 'flex-start',
-  },
-  catalogPrice: {
-    color: colors.primary,
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  sectionHelper: {
-    color: colors.textMuted,
-    fontSize: 13,
-    lineHeight: 18,
-  },
-  optionGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-  },
-  optionChip: {
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surfaceAlt,
-  },
-  optionChipSelected: {
-    borderColor: colors.primary,
-    backgroundColor: colors.primaryStrong,
-  },
-  optionChipText: {
-    color: colors.textMuted,
-    fontSize: 13,
-    fontWeight: '700',
-    textTransform: 'capitalize',
-  },
-  optionChipTextSelected: {
-    color: colors.primary,
   },
   input: {
     minHeight: 110,

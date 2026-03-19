@@ -89,6 +89,7 @@ export type CatalogItem = {
   id: string;
   name: string;
   category: string;
+  imageUrl: string;
   description: string;
   price: string;
   stock: string;
