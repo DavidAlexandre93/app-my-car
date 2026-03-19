@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SectionCard } from '../../components/SectionCard';
+import { ServiceProgressTracker } from '../../components/ServiceProgressTracker';
+import { fetchDashboardData, submitQuoteRequest } from '../../services/api/mockApi';
 import { fetchDashboardData } from '../../services/api/mockApi';
 import { colors } from '../../utils/colors';
 import {
@@ -21,7 +23,6 @@ import {
   Promotion,
   ReminderCadence,
   ServiceHistoryItem,
-  ServiceStatusStep,
   Shortcut,
   Vehicle,
 } from '../../types';
@@ -196,43 +197,12 @@ export function HomeScreen() {
           subtitle={`${activeVehicle.brand} ${activeVehicle.model} • ${activeVehicle.plate}`}
           rightLabel={activeService.eta}
         >
-          <View style={styles.statusHeader}>
-            <View>
-              <Text style={styles.statusTitle}>{activeService.title}</Text>
-              <Text style={styles.cardDescription}>{activeService.description}</Text>
-            </View>
-            <View style={styles.statusBadge}>
-              <Text style={styles.statusBadgeText}>{activeVehicle.statusLabel}</Text>
-            </View>
+          <View style={styles.serviceSummary}>
+            <Text style={styles.serviceBudget}>Orçamento atual: {service.budget}</Text>
+            <Text style={styles.metaLabel}>{service.technician}</Text>
+            <Text style={styles.metaLabel}>Timeline visual com barra de progresso para o demo</Text>
           </View>
-
-          <View style={styles.infoRow}>
-            <View style={styles.infoBox}>
-              <Text style={styles.infoLabel}>Orçamento atual</Text>
-              <Text style={styles.infoValue}>{activeService.budget}</Text>
-            </View>
-            <View style={styles.infoBox}>
-              <Text style={styles.infoLabel}>Responsável</Text>
-              <Text style={styles.infoValue}>{activeService.technician}</Text>
-            </View>
-          </View>
-
-          <View style={styles.timeline}>
-            {activeService.steps.map((step: ServiceStatusStep) => (
-              <View key={step.label} style={styles.timelineItem}>
-                <View
-                  style={[
-                    styles.timelineDot,
-                    step.completed ? styles.timelineDotDone : undefined,
-                    step.current ? styles.timelineDotCurrent : undefined,
-                  ]}
-                />
-                <Text style={[styles.timelineText, step.current ? styles.timelineTextCurrent : undefined]}>
-                  {step.label}
-                </Text>
-              </View>
-            ))}
-          </View>
+          <ServiceProgressTracker service={service} />
         </SectionCard>
       ) : null}
 
@@ -558,38 +528,36 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
   },
-  timeline: {
-    gap: 10,
-  },
-  timelineItem: {
+  listItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
+    justifyContent: 'space-between',
+    gap: 12,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
   },
-  timelineDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 999,
-    backgroundColor: colors.border,
+  listItemText: {
+    flex: 1,
+    gap: 4,
   },
-  timelineDotDone: {
-    backgroundColor: colors.success,
-  },
-  timelineDotCurrent: {
-    backgroundColor: colors.primary,
-    transform: [{ scale: 1.15 }],
-  },
-  timelineText: {
-    color: colors.textMuted,
-    fontSize: 14,
-  },
-  timelineTextCurrent: {
+  listItemTitle: {
     color: colors.text,
+    fontSize: 15,
     fontWeight: '700',
   },
-  vehicleCard: {
-    backgroundColor: colors.background,
-    borderRadius: 18,
+  listItemDescription: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  highlight: {
+    color: colors.primary,
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  catalogCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
     padding: 16,
     gap: 12,
     borderWidth: 1,
