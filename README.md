@@ -185,9 +185,15 @@ O usuário pode selecionar produtos ou serviços e enviar uma solicitação de o
 
 O cliente pode acessar o histórico completo de serviços realizados em cada veículo cadastrado.
 
-### 9. Lembrete de revisão periódica
+### 9. Lembrete de revisão a cada 3 meses
 
-O sistema pode notificar o cliente a cada 3 meses para lembrar sobre a necessidade de nova revisão.
+O sistema enviará notificações automáticas lembrando o cliente que já está na hora de fazer uma nova revisão.
+
+**Exemplo**
+
+> "Já faz 3 meses desde sua última revisão. Agende uma nova visita na Impacto Prime."
+
+Isso ajuda na retenção de clientes e recorrência de serviços.
 
 ---
 
