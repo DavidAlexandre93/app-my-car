@@ -32,6 +32,7 @@ export function ServiceProgressTracker({ service }: ServiceProgressTrackerProps)
   const currentStepIndex = getCurrentStepIndex(service.steps);
   const currentStep = service.steps[currentStepIndex];
   const progress = getProgressPercentage(service.steps);
+  const completedSteps = service.steps.filter((step) => step.completed).length;
 
   return (
     <View style={styles.container}>
@@ -47,6 +48,17 @@ export function ServiceProgressTracker({ service }: ServiceProgressTrackerProps)
           </View>
         </View>
 
+        <View style={styles.summaryHeader}>
+          <View style={styles.summaryBadge}>
+            <Text style={styles.summaryBadgeLabel}>Ordem de serviço</Text>
+            <Text style={styles.summaryBadgeValue}>{service.serviceOrder}</Text>
+          </View>
+          <View style={styles.summaryBadge}>
+            <Text style={styles.summaryBadgeLabel}>Última atualização</Text>
+            <Text style={styles.summaryBadgeValue}>{service.lastUpdated}</Text>
+          </View>
+        </View>
+
         <View style={styles.progressHeader}>
           <Text style={styles.progressLabel}>Andamento do serviço</Text>
           <Text style={styles.progressValue}>{progress}%</Text>
@@ -56,9 +68,27 @@ export function ServiceProgressTracker({ service }: ServiceProgressTrackerProps)
           <View style={[styles.progressFill, { width: `${progress}%` }]} />
         </View>
 
-        <Text style={styles.helperText}>
-          O cliente consegue visualizar em tempo real em qual etapa o carro está, trazendo mais transparência e confiança durante todo o atendimento.
-        </Text>
+        <View style={styles.metricsRow}>
+          <View style={styles.metricPill}>
+            <Text style={styles.metricValue}>{completedSteps}/{service.steps.length}</Text>
+            <Text style={styles.metricLabel}>etapas concluídas</Text>
+          </View>
+          <View style={styles.metricPill}>
+            <Text style={styles.metricValue}>{service.technician}</Text>
+            <Text style={styles.metricLabel}>técnico responsável</Text>
+          </View>
+        </View>
+
+        <View style={styles.messageCard}>
+          <Text style={styles.messageTitle}>Atualização para o cliente</Text>
+          <Text style={styles.messageText}>{service.customerMessage}</Text>
+          <Text style={styles.nextStepText}>Próxima etapa: {service.nextStep}</Text>
+        </View>
+      </View>
+
+      <View style={styles.timelineHeader}>
+        <Text style={styles.timelineHeading}>Timeline do atendimento</Text>
+        <Text style={styles.timelineSubtitle}>Cada etapa deixa claro em que fase o carro está agora.</Text>
       </View>
 
       <View style={styles.timeline}>
@@ -95,16 +125,13 @@ export function ServiceProgressTracker({ service }: ServiceProgressTrackerProps)
                   isCurrent ? styles.timelineContentCurrent : undefined,
                 ]}
               >
-                <Text style={[styles.timelineTitle, isCurrent ? styles.timelineTitleCurrent : undefined]}>
-                  {step.label}
-                </Text>
-                <Text style={styles.timelineDescription}>
-                  {isCompleted
-                    ? 'Etapa concluída e registrada no histórico do atendimento.'
-                    : isCurrent
-                      ? 'Equipe trabalhando nesta fase agora, com atualização em tempo real para o cliente.'
-                      : 'Próxima etapa prevista para a sequência do serviço.'}
-                </Text>
+                <View style={styles.timelineContentHeader}>
+                  <Text style={[styles.timelineTitle, isCurrent ? styles.timelineTitleCurrent : undefined]}>
+                    {step.label}
+                  </Text>
+                  <Text style={styles.timelineTime}>{step.time}</Text>
+                </View>
+                <Text style={styles.timelineDescription}>{step.details}</Text>
                 <Text
                   style={[
                     styles.timelineStatus,
@@ -183,10 +210,65 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     backgroundColor: colors.primary,
   },
-  helperText: {
+  metricsRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  metricPill: {
+    flex: 1,
+    backgroundColor: '#1B1B1F',
+    borderRadius: 14,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+    gap: 4,
+  },
+  metricValue: {
+    color: colors.accent,
+    fontSize: 14,
+    fontWeight: '800',
+  },
+  metricLabel: {
     color: colors.textMuted,
+    fontSize: 12,
+    textTransform: 'uppercase',
+  },
+  messageCard: {
+    backgroundColor: '#2A2417',
+    borderRadius: 16,
+    padding: 14,
+    gap: 6,
+    borderWidth: 1,
+    borderColor: colors.primaryStrong,
+  },
+  messageTitle: {
+    color: colors.primary,
+    fontSize: 13,
+    fontWeight: '800',
+    textTransform: 'uppercase',
+  },
+  messageText: {
+    color: colors.text,
     fontSize: 13,
     lineHeight: 19,
+  },
+  nextStepText: {
+    color: colors.accent,
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  timelineHeader: {
+    gap: 4,
+  },
+  timelineHeading: {
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: '800',
+  },
+  timelineSubtitle: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 18,
   },
   timeline: {
     gap: 0,
@@ -245,19 +327,31 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     borderColor: colors.border,
-    gap: 6,
+    gap: 8,
   },
   timelineContentCurrent: {
     borderColor: colors.primaryStrong,
     backgroundColor: '#2A2417',
   },
+  timelineContentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+    alignItems: 'center',
+  },
   timelineTitle: {
     color: colors.text,
     fontSize: 15,
     fontWeight: '700',
+    flex: 1,
   },
   timelineTitleCurrent: {
     color: colors.primary,
+  },
+  timelineTime: {
+    color: colors.accent,
+    fontSize: 12,
+    fontWeight: '700',
   },
   timelineDescription: {
     color: colors.textMuted,
