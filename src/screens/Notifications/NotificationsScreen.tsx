@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SectionCard } from '../../components/SectionCard';
-import { fetchDashboardData } from '../../services/api/mockApi';
+import { useDashboardData } from '../../hooks';
 import {
   getPickupNotifications,
   getPromotionNotifications,
@@ -13,44 +12,34 @@ import {
   promotionPushExample,
   pushChannelRecommendation,
 } from '../../services/notifications';
-import { DashboardData } from '../../types';
 import { colors } from '../../utils/colors';
 
 export function NotificationsScreen() {
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data, loading, error, retry } = useDashboardData();
 
-  useEffect(() => {
-    fetchDashboardData()
-      .then(setData)
-      .finally(() => setLoading(false));
-  }, []);
-
-  const promoNotifications = useMemo(
-    () => (data ? getPromotionNotifications(data.notifications) : []),
-    [data],
-  );
-  const pickupNotifications = useMemo(
-    () => (data ? getPickupNotifications(data.notifications) : []),
-    [data],
-  );
-  const revisionNotifications = useMemo(
-    () => (data ? getRevisionNotifications(data.notifications) : []),
-    [data],
-  );
-  const quoteNotifications = useMemo(
-    () => (data ? getQuoteNotifications(data.notifications) : []),
-    [data],
-  );
-
-  if (loading || !data) {
+  if (loading && !data) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator color={colors.primary} size="large" />
-        <Text style={styles.loaderText}>Carregando notificações...</Text>
+        <Text style={styles.loaderTitle}>Carregando notificações...</Text>
+        <Text style={styles.loaderText}>Buscando campanhas, alertas e confirmações.</Text>
       </View>
     );
   }
+
+  if (error || !data) {
+    return (
+      <View style={styles.loaderContainer}>
+        <Text style={styles.loaderTitle}>Não foi possível carregar as notificações.</Text>
+        <Text style={styles.loaderText}>Tente novamente para atualizar a central do cliente.</Text>
+        <Text onPress={retry} style={styles.retryLink}>Tentar novamente</Text>
+      </View>
+    );
+  }
+
+  const promoNotifications = getPromotionNotifications(data.notifications);
+  const pickupNotifications = getPickupNotifications(data.notifications);
+  const revisionNotifications = getRevisionNotifications(data.notifications);
+  const quoteNotifications = getQuoteNotifications(data.notifications);
 
   return (
     <View style={styles.wrapper}>
@@ -195,8 +184,11 @@ export function NotificationsScreen() {
 const styles = StyleSheet.create({
   wrapper: {
     gap: 12,
+    padding: 16,
+    paddingBottom: 32,
   },
   loaderContainer: {
+    margin: 16,
     backgroundColor: colors.surface,
     borderRadius: 24,
     borderWidth: 1,
@@ -206,9 +198,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 12,
   },
+  loaderTitle: {
+    color: colors.text,
+    fontSize: 18,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
   loaderText: {
     color: colors.textMuted,
     fontSize: 14,
+    textAlign: 'center',
+  },
+  retryLink: {
+    color: colors.primary,
+    fontWeight: '700',
   },
   categoryList: {
     gap: 10,
@@ -231,7 +234,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 19,
   },
-
   planList: {
     gap: 10,
   },
@@ -260,10 +262,10 @@ const styles = StyleSheet.create({
     lineHeight: 19,
   },
   exampleCard: {
-    backgroundColor: colors.background,
-    borderRadius: 18,
+    backgroundColor: '#2A2417',
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.primaryStrong,
     padding: 18,
     gap: 8,
   },
@@ -275,13 +277,13 @@ const styles = StyleSheet.create({
   },
   exampleText: {
     color: colors.text,
-    fontSize: 17,
+    fontSize: 16,
     lineHeight: 24,
-    fontWeight: '700',
+    fontWeight: '600',
   },
   pickupCard: {
-    backgroundColor: colors.background,
-    borderRadius: 18,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: colors.border,
     padding: 18,
@@ -291,67 +293,28 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   pickupFieldCard: {
-    backgroundColor: colors.surfaceAlt,
-    borderRadius: 14,
+    backgroundColor: colors.surface,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: colors.border,
     padding: 14,
     gap: 4,
   },
   pickupFieldLabel: {
-    color: colors.primary,
+    color: colors.textMuted,
     fontSize: 12,
-    fontWeight: '700',
-    textTransform: 'uppercase',
   },
   pickupFieldValue: {
     color: colors.text,
-    fontSize: 13,
-    lineHeight: 19,
-    fontWeight: '600',
-  },
-  techCard: {
-    backgroundColor: colors.surfaceAlt,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: 16,
-    gap: 10,
-  },
-  techTitle: {
-    color: colors.text,
-    fontSize: 16,
-    fontWeight: '800',
-  },
-  techDescription: {
-    color: colors.textMuted,
-    fontSize: 14,
     lineHeight: 20,
-  },
-  useCaseList: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  useCasePill: {
-    backgroundColor: colors.background,
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: colors.border,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-  },
-  useCaseText: {
-    color: colors.accent,
-    fontSize: 12,
-    fontWeight: '600',
   },
   notificationRow: {
     gap: 12,
+    paddingRight: 12,
   },
   notificationCard: {
-    width: 260,
-    backgroundColor: colors.background,
+    width: 280,
+    backgroundColor: colors.surfaceAlt,
     borderRadius: 18,
     borderWidth: 1,
     borderColor: colors.border,
@@ -361,28 +324,57 @@ const styles = StyleSheet.create({
   notificationDate: {
     color: colors.primary,
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   notificationTitle: {
     color: colors.text,
-    fontSize: 15,
-    fontWeight: '700',
+    fontSize: 16,
+    fontWeight: '800',
   },
   notificationMessage: {
     color: colors.textMuted,
-    fontSize: 13,
-    lineHeight: 19,
+    lineHeight: 20,
   },
   notificationDetail: {
-    color: colors.text,
-    fontSize: 12,
-    lineHeight: 18,
-    fontWeight: '600',
+    color: colors.accent,
+    lineHeight: 20,
   },
   notificationStatus: {
     color: colors.success,
-    fontSize: 12,
     fontWeight: '700',
-    textTransform: 'uppercase',
+  },
+  techCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: 18,
+    gap: 12,
+  },
+  techTitle: {
+    color: colors.text,
+    fontSize: 18,
+    fontWeight: '800',
+  },
+  techDescription: {
+    color: colors.textMuted,
+    lineHeight: 21,
+  },
+  useCaseList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+  },
+  useCasePill: {
+    backgroundColor: colors.surface,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  useCaseText: {
+    color: colors.primary,
+    fontWeight: '700',
   },
 });

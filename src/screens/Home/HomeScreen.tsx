@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SectionCard } from '../../components/SectionCard';
 import { ServiceProgressTracker } from '../../components/ServiceProgressTracker';
-import { fetchDashboardData } from '../../services/api/mockApi';
-import { DashboardData } from '../../types';
+import { useDashboardData } from '../../hooks';
 import { colors } from '../../utils/colors';
 
 type HomeScreenProps = {
@@ -15,30 +14,31 @@ const shortcutLabelMap: Record<string, string> = {
 };
 
 export function HomeScreen({ customerName }: HomeScreenProps) {
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data, loading, error, retry } = useDashboardData();
   const [selectedShortcut, setSelectedShortcut] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchDashboardData()
-      .then(setData)
-      .finally(() => setLoading(false));
-  }, []);
-
-  const firstName = useMemo(() => {
-    const fallbackName = data?.customer.name ?? 'Cliente';
-    return (customerName ?? fallbackName).split(' ')[0];
-  }, [customerName, data?.customer.name]);
-
-  if (loading || !data) {
+  if (loading && !data) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator color={colors.primary} size="large" />
-        <Text style={styles.loaderText}>Carregando tela inicial...</Text>
+        <Text style={styles.loaderTitle}>Carregando tela inicial...</Text>
+        <Text style={styles.loaderText}>Buscando promoções, atalhos e status do veículo.</Text>
       </View>
     );
   }
 
+  if (error || !data) {
+    return (
+      <View style={styles.loaderContainer}>
+        <Text style={styles.loaderTitle}>Não foi possível carregar a tela inicial.</Text>
+        <Text style={styles.loaderText}>Verifique os dados da demo e tente novamente.</Text>
+        <Pressable style={styles.retryButton} onPress={retry}>
+          <Text style={styles.retryButtonText}>Tentar novamente</Text>
+        </Pressable>
+      </View>
+    );
+  }
+
+  const firstName = (customerName ?? data.customer.name ?? 'Cliente').split(' ')[0];
   const activeService = data.activeServices[0];
   const nextRecommendations = [
     `Revisão preventiva recomendada para ${data.customer.nextRevision}.`,
@@ -143,9 +143,11 @@ const styles = StyleSheet.create({
   },
   content: {
     gap: 16,
+    padding: 16,
     paddingBottom: 32,
   },
   loaderContainer: {
+    margin: 16,
     backgroundColor: colors.surface,
     borderRadius: 24,
     borderWidth: 1,
@@ -155,8 +157,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 12,
   },
+  loaderTitle: {
+    color: colors.text,
+    fontSize: 18,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
   loaderText: {
     color: colors.textMuted,
+    textAlign: 'center',
+  },
+  retryButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  retryButtonText: {
+    color: colors.background,
+    fontWeight: '800',
   },
   lead: {
     color: colors.textMuted,
@@ -260,15 +279,14 @@ const styles = StyleSheet.create({
   },
   listText: {
     flex: 1,
-    color: colors.text,
+    color: colors.textMuted,
     lineHeight: 20,
   },
   statusPanel: {
-    gap: 16,
+    gap: 12,
   },
   statusHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     gap: 12,
     alignItems: 'flex-start',
   },
@@ -277,18 +295,18 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   budgetBadge: {
-    minWidth: 112,
-    backgroundColor: colors.surfaceAlt,
-    borderRadius: 16,
+    minWidth: 108,
+    backgroundColor: '#2A2417',
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: colors.border,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    gap: 3,
+    borderColor: colors.primaryStrong,
+    padding: 12,
+    gap: 4,
   },
   budgetLabel: {
     color: colors.textMuted,
     fontSize: 12,
+    textTransform: 'uppercase',
   },
   budgetValue: {
     color: colors.primary,

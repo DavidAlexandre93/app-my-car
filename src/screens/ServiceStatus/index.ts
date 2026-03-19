@@ -1,1 +1,1 @@
-export const ServiceStatusScreen = 'ServiceStatus';
+export { ServiceStatusScreen } from './ServiceStatusScreen';
