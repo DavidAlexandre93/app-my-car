@@ -92,6 +92,20 @@ export type KPI = {
   value: string;
 };
 
+export type AppModule = {
+  id: string;
+  name: string;
+  description: string;
+  responsibilities: string[];
+};
+
+export type DomainEntity = {
+  id: string;
+  name: string;
+  description: string;
+  keyFields: string[];
+};
+
 export type DashboardData = {
   customer: {
     name: string;
@@ -100,6 +114,8 @@ export type DashboardData = {
     memberSince: string;
   };
   kpis: KPI[];
+  appModules: AppModule[];
+  domainEntities: DomainEntity[];
   shortcuts: Shortcut[];
   featureHighlights: FeatureHighlight[];
   vehicles: Vehicle[];
