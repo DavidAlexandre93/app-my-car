@@ -3,10 +3,8 @@ import { StatusBar } from 'expo-status-bar';
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LoginScreen } from './src/screens/Login';
 import { RegisterScreen } from './src/screens/Register';
-import { NotificationsScreen } from './src/screens/Notifications';
-import { ProfileScreen } from './src/screens/Profile';
-import { VehiclesScreen } from './src/screens/Vehicles';
 import { SectionCard } from './src/components/SectionCard';
+import { HomeScreen } from './src/screens/Home';
 import { useAuthStore } from './src/store';
 import { colors } from './src/utils/colors';
 
@@ -85,16 +83,14 @@ export default function App() {
               <View>
                 <Text style={styles.accountTitle}>Olá, {currentUser.name.split(' ')[0]}</Text>
                 <Text style={styles.accountDescription}>
-                  Sua conta está pronta para receber novos veículos e centralizar o relacionamento com a oficina.
+                  Sua tela inicial agora reúne promoções, serviços recomendados, status do veículo e atalhos para as ações principais.
                 </Text>
               </View>
               <Pressable style={styles.outlineButton} onPress={logout}>
                 <Text style={styles.outlineButtonText}>Sair</Text>
               </Pressable>
             </View>
-            <NotificationsScreen />
-            <ProfileScreen />
-            <VehiclesScreen />
+            <HomeScreen customerName={currentUser.name} />
           </>
         )}
       </ScrollView>
