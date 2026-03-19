@@ -19,6 +19,9 @@
       "eas": {
         "projectId": "c15bbf4a-6423-4579-b407-ab4020da5bfd"
       }
+    },
+    "android": {
+      "package": "com.impactoprime.app"
     }
   }
 }
