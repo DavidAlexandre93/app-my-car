@@ -10,7 +10,7 @@ export const mockDashboardData: DashboardData = {
   kpis: [
     { id: 'kpi-1', label: 'Veículos cadastrados', value: '2' },
     { id: 'kpi-2', label: 'Serviço em andamento', value: '1 ativo' },
-    { id: 'kpi-3', label: 'Solicitações de orçamento', value: '3 este mês' },
+    { id: 'kpi-3', label: 'Solicitações de orçamento', value: '4 este mês' },
   ],
   shortcuts: [
     {
@@ -21,7 +21,7 @@ export const mockDashboardData: DashboardData = {
     {
       id: 'short-2',
       label: 'Solicitar orçamento',
-      description: 'Envio rápido de pneus, peças e revisões.',
+      description: 'Seleção rápida de pneus, peças, freio e outros serviços.',
     },
     {
       id: 'short-3',
@@ -43,7 +43,7 @@ export const mockDashboardData: DashboardData = {
     {
       id: 'feature-2',
       title: 'RF07/RF08 • Orçamento digital',
-      description: 'Solicitação vai para o admin e retorna para o cliente com protocolo.',
+      description: 'Cliente seleciona categorias, o sistema registra o pedido e o admin responde com retorno.',
     },
     {
       id: 'feature-3',
@@ -221,9 +221,9 @@ export const mockDashboardData: DashboardData = {
   adminTasks: [
     {
       id: 'adm-1',
-      title: 'Responder orçamento de pneus',
-      description: 'Cliente Lucas Martins solicitou cotação para 4 pneus aro 18.',
-      status: 'Pendente',
+      title: 'Analisar solicitação de orçamento',
+      description: 'Lucas Martins solicitou pneus, revisão e outro serviço. Aguardar análise e retorno ao cliente.',
+      status: 'Novo pedido',
     },
     {
       id: 'adm-2',
