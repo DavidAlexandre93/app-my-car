@@ -279,6 +279,15 @@ export function HomeScreen() {
               <View style={styles.listItemText}>
                 <Text style={styles.listItemTitle}>{notification.title}</Text>
                 <Text style={styles.listItemDescription}>{notification.message}</Text>
+                {notification.details?.finalAmount ? (
+                  <Text style={styles.notificationDetail}>Valor final: {notification.details.finalAmount}</Text>
+                ) : null}
+                {notification.details?.businessHours ? (
+                  <Text style={styles.notificationDetail}>Horário de funcionamento: {notification.details.businessHours}</Text>
+                ) : null}
+                {notification.details?.technicianNotes ? (
+                  <Text style={styles.notificationDetail}>Observações do técnico: {notification.details.technicianNotes}</Text>
+                ) : null}
                 <Text style={styles.notificationDate}>{notification.date}</Text>
               </View>
             </View>
@@ -633,6 +642,12 @@ const styles = StyleSheet.create({
   },
   notificationUnread: {
     backgroundColor: colors.primary,
+  },
+  notificationDetail: {
+    color: colors.text,
+    fontSize: 13,
+    lineHeight: 18,
+    marginTop: 4,
   },
   notificationDate: {
     color: colors.accent,

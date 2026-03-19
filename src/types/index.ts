@@ -52,6 +52,12 @@ export type ServiceHistoryItem = {
   amount: string;
 };
 
+export type NotificationDetails = {
+  finalAmount?: string;
+  businessHours?: string;
+  technicianNotes?: string;
+};
+
 export type AppNotification = {
   id: string;
   type: 'promo' | 'service' | 'pickup' | 'revision' | 'quote';
@@ -59,6 +65,7 @@ export type AppNotification = {
   message: string;
   date: string;
   read: boolean;
+  details?: NotificationDetails;
 };
 
 export type QuoteRequest = {
