@@ -52,6 +52,24 @@ Por meio do app, o cliente pode:
 
 Além da experiência do cliente, o sistema também prevê uma área administrativa para que a oficina gerencie os atendimentos, atualize o status dos serviços, receba pedidos de orçamento e envie notificações.
 
+### Objetivo resumido do aplicativo
+
+**Cliente**
+
+* receber notificações de promoções;
+* acompanhar o status do serviço do carro em tempo real;
+* ser notificado quando o veículo estiver pronto para retirada;
+* consultar e solicitar orçamento de pneus, peças e serviços;
+* visualizar o histórico de serviços realizados;
+* receber lembretes periódicos de revisão, como a cada 3 meses.
+
+**Empresa / área administrativa**
+
+* gerenciar atendimentos;
+* controlar orçamentos;
+* atualizar status de serviços;
+* disparar notificações promocionais, transacionais e recorrentes.
+
 ---
 
 ## Objetivo do projeto
@@ -146,7 +164,7 @@ Exemplo de fluxo de status:
 
 ### 5. Notificação de retirada
 
-Quando o serviço for concluído, o cliente recebe uma notificação informando que o veículo está pronto para ser retirado.
+Quando o serviço for concluído, o cliente recebe uma notificação informando que o veículo está pronto para ser retirado. A mensagem também pode apresentar valor final, horário de funcionamento da unidade e observações do técnico para dar mais contexto no momento da retirada.
 
 ### 6. Catálogo de pneus e peças
 
