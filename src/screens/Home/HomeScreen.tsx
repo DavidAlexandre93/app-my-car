@@ -25,6 +25,13 @@ import {
   Vehicle,
 } from '../../types';
 
+const parseHistoryDate = (value: string) => {
+  const [day, month, year] = value.split('/').map(Number);
+  return new Date(year, month - 1, day);
+};
+
+const formatVehicleLabel = (vehicle: Vehicle) => `${vehicle.brand} ${vehicle.model} • ${vehicle.plate}`;
+
 export function HomeScreen() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -39,6 +46,26 @@ export function HomeScreen() {
   }, []);
 
   const activeVehicle = useMemo(() => data?.vehicles[0], [data]);
+
+  const historyByVehicle = useMemo(() => {
+    if (!data) {
+      return [];
+    }
+
+    return data.vehicles
+      .map((vehicle) => {
+        const entries = data.history
+          .filter((entry) => entry.vehicleId === vehicle.id)
+          .sort((a, b) => parseHistoryDate(a.date).getTime() - parseHistoryDate(b.date).getTime());
+
+        return {
+          vehicle,
+          entries,
+          totalSpent: entries.reduce((sum, entry) => sum + Number(entry.amount.replace(/[^\d,]/g, '').replace('.', '').replace(',', '.')), 0),
+        };
+      })
+      .filter((group) => group.entries.length > 0);
+  }, [data]);
 
   const handleSubmitQuote = async () => {
     if (!activeVehicle) {
@@ -115,7 +142,6 @@ export function HomeScreen() {
           </View>
         </View>
       </SectionCard>
-
 
       <SectionCard title="Stack solicitado para este projeto" subtitle="Base tecnológica escolhida para mobile, backend, autenticação e painel web">
         <View style={styles.stack}>
@@ -254,17 +280,48 @@ export function HomeScreen() {
         {quoteFeedback ? <Text style={styles.feedback}>{quoteFeedback}</Text> : null}
       </SectionCard>
 
-      <SectionCard title="Histórico de serviços" subtitle="Registro completo por veículo">
+      <SectionCard
+        title="Histórico de serviços realizados"
+        subtitle="O cliente visualiza tudo que já foi feito em cada carro e mantém o controle da manutenção preventiva."
+      >
+        <Text style={styles.historyIntro}>
+          Linha do tempo consolidada com data, descrição e valor dos serviços já concluídos na oficina.
+        </Text>
         <View style={styles.stack}>
-          {data.history.map((entry: ServiceHistoryItem) => (
-            <View key={entry.id} style={styles.historyItem}>
-              <View style={styles.listItemText}>
-                <Text style={styles.listItemTitle}>{entry.title}</Text>
-                <Text style={styles.listItemDescription}>{entry.details}</Text>
+          {historyByVehicle.map(({ vehicle, entries, totalSpent }) => (
+            <View key={vehicle.id} style={styles.historyVehicleCard}>
+              <View style={styles.historyVehicleHeader}>
+                <View style={styles.listItemText}>
+                  <Text style={styles.listItemTitle}>{formatVehicleLabel(vehicle)}</Text>
+                  <Text style={styles.listItemDescription}>
+                    {entries.length} serviços registrados para consulta rápida do cliente.
+                  </Text>
+                </View>
+                <View style={styles.historySummaryBadge}>
+                  <Text style={styles.historySummaryLabel}>Total investido</Text>
+                  <Text style={styles.historySummaryValue}>
+                    {totalSpent.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                  </Text>
+                </View>
               </View>
-              <View style={styles.historyMeta}>
-                <Text style={styles.metaLabel}>{entry.date}</Text>
-                <Text style={styles.historyAmount}>{entry.amount}</Text>
+
+              <View style={styles.historyTimeline}>
+                {entries.map((entry, index) => (
+                  <View key={entry.id} style={styles.historyTimelineItem}>
+                    <View style={styles.historyTimelineRail}>
+                      <View style={styles.historyTimelineDot} />
+                      {index < entries.length - 1 ? <View style={styles.historyTimelineLine} /> : null}
+                    </View>
+                    <View style={styles.historyContentCard}>
+                      <View style={styles.historyContentHeader}>
+                        <Text style={styles.listItemTitle}>{entry.title}</Text>
+                        <Text style={styles.historyDate}>{entry.date}</Text>
+                      </View>
+                      <Text style={styles.listItemDescription}>{entry.details}</Text>
+                      <Text style={styles.historyAmount}>{entry.amount}</Text>
+                    </View>
+                  </View>
+                ))}
               </View>
             </View>
           ))}
@@ -601,17 +658,86 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 18,
   },
-  historyItem: {
+  historyIntro: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 20,
+  },
+  historyVehicleCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 22,
+    padding: 16,
+    gap: 16,
+  },
+  historyVehicleHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 12,
-    backgroundColor: colors.surfaceAlt,
-    borderRadius: 20,
-    padding: 16,
+    alignItems: 'flex-start',
   },
-  historyMeta: {
-    alignItems: 'flex-end',
+  historySummaryBadge: {
+    minWidth: 120,
+    borderRadius: 16,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    gap: 2,
+  },
+  historySummaryLabel: {
+    color: colors.textMuted,
+    fontSize: 11,
+    textTransform: 'uppercase',
+  },
+  historySummaryValue: {
+    color: colors.accent,
+    fontSize: 14,
+    fontWeight: '800',
+  },
+  historyTimeline: {
+    gap: 2,
+  },
+  historyTimelineItem: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  historyTimelineRail: {
+    alignItems: 'center',
+    width: 18,
+  },
+  historyTimelineDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 999,
+    backgroundColor: colors.primary,
+    marginTop: 6,
+  },
+  historyTimelineLine: {
+    flex: 1,
+    width: 2,
+    backgroundColor: colors.border,
+    marginTop: 6,
+    marginBottom: -6,
+  },
+  historyContentCard: {
+    flex: 1,
+    backgroundColor: colors.surface,
+    borderRadius: 18,
+    padding: 14,
     gap: 8,
+    marginBottom: 10,
+  },
+  historyContentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+    flexWrap: 'wrap',
+  },
+  historyDate: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '700',
   },
   historyAmount: {
     color: colors.accent,
