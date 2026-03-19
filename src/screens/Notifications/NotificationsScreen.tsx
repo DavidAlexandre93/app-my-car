@@ -4,6 +4,7 @@ import { SectionCard } from '../../components/SectionCard';
 import { fetchDashboardData } from '../../services/api/mockApi';
 import {
   getPromotionNotifications,
+  promotionCampaignPlans,
   promotionNotificationCategories,
   promotionPushExample,
   pushChannelRecommendation,
@@ -47,6 +48,19 @@ export function NotificationsScreen() {
             <View key={category.id} style={styles.categoryCard}>
               <Text style={styles.categoryTitle}>{category.title}</Text>
               <Text style={styles.categoryDescription}>{category.description}</Text>
+            </View>
+          ))}
+        </View>
+      </SectionCard>
+
+      <SectionCard title="Plano de campanhas promocionais" subtitle="Sugestão de segmentação e gatilhos para o envio das ofertas.">
+        <View style={styles.planList}>
+          {promotionCampaignPlans.map((plan) => (
+            <View key={plan.id} style={styles.planCard}>
+              <Text style={styles.planTitle}>{plan.title}</Text>
+              <Text style={styles.planMeta}>Gatilho: {plan.trigger}</Text>
+              <Text style={styles.planMeta}>Público: {plan.audience}</Text>
+              <Text style={styles.planObjective}>{plan.objective}</Text>
             </View>
           ))}
         </View>
@@ -124,6 +138,34 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   categoryDescription: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 19,
+  },
+
+  planList: {
+    gap: 10,
+  },
+  planCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: 16,
+    gap: 6,
+  },
+  planTitle: {
+    color: colors.text,
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  planMeta: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '600',
+    lineHeight: 18,
+  },
+  planObjective: {
     color: colors.textMuted,
     fontSize: 13,
     lineHeight: 19,
