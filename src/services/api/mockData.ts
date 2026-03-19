@@ -169,18 +169,28 @@ export const mockDashboardData: DashboardData = {
   featureHighlights: [
     {
       id: 'feature-1',
-      title: 'RF04 • Status do serviço',
-      description: 'Cliente acompanha cada etapa: recebimento, análise, aprovação, execução e retirada.',
+      title: 'Confiança do cliente',
+      description: 'Acompanhamento transparente do serviço aumenta a segurança e reduz dúvidas durante o atendimento.',
     },
     {
       id: 'feature-2',
-      title: 'RF07/RF08 • Orçamento digital',
-      description: 'Solicitação vai para o admin e retorna para o cliente com protocolo.',
+      title: 'Comunicação oficina-consumidor',
+      description: 'Atualizações, notificações e retorno de orçamento melhoram o contato entre a equipe e o cliente.',
     },
     {
       id: 'feature-3',
-      title: 'RF10 • Lembrete trimestral',
-      description: 'Notificações automatizadas ajudam na retenção e recorrência de revisão.',
+      title: 'Retorno com promoções e revisões',
+      description: 'Campanhas e lembretes recorrentes ajudam a gerar novas visitas e aumentar o faturamento.',
+    },
+    {
+      id: 'feature-4',
+      title: 'Histórico do veículo organizado',
+      description: 'Todas as manutenções ficam registradas em um só lugar para consulta rápida e confiável.',
+    },
+    {
+      id: 'feature-5',
+      title: 'Orçamento e acompanhamento digitais',
+      description: 'O app digitaliza a solicitação de orçamento e o acompanhamento do serviço do início ao fim.',
     },
   ],
   vehicles: [
