@@ -24,6 +24,7 @@ import {
   ReminderCadence,
   ServiceHistoryItem,
   Shortcut,
+  UserFlow,
   Vehicle,
 } from '../../types';
 
@@ -179,7 +180,27 @@ export function HomeScreen() {
         </View>
       </SectionCard>
 
-      <SectionCard title="Próximos serviços recomendados" subtitle="Sugestões com base no histórico e na revisão planejada.">
+      <SectionCard title="Fluxos principais do usuário" subtitle="Jornadas centrais do cliente e do admin dentro do MVP">
+        <View style={styles.stack}>
+          {data.userFlows.map((flow: UserFlow) => (
+            <View key={flow.id} style={styles.flowCard}>
+              <Text style={styles.listItemTitle}>{flow.title}</Text>
+              <Text style={styles.listItemDescription}>{flow.summary}</Text>
+              <View style={styles.flowSteps}>
+                {flow.steps.map((step, index) => (
+                  <View key={`${flow.id}-${index + 1}`} style={styles.flowStepItem}>
+                    <Text style={styles.flowStepIndex}>{index + 1}</Text>
+                    <Text style={styles.flowStepText}>{step}</Text>
+                  </View>
+                ))}
+              </View>
+              <Text style={styles.flowOutcome}>{flow.outcome}</Text>
+            </View>
+          ))}
+        </View>
+      </SectionCard>
+
+      <SectionCard title="Meus veículos" subtitle="Cliente pode cadastrar múltiplos veículos" rightLabel={`${data.vehicles.length} ativos`}>
         <View style={styles.stack}>
           {recommendedServices.map((service) => (
             <View key={service.id} style={styles.recommendationCard}>
@@ -429,9 +450,45 @@ const styles = StyleSheet.create({
   stack: {
     gap: 12,
   },
-  promotionCard: {
-    backgroundColor: colors.background,
-    borderRadius: 18,
+  flowCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+    gap: 10,
+  },
+  flowSteps: {
+    gap: 8,
+  },
+  flowStepItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+  },
+  flowStepIndex: {
+    width: 22,
+    height: 22,
+    borderRadius: 999,
+    backgroundColor: colors.primary,
+    color: '#171717',
+    textAlign: 'center',
+    fontSize: 12,
+    fontWeight: '800',
+    lineHeight: 22,
+  },
+  flowStepText: {
+    flex: 1,
+    color: colors.text,
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  flowOutcome: {
+    color: colors.accent,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  vehicleCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
     padding: 16,
     gap: 8,
     borderWidth: 1,

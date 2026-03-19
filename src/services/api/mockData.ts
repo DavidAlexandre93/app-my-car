@@ -193,6 +193,45 @@ export const mockDashboardData: DashboardData = {
       description: 'O app digitaliza a solicitação de orçamento e o acompanhamento do serviço do início ao fim.',
     },
   ],
+  userFlows: [
+    {
+      id: 'flow-1',
+      title: 'Fluxo 1 — acompanhamento do serviço',
+      summary: 'Cliente acompanha a entrada do veículo, o avanço do atendimento e a notificação de retirada.',
+      steps: [
+        'Cliente leva o carro à oficina.',
+        'Admin cadastra entrada do veículo.',
+        'Status é atualizado no sistema.',
+        'Cliente acompanha pelo app.',
+        'Quando finalizar, recebe notificação de retirada.',
+      ],
+      outcome: 'Mais transparência durante toda a execução do serviço.',
+    },
+    {
+      id: 'flow-2',
+      title: 'Fluxo 2 — solicitação de orçamento',
+      summary: 'Catálogo conectado ao time administrativo para cotações de pneus, peças e serviços.',
+      steps: [
+        'Cliente entra na área de pneus/peças.',
+        'Seleciona item ou serviço.',
+        'Clica em solicitar orçamento.',
+        'Pedido vai para o admin.',
+        'Admin analisa e responde.',
+      ],
+      outcome: 'A equipe responde com protocolo e retorno comercial centralizado.',
+    },
+    {
+      id: 'flow-3',
+      title: 'Fluxo 3 — revisão periódica',
+      summary: 'Histórico salva a conclusão do serviço e ativa o lembrete automático de manutenção.',
+      steps: [
+        'Serviço concluído e salvo no histórico.',
+        'Sistema registra data da última revisão.',
+        'Após 3 meses, cliente recebe lembrete automático.',
+      ],
+      outcome: 'O app ajuda a aumentar recorrência e retenção da oficina.',
+    },
+  ],
   vehicles: [
     {
       id: 'veh-1',

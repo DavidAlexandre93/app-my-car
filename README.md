@@ -193,33 +193,27 @@ O sistema pode notificar o cliente a cada 3 meses para lembrar sobre a necessida
 
 ## Fluxos principais do usuário
 
-### Fluxo 1: acompanhar serviço do veículo
+### Fluxo 1 — acompanhamento do serviço
 
-1. O cliente leva o veículo até a oficina.
-2. A equipe registra a entrada do carro no sistema.
-3. O status do atendimento é atualizado ao longo do processo.
-4. O cliente acompanha as etapas pelo aplicativo.
-5. Ao final, recebe a notificação de retirada.
+1. Cliente leva o carro à oficina.
+2. Admin cadastra entrada do veículo.
+3. Status é atualizado no sistema.
+4. Cliente acompanha pelo app.
+5. Quando finalizar, recebe notificação de retirada.
 
-### Fluxo 2: solicitar orçamento
+### Fluxo 2 — solicitação de orçamento
 
-1. O cliente acessa a área de produtos e serviços.
-2. Seleciona um item ou tipo de serviço.
-3. Preenche os detalhes da solicitação.
-4. Envia o pedido para a equipe administrativa.
-5. A oficina analisa e entra em contato com o cliente.
+1. Cliente entra na área de pneus/peças.
+2. Seleciona item ou serviço.
+3. Clica em solicitar orçamento.
+4. Pedido vai para o admin.
+5. Admin analisa e responde.
 
-### Fluxo 3: consultar histórico de manutenção
+### Fluxo 3 — revisão periódica
 
-1. O cliente acessa a área de histórico.
-2. Seleciona o veículo desejado.
-3. Visualiza todos os serviços já realizados, com data e descrição.
-
-### Fluxo 4: lembrete de revisão
-
-1. A oficina finaliza um serviço no sistema.
-2. O app registra a data da última manutenção.
-3. Após 3 meses, o cliente recebe uma notificação sugerindo nova revisão.
+1. Serviço concluído e salvo no histórico.
+2. Sistema registra data da última revisão.
+3. Após 3 meses, cliente recebe lembrete automático.
 
 ---
 

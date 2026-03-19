@@ -157,18 +157,12 @@ export type KPI = {
   value: string;
 };
 
-export type AppModule = {
+export type UserFlow = {
   id: string;
-  name: string;
-  description: string;
-  responsibilities: string[];
-};
-
-export type DomainEntity = {
-  id: string;
-  name: string;
-  description: string;
-  keyFields: string[];
+  title: string;
+  summary: string;
+  steps: string[];
+  outcome: string;
 };
 
 export type DashboardData = {
@@ -184,6 +178,7 @@ export type DashboardData = {
   domainEntities: DomainEntity[];
   shortcuts: Shortcut[];
   featureHighlights: FeatureHighlight[];
+  userFlows: UserFlow[];
   vehicles: Vehicle[];
   activeServices: ActiveService[];
   promotions: Promotion[];
