@@ -9,6 +9,35 @@ export type Vehicle = {
   statusLabel: string;
 };
 
+export type CustomerProfile = {
+  name: string;
+  phone: string;
+  email: string;
+};
+
+export type AuthUser = CustomerProfile & {
+  id: string;
+  password: string;
+  vehicles: Vehicle[];
+};
+
+export type LoginPayload = {
+  email: string;
+  password: string;
+};
+
+export type RegisterPayload = CustomerProfile & {
+  password: string;
+};
+
+export type VehiclePayload = {
+  plate: string;
+  brand: string;
+  model: string;
+  year: string;
+  mileage: string;
+};
+
 export type ServiceStatusStep = {
   label: string;
   completed: boolean;
