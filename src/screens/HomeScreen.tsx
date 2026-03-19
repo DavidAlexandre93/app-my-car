@@ -10,19 +10,25 @@ import {
 import { SectionCard } from '../components/SectionCard';
 import { fetchDashboardData, submitQuoteRequest } from '../services/mockApi';
 import { colors } from '../theme/colors';
-import { ActiveService, AppNotification, CatalogItem, DashboardData, Promotion, ServiceHistoryItem, ServiceStatusStep } from '../types';
-
-const quickActions = [
-  'Acompanhar serviço',
-  'Solicitar orçamento',
-  'Histórico',
-  'Notificações',
-];
+import {
+  ActiveService,
+  AdminTask,
+  AppNotification,
+  CatalogItem,
+  DashboardData,
+  FeatureHighlight,
+  KPI,
+  Promotion,
+  ServiceHistoryItem,
+  ServiceStatusStep,
+  Shortcut,
+  Vehicle,
+} from '../types';
 
 export function HomeScreen() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [quoteDescription, setQuoteDescription] = useState('Quero orçamento para 4 pneus aro 18 e alinhamento.');
+  const [quoteDescription, setQuoteDescription] = useState('Quero orçamento para 4 pneus aro 18, alinhamento e revisão preventiva.');
   const [quoteFeedback, setQuoteFeedback] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -42,7 +48,7 @@ export function HomeScreen() {
     setSubmitting(true);
     const response = await submitQuoteRequest({
       vehicleId: activeVehicle.id,
-      type: 'Pneus e serviços',
+      type: 'Pneus, peças e serviços',
       description: quoteDescription,
     });
 
@@ -62,10 +68,10 @@ export function HomeScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.hero}>
-        <Text style={styles.brand}>IMPACTO Prime</Text>
-        <Text style={styles.heroTitle}>Pensou pneus, pensou impacto.</Text>
+        <Text style={styles.brand}>Impacto Prime AutoCare</Text>
+        <Text style={styles.heroTitle}>Demo do app da unidade Taboão da Serra.</Text>
         <Text style={styles.heroText}>
-          Acompanhe serviços, receba promoções, solicite orçamentos e mantenha o histórico do seu carro na palma da mão.
+          Experiência digital para acompanhar serviços, receber promoções, solicitar orçamentos e manter o histórico do veículo sempre acessível.
         </Text>
         <View style={styles.heroBadgeRow}>
           <View style={styles.heroBadge}>
@@ -77,36 +83,75 @@ export function HomeScreen() {
             <Text style={styles.heroBadgeValue}>{data.customer.nextRevision}</Text>
           </View>
         </View>
+        <Text style={styles.heroFootnote}>{data.customer.unit} • {data.customer.memberSince}</Text>
       </View>
 
-      <SectionCard title="Atalhos rápidos" subtitle={data.customer.unit}>
-        <View style={styles.actionGrid}>
-          {quickActions.map((action) => (
-            <View key={action} style={styles.actionPill}>
-              <Text style={styles.actionText}>{action}</Text>
+      <SectionCard title="MVP do demo" subtitle="Escopo essencial para apresentar valor rapidamente">
+        <View style={styles.kpiGrid}>
+          {data.kpis.map((item: KPI) => (
+            <View key={item.id} style={styles.kpiCard}>
+              <Text style={styles.kpiValue}>{item.value}</Text>
+              <Text style={styles.kpiLabel}>{item.label}</Text>
             </View>
           ))}
         </View>
       </SectionCard>
 
-      <SectionCard
-        title="Meu veículo principal"
-        subtitle={activeVehicle.notes}
-        rightLabel={activeVehicle.plate}
-      >
-        <View style={styles.vehicleMetaRow}>
-          <View>
-            <Text style={styles.metaLabel}>Modelo</Text>
-            <Text style={styles.metaValue}>{activeVehicle.brand} {activeVehicle.model}</Text>
+      <SectionCard title="Jornada do cliente" subtitle="Cadastro, login, veículos e serviços">
+        <View style={styles.stack}>
+          <View style={styles.authCard}>
+            <Text style={styles.listItemTitle}>Login / Cadastro</Text>
+            <Text style={styles.listItemDescription}>
+              Entrada com e-mail ou telefone, recuperação de acesso e onboarding para cadastrar um ou mais veículos.
+            </Text>
           </View>
-          <View>
-            <Text style={styles.metaLabel}>Ano</Text>
-            <Text style={styles.metaValue}>{activeVehicle.year}</Text>
+          <View style={styles.actionGrid}>
+            {data.shortcuts.map((shortcut: Shortcut) => (
+              <View key={shortcut.id} style={styles.actionPill}>
+                <Text style={styles.actionText}>{shortcut.label}</Text>
+                <Text style={styles.actionDescription}>{shortcut.description}</Text>
+              </View>
+            ))}
           </View>
-          <View>
-            <Text style={styles.metaLabel}>KM</Text>
-            <Text style={styles.metaValue}>{activeVehicle.mileage.toLocaleString('pt-BR')}</Text>
-          </View>
+        </View>
+      </SectionCard>
+
+      <SectionCard title="Requisitos em destaque" subtitle="Recorte funcional pedido para o projeto">
+        <View style={styles.stack}>
+          {data.featureHighlights.map((feature: FeatureHighlight) => (
+            <View key={feature.id} style={styles.featureItem}>
+              <Text style={styles.listItemTitle}>{feature.title}</Text>
+              <Text style={styles.listItemDescription}>{feature.description}</Text>
+            </View>
+          ))}
+        </View>
+      </SectionCard>
+
+      <SectionCard title="Meus veículos" subtitle="Cliente pode cadastrar múltiplos veículos" rightLabel={`${data.vehicles.length} ativos`}>
+        <View style={styles.stack}>
+          {data.vehicles.map((vehicle: Vehicle) => (
+            <View key={vehicle.id} style={styles.vehicleCard}>
+              <View style={styles.vehicleHeader}>
+                <Text style={styles.listItemTitle}>{vehicle.brand} {vehicle.model}</Text>
+                <Text style={styles.highlight}>{vehicle.plate}</Text>
+              </View>
+              <View style={styles.vehicleMetaRow}>
+                <View>
+                  <Text style={styles.metaLabel}>Ano</Text>
+                  <Text style={styles.metaValue}>{vehicle.year}</Text>
+                </View>
+                <View>
+                  <Text style={styles.metaLabel}>KM</Text>
+                  <Text style={styles.metaValue}>{vehicle.mileage.toLocaleString('pt-BR')}</Text>
+                </View>
+                <View>
+                  <Text style={styles.metaLabel}>Status</Text>
+                  <Text style={styles.metaValue}>{vehicle.statusLabel}</Text>
+                </View>
+              </View>
+              <Text style={styles.listItemDescription}>{vehicle.notes}</Text>
+            </View>
+          ))}
         </View>
       </SectionCard>
 
@@ -119,6 +164,7 @@ export function HomeScreen() {
         >
           <View style={styles.serviceSummary}>
             <Text style={styles.serviceBudget}>Orçamento atual: {service.budget}</Text>
+            <Text style={styles.metaLabel}>{service.technician}</Text>
             <Text style={styles.metaLabel}>Status em tempo real</Text>
           </View>
           <View style={styles.timeline}>
@@ -140,13 +186,14 @@ export function HomeScreen() {
         </SectionCard>
       ))}
 
-      <SectionCard title="Promoções e campanhas" subtitle="Ofertas em destaque da oficina">
+      <SectionCard title="Promoções e campanhas" subtitle="Push notifications e ofertas da oficina">
         <View style={styles.stack}>
           {data.promotions.map((promotion: Promotion) => (
             <View key={promotion.id} style={styles.listItem}>
               <View style={styles.listItemText}>
                 <Text style={styles.listItemTitle}>{promotion.title}</Text>
                 <Text style={styles.listItemDescription}>{promotion.description}</Text>
+                <Text style={styles.notificationDate}>{promotion.cta}</Text>
               </View>
               <Text style={styles.highlight}>{promotion.highlight}</Text>
             </View>
@@ -154,7 +201,7 @@ export function HomeScreen() {
         </View>
       </SectionCard>
 
-      <SectionCard title="Catálogo de pneus, peças e serviços" subtitle="Dados mocados simulando retorno de API">
+      <SectionCard title="Loja / catálogo" subtitle="Pneus, peças e serviços com botão de orçamento">
         <View style={styles.stack}>
           {data.catalog.map((item: CatalogItem) => (
             <View key={item.id} style={styles.catalogCard}>
@@ -170,7 +217,7 @@ export function HomeScreen() {
         </View>
       </SectionCard>
 
-      <SectionCard title="Solicitar orçamento" subtitle="Envie um pedido rápido para o administrativo">
+      <SectionCard title="Solicitar orçamento" subtitle="Fluxo: cliente solicita → admin analisa → cliente recebe retorno">
         <TextInput
           value={quoteDescription}
           onChangeText={setQuoteDescription}
@@ -187,7 +234,7 @@ export function HomeScreen() {
         {quoteFeedback ? <Text style={styles.feedback}>{quoteFeedback}</Text> : null}
       </SectionCard>
 
-      <SectionCard title="Histórico de serviços" subtitle="Registros anteriores por veículo">
+      <SectionCard title="Histórico de serviços" subtitle="Registro completo por veículo">
         <View style={styles.stack}>
           {data.history.map((entry: ServiceHistoryItem) => (
             <View key={entry.id} style={styles.historyItem}>
@@ -204,7 +251,7 @@ export function HomeScreen() {
         </View>
       </SectionCard>
 
-      <SectionCard title="Central de notificações" subtitle="Promoções, status de serviço e lembretes">
+      <SectionCard title="Central de notificações" subtitle="Promoções, carro pronto e lembrete trimestral">
         <View style={styles.stack}>
           {data.notifications.map((notification: AppNotification) => (
             <View key={notification.id} style={styles.notificationItem}>
@@ -214,6 +261,20 @@ export function HomeScreen() {
                 <Text style={styles.listItemDescription}>{notification.message}</Text>
                 <Text style={styles.notificationDate}>{notification.date}</Text>
               </View>
+            </View>
+          ))}
+        </View>
+      </SectionCard>
+
+      <SectionCard title="Painel administrativo" subtitle="Área web ou interna conectada ao mesmo backend">
+        <View style={styles.stack}>
+          {data.adminTasks.map((task: AdminTask) => (
+            <View key={task.id} style={styles.adminTaskCard}>
+              <View style={styles.vehicleHeader}>
+                <Text style={styles.listItemTitle}>{task.title}</Text>
+                <Text style={styles.adminStatus}>{task.status}</Text>
+              </View>
+              <Text style={styles.listItemDescription}>{task.description}</Text>
             </View>
           ))}
         </View>
@@ -265,46 +326,95 @@ const styles = StyleSheet.create({
   heroBadgeRow: {
     flexDirection: 'row',
     gap: 12,
-    flexWrap: 'wrap',
   },
   heroBadge: {
-    flexGrow: 1,
-    minWidth: 140,
+    flex: 1,
     backgroundColor: colors.surfaceAlt,
     borderRadius: 18,
     padding: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
-    gap: 6,
+    gap: 4,
   },
   heroBadgeLabel: {
     color: colors.textMuted,
     fontSize: 12,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
   },
   heroBadgeValue: {
     color: colors.text,
     fontSize: 16,
     fontWeight: '700',
   },
-  actionGrid: {
+  heroFootnote: {
+    color: colors.accent,
+    fontSize: 12,
+  },
+  kpiGrid: {
     flexDirection: 'row',
+    gap: 12,
     flexWrap: 'wrap',
-    gap: 10,
+  },
+  kpiCard: {
+    flexGrow: 1,
+    minWidth: 90,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 18,
+    padding: 14,
+    gap: 6,
+  },
+  kpiValue: {
+    color: colors.primary,
+    fontWeight: '800',
+    fontSize: 18,
+  },
+  kpiLabel: {
+    color: colors.textMuted,
+    fontSize: 12,
+    lineHeight: 18,
+  },
+  stack: {
+    gap: 12,
+  },
+  authCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+    gap: 6,
+  },
+  actionGrid: {
+    gap: 12,
   },
   actionPill: {
     backgroundColor: colors.surfaceAlt,
-    borderRadius: 999,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderRadius: 18,
+    padding: 16,
+    gap: 4,
   },
   actionText: {
-    color: colors.accent,
+    color: colors.text,
+    fontWeight: '700',
+    fontSize: 15,
+  },
+  actionDescription: {
+    color: colors.textMuted,
     fontSize: 13,
-    fontWeight: '600',
+    lineHeight: 18,
+  },
+  featureItem: {
+    borderLeftWidth: 3,
+    borderLeftColor: colors.primary,
+    paddingLeft: 12,
+    gap: 4,
+  },
+  vehicleCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+    gap: 12,
+  },
+  vehicleHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 10,
   },
   vehicleMetaRow: {
     flexDirection: 'row',
@@ -315,43 +425,47 @@ const styles = StyleSheet.create({
   metaLabel: {
     color: colors.textMuted,
     fontSize: 12,
-    marginBottom: 4,
   },
   metaValue: {
     color: colors.text,
-    fontSize: 15,
-    fontWeight: '700',
+    fontWeight: '600',
+    marginTop: 4,
   },
   serviceSummary: {
     gap: 4,
   },
   serviceBudget: {
-    color: colors.primary,
-    fontSize: 15,
+    color: colors.accent,
+    fontSize: 16,
     fontWeight: '700',
   },
   timeline: {
-    gap: 12,
+    gap: 10,
+    marginTop: 4,
   },
   timelineItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
   },
   timelineDot: {
-    width: 14,
-    height: 14,
+    width: 12,
+    height: 12,
     borderRadius: 999,
-    backgroundColor: colors.border,
+    borderWidth: 2,
+    borderColor: colors.border,
   },
   timelineDotDone: {
     backgroundColor: colors.success,
+    borderColor: colors.success,
   },
   timelineDotCurrent: {
     backgroundColor: colors.primary,
+    borderColor: colors.primary,
     shadowColor: colors.primary,
-    shadowOpacity: 0.7,
+    shadowOpacity: 0.4,
     shadowRadius: 8,
+    shadowOffset: { width: 0, height: 0 },
   },
   timelineText: {
     color: colors.textMuted,
@@ -361,18 +475,13 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontWeight: '700',
   },
-  stack: {
-    gap: 12,
-  },
   listItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 12,
     backgroundColor: colors.surfaceAlt,
-    borderRadius: 18,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderRadius: 20,
+    padding: 16,
   },
   listItemText: {
     flex: 1,
@@ -386,21 +495,18 @@ const styles = StyleSheet.create({
   listItemDescription: {
     color: colors.textMuted,
     fontSize: 13,
-    lineHeight: 19,
+    lineHeight: 18,
   },
   highlight: {
     color: colors.primary,
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '800',
-    alignSelf: 'flex-start',
   },
   catalogCard: {
     backgroundColor: colors.surfaceAlt,
-    borderRadius: 18,
-    padding: 14,
+    borderRadius: 20,
+    padding: 16,
     gap: 6,
-    borderWidth: 1,
-    borderColor: colors.border,
   },
   catalogCategory: {
     color: colors.info,
@@ -411,36 +517,34 @@ const styles = StyleSheet.create({
   catalogFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 8,
+    marginTop: 6,
+    gap: 12,
   },
   catalogPrice: {
     color: colors.primary,
-    fontSize: 16,
-    fontWeight: '800',
+    fontSize: 15,
+    fontWeight: '700',
   },
   input: {
     minHeight: 110,
-    backgroundColor: colors.surfaceAlt,
-    borderRadius: 18,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: colors.border,
+    backgroundColor: colors.surfaceAlt,
     color: colors.text,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
+    padding: 16,
     textAlignVertical: 'top',
-    fontSize: 14,
   },
   primaryButton: {
     backgroundColor: colors.primary,
     borderRadius: 18,
-    paddingVertical: 15,
+    paddingVertical: 14,
     alignItems: 'center',
   },
   primaryButtonText: {
-    color: '#231600',
-    fontSize: 15,
+    color: '#171717',
     fontWeight: '800',
+    fontSize: 15,
   },
   feedback: {
     color: colors.success,
@@ -448,45 +552,53 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   historyItem: {
-    backgroundColor: colors.surfaceAlt,
-    borderRadius: 18,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
-    gap: 10,
-  },
-  historyMeta: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    gap: 12,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+  },
+  historyMeta: {
+    alignItems: 'flex-end',
+    gap: 8,
   },
   historyAmount: {
-    color: colors.primary,
-    fontSize: 14,
-    fontWeight: '800',
+    color: colors.accent,
+    fontWeight: '700',
   },
   notificationItem: {
     flexDirection: 'row',
     gap: 12,
-    padding: 14,
     backgroundColor: colors.surfaceAlt,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderRadius: 20,
+    padding: 16,
   },
   notificationBullet: {
-    width: 10,
-    height: 10,
+    width: 12,
+    height: 12,
     borderRadius: 999,
-    backgroundColor: colors.textMuted,
-    marginTop: 6,
+    marginTop: 4,
+    backgroundColor: colors.border,
   },
   notificationUnread: {
     backgroundColor: colors.primary,
   },
   notificationDate: {
     color: colors.accent,
-    fontSize: 11,
-    marginTop: 6,
+    fontSize: 12,
+    marginTop: 4,
+  },
+  adminTaskCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+    gap: 6,
+  },
+  adminStatus: {
+    color: colors.warning,
+    fontSize: 12,
+    fontWeight: '800',
+    textTransform: 'uppercase',
   },
 });

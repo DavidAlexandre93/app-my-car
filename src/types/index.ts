@@ -6,6 +6,7 @@ export type Vehicle = {
   year: number;
   mileage: number;
   notes: string;
+  statusLabel: string;
 };
 
 export type ServiceStatusStep = {
@@ -21,6 +22,7 @@ export type ActiveService = {
   description: string;
   eta: string;
   budget: string;
+  technician: string;
   steps: ServiceStatusStep[];
 };
 
@@ -29,6 +31,7 @@ export type Promotion = {
   title: string;
   description: string;
   highlight: string;
+  cta: string;
 };
 
 export type CatalogItem = {
@@ -64,16 +67,46 @@ export type QuoteRequest = {
   description: string;
 };
 
+export type Shortcut = {
+  id: string;
+  label: string;
+  description: string;
+};
+
+export type FeatureHighlight = {
+  id: string;
+  title: string;
+  description: string;
+};
+
+export type AdminTask = {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+};
+
+export type KPI = {
+  id: string;
+  label: string;
+  value: string;
+};
+
 export type DashboardData = {
   customer: {
     name: string;
     unit: string;
     nextRevision: string;
+    memberSince: string;
   };
+  kpis: KPI[];
+  shortcuts: Shortcut[];
+  featureHighlights: FeatureHighlight[];
   vehicles: Vehicle[];
   activeServices: ActiveService[];
   promotions: Promotion[];
   catalog: CatalogItem[];
   history: ServiceHistoryItem[];
   notifications: AppNotification[];
+  adminTasks: AdminTask[];
 };
