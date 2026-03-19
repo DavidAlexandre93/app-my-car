@@ -51,6 +51,13 @@ export const mockDashboardData: DashboardData = {
       description: 'Notificações automatizadas ajudam na retenção e recorrência de revisão.',
     },
   ],
+  revisionReminder: {
+    title: 'Lembrete de revisão a cada 3 meses',
+    cadence: 'Disparo automático trimestral',
+    trigger: '3 meses após a última revisão registrada do veículo',
+    message: '“Já faz 3 meses desde sua última revisão. Agende uma nova visita na Impacto Prime.”',
+    benefit: 'Ajuda na retenção de clientes e aumenta a recorrência de serviços preventivos.',
+  },
   vehicles: [
     {
       id: 'veh-1',
@@ -236,6 +243,12 @@ export const mockDashboardData: DashboardData = {
       title: 'Cadastrar campanha sazonal',
       description: 'Subir promoção de alinhamento e balanceamento de abril.',
       status: 'Planejado',
+    },
+    {
+      id: 'adm-4',
+      title: 'Programar lembretes de revisão',
+      description: 'Automação deve avisar clientes exatamente 3 meses após a última revisão registrada.',
+      status: 'Ativo',
     },
   ],
 };

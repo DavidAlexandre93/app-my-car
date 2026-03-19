@@ -79,6 +79,14 @@ export type FeatureHighlight = {
   description: string;
 };
 
+export type RevisionReminder = {
+  title: string;
+  cadence: string;
+  trigger: string;
+  message: string;
+  benefit: string;
+};
+
 export type AdminTask = {
   id: string;
   title: string;
@@ -102,6 +110,7 @@ export type DashboardData = {
   kpis: KPI[];
   shortcuts: Shortcut[];
   featureHighlights: FeatureHighlight[];
+  revisionReminder: RevisionReminder;
   vehicles: Vehicle[];
   activeServices: ActiveService[];
   promotions: Promotion[];
