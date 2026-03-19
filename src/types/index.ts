@@ -65,6 +65,8 @@ export type ServiceStatusStep = {
   label: string;
   completed: boolean;
   current?: boolean;
+  time: string;
+  details: string;
 };
 
 export type ActiveService = {
@@ -75,6 +77,10 @@ export type ActiveService = {
   eta: string;
   budget: string;
   technician: string;
+  serviceOrder: string;
+  lastUpdated: string;
+  customerMessage: string;
+  nextStep: string;
   steps: ServiceStatusStep[];
 };
 

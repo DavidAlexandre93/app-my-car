@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SectionCard } from '../../components/SectionCard';
+import { ServiceProgressTracker } from '../../components/ServiceProgressTracker';
 import { fetchDashboardData } from '../../services/api/mockApi';
 import { DashboardData } from '../../types';
 import { colors } from '../../utils/colors';
@@ -115,9 +116,9 @@ export function HomeScreen({ customerName }: HomeScreenProps) {
         {activeService ? (
           <View style={styles.statusPanel}>
             <View style={styles.statusHeader}>
-              <View>
+              <View style={styles.statusHeaderText}>
                 <Text style={styles.cardTitle}>{activeService.title}</Text>
-                <Text style={styles.cardDescription}>Responsável: {activeService.technician}</Text>
+                <Text style={styles.cardDescription}>{activeService.description}</Text>
               </View>
               <View style={styles.budgetBadge}>
                 <Text style={styles.budgetLabel}>Orçamento</Text>
@@ -125,25 +126,7 @@ export function HomeScreen({ customerName }: HomeScreenProps) {
               </View>
             </View>
 
-            <View style={styles.stack}>
-              {activeService.steps.map((step, index) => (
-                <View key={`${step.label}-${index}`} style={styles.stepRow}>
-                  <View
-                    style={[
-                      styles.stepIndicator,
-                      step.completed ? styles.stepIndicatorDone : undefined,
-                      step.current ? styles.stepIndicatorCurrent : undefined,
-                    ]}
-                  />
-                  <View style={styles.stepContent}>
-                    <Text style={styles.stepTitle}>{step.label}</Text>
-                    <Text style={styles.stepMeta}>
-                      {step.current ? 'Etapa atual do atendimento' : step.completed ? 'Etapa concluída' : 'Aguardando próxima atualização'}
-                    </Text>
-                  </View>
-                </View>
-              ))}
-            </View>
+            <ServiceProgressTracker service={activeService} />
           </View>
         ) : (
           <Text style={styles.lead}>Seu veículo não possui uma ordem de serviço aberta agora.</Text>
@@ -289,6 +272,10 @@ const styles = StyleSheet.create({
     gap: 12,
     alignItems: 'flex-start',
   },
+  statusHeaderText: {
+    flex: 1,
+    gap: 4,
+  },
   budgetBadge: {
     minWidth: 112,
     backgroundColor: colors.surfaceAlt,
@@ -306,38 +293,5 @@ const styles = StyleSheet.create({
   budgetValue: {
     color: colors.primary,
     fontWeight: '800',
-  },
-  stepRow: {
-    flexDirection: 'row',
-    gap: 12,
-    alignItems: 'flex-start',
-  },
-  stepIndicator: {
-    width: 14,
-    height: 14,
-    borderRadius: 999,
-    marginTop: 2,
-    backgroundColor: colors.border,
-  },
-  stepIndicatorDone: {
-    backgroundColor: colors.success,
-  },
-  stepIndicatorCurrent: {
-    backgroundColor: colors.primary,
-  },
-  stepContent: {
-    flex: 1,
-    gap: 4,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  stepTitle: {
-    color: colors.text,
-    fontWeight: '700',
-  },
-  stepMeta: {
-    color: colors.textMuted,
-    fontSize: 13,
   },
 });
