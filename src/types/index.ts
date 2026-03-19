@@ -147,12 +147,12 @@ export type FeatureHighlight = {
   description: string;
 };
 
-export type FunctionalRequirement = {
-  id: string;
+export type RevisionReminder = {
   title: string;
-  description: string;
-  appArea: string;
-  status: 'Disponível no MVP' | 'Disponível na demo' | 'Fluxo administrativo';
+  cadence: string;
+  trigger: string;
+  message: string;
+  benefit: string;
 };
 
 export type AdminTask = {
@@ -189,7 +189,7 @@ export type DashboardData = {
   domainEntities: DomainEntity[];
   shortcuts: Shortcut[];
   featureHighlights: FeatureHighlight[];
-  requirements: FunctionalRequirement[];
+  revisionReminder: RevisionReminder;
   vehicles: Vehicle[];
   activeServices: ActiveService[];
   promotions: Promotion[];

@@ -231,6 +231,30 @@ export function HomeScreen() {
         </View>
       </SectionCard>
 
+      <SectionCard
+        title={data.revisionReminder.title}
+        subtitle="Automação de retenção e recorrência para revisões preventivas"
+        rightLabel={data.revisionReminder.cadence}
+      >
+        <View style={styles.reminderCard}>
+          <View style={styles.reminderMetaRow}>
+            <View style={styles.reminderMetaPill}>
+              <Text style={styles.reminderMetaLabel}>Disparo</Text>
+              <Text style={styles.reminderMetaValue}>{data.revisionReminder.trigger}</Text>
+            </View>
+            <View style={styles.reminderMetaPill}>
+              <Text style={styles.reminderMetaLabel}>Objetivo</Text>
+              <Text style={styles.reminderMetaValue}>Retenção e recorrência</Text>
+            </View>
+          </View>
+          <View style={styles.reminderExample}>
+            <Text style={styles.reminderExampleLabel}>Exemplo de notificação</Text>
+            <Text style={styles.reminderExampleText}>{data.revisionReminder.message}</Text>
+          </View>
+          <Text style={styles.listItemDescription}>{data.revisionReminder.benefit}</Text>
+        </View>
+      </SectionCard>
+
       <SectionCard title="Meus veículos" subtitle="Cliente pode cadastrar múltiplos veículos" rightLabel={`${data.vehicles.length} ativos`}>
         <View style={styles.stack}>
           {recommendedServices.map((service) => (
@@ -657,6 +681,52 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     marginTop: 2,
+  },
+  reminderCard: {
+    gap: 12,
+  },
+  reminderMetaRow: {
+    flexDirection: 'row',
+    gap: 12,
+    flexWrap: 'wrap',
+  },
+  reminderMetaPill: {
+    flex: 1,
+    minWidth: 150,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 18,
+    padding: 14,
+    gap: 4,
+  },
+  reminderMetaLabel: {
+    color: colors.textMuted,
+    fontSize: 12,
+    textTransform: 'uppercase',
+  },
+  reminderMetaValue: {
+    color: colors.text,
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  reminderExample: {
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surfaceAlt,
+    padding: 16,
+    gap: 6,
+  },
+  reminderExampleLabel: {
+    color: colors.accent,
+    fontSize: 12,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
+  reminderExampleText: {
+    color: colors.text,
+    fontSize: 15,
+    lineHeight: 22,
+    fontWeight: '600',
   },
   vehicleCard: {
     backgroundColor: colors.surfaceAlt,
