@@ -1,6 +1,32 @@
 import { DashboardData } from '../../types';
 
 export const mockDashboardData: DashboardData = {
+  objectives: [
+    {
+      id: 'obj-1',
+      audience: 'Cliente',
+      title: 'Receber promoções e campanhas no celular',
+      description: 'A oficina divulga ofertas segmentadas de pneus, peças e serviços com chamadas para orçamento ou agendamento.',
+    },
+    {
+      id: 'obj-2',
+      audience: 'Cliente',
+      title: 'Acompanhar o status do carro em tempo real',
+      description: 'Cada atendimento mostra a etapa atual do serviço e o cliente é avisado quando o veículo está pronto para retirada.',
+    },
+    {
+      id: 'obj-3',
+      audience: 'Cliente',
+      title: 'Consultar histórico e pedir orçamento',
+      description: 'O app centraliza histórico de manutenção, catálogo e solicitação de orçamento para pneus, peças e serviços.',
+    },
+    {
+      id: 'obj-4',
+      audience: 'Empresa',
+      title: 'Gerenciar atendimentos, orçamentos, status e notificações',
+      description: 'A área administrativa coordena filas de atendimento, respostas comerciais, lembretes trimestrais e mensagens transacionais.',
+    },
+  ],
   customer: {
     name: 'Lucas Martins',
     unit: 'Impacto Prime • Taboão da Serra',
@@ -322,6 +348,42 @@ export const mockDashboardData: DashboardData = {
       message: 'Já faz 3 meses desde sua última revisão. Agende uma nova visita na Impacto Prime.',
       date: '18 mar 2026',
       read: true,
+    },
+  ],
+  reminderCadences: [
+    {
+      id: 'rem-1',
+      title: 'Revisão preventiva automática',
+      cadence: 'A cada 3 meses',
+      trigger: 'Disparo após a data da última manutenção concluída.',
+      description: 'Envia push, banner no app e CTA para reagendar revisão ou solicitar nova avaliação.',
+    },
+    {
+      id: 'rem-2',
+      title: 'Recuperação de orçamento sem resposta',
+      cadence: '48 horas depois',
+      trigger: 'Ativado quando o cliente visualiza a cotação e ainda não aprova.',
+      description: 'A equipe comercial recebe alerta e o cliente recebe lembrete amigável com a oferta vigente.',
+    },
+  ],
+  adminWorkspace: [
+    {
+      id: 'wrk-1',
+      owner: 'Atendimento',
+      title: 'Gestão de entrada e andamento do serviço',
+      description: 'Registrar check-in do veículo, atualizar etapas da OS e sinalizar o momento de retirada.',
+    },
+    {
+      id: 'wrk-2',
+      owner: 'Comercial',
+      title: 'Orçamentos de pneus, peças e serviços',
+      description: 'Receber pedidos vindos do app, montar propostas e acompanhar conversão de campanhas.',
+    },
+    {
+      id: 'wrk-3',
+      owner: 'Relacionamento',
+      title: 'Notificações e campanhas',
+      description: 'Programar promoções, avisos transacionais e lembretes periódicos com segmentação por cliente ou veículo.',
     },
   ],
   adminTasks: [
