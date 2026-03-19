@@ -116,6 +116,26 @@ export function HomeScreen() {
         </View>
       </SectionCard>
 
+
+      <SectionCard title="Stack solicitado para este projeto" subtitle="Base tecnológica escolhida para mobile, backend, autenticação e painel web">
+        <View style={styles.stack}>
+          <View style={styles.techGrid}>
+            <View style={styles.techChip}><Text style={styles.techChipLabel}>React Native</Text><Text style={styles.techChipValue}>Expo + TypeScript</Text></View>
+            <View style={styles.techChip}><Text style={styles.techChipLabel}>Navegação</Text><Text style={styles.techChipValue}>React Navigation</Text></View>
+            <View style={styles.techChip}><Text style={styles.techChipLabel}>HTTP</Text><Text style={styles.techChipValue}>Axios</Text></View>
+            <View style={styles.techChip}><Text style={styles.techChipLabel}>Estado</Text><Text style={styles.techChipValue}>Zustand</Text></View>
+            <View style={styles.techChip}><Text style={styles.techChipLabel}>Backend demo</Text><Text style={styles.techChipValue}>Firebase</Text></View>
+            <View style={styles.techChip}><Text style={styles.techChipLabel}>Banco</Text><Text style={styles.techChipValue}>Firestore</Text></View>
+            <View style={styles.techChip}><Text style={styles.techChipLabel}>Push</Text><Text style={styles.techChipValue}>FCM</Text></View>
+            <View style={styles.techChip}><Text style={styles.techChipLabel}>Auth</Text><Text style={styles.techChipValue}>Firebase Auth / JWT</Text></View>
+            <View style={styles.techChip}><Text style={styles.techChipLabel}>Painel admin</Text><Text style={styles.techChipValue}>React.js + Material UI</Text></View>
+          </View>
+          <Text style={styles.architectureNote}>
+            Para acelerar a demo, a recomendação é manter Firebase no MVP e preparar uma evolução futura para Node.js + Express/NestJS com PostgreSQL quando houver necessidade de regras mais avançadas, integrações e relatórios.
+          </Text>
+        </View>
+      </SectionCard>
+
       <SectionCard title="Requisitos em destaque" subtitle="Recorte funcional pedido para o projeto">
         <View style={styles.stack}>
           {data.featureHighlights.map((feature: FeatureHighlight) => (
@@ -381,6 +401,36 @@ const styles = StyleSheet.create({
   },
   actionGrid: {
     gap: 12,
+  },
+  techGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  techChip: {
+    minWidth: 140,
+    flexGrow: 1,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 18,
+    padding: 14,
+    gap: 4,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  techChipLabel: {
+    color: colors.textMuted,
+    fontSize: 12,
+    textTransform: 'uppercase',
+  },
+  techChipValue: {
+    color: colors.text,
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  architectureNote: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 20,
   },
   actionPill: {
     backgroundColor: colors.surfaceAlt,
