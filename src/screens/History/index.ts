@@ -1,1 +1,1 @@
-export const HistoryScreen = 'History';
+export { HistoryScreen } from './HistoryScreen';

@@ -5,6 +5,7 @@ import { LoginScreen } from './src/screens/Login';
 import { RegisterScreen } from './src/screens/Register';
 import { SectionCard } from './src/components/SectionCard';
 import { HomeScreen } from './src/screens/Home';
+import { HistoryScreen } from './src/screens/History';
 import { QuoteRequestScreen } from './src/screens/QuoteRequest';
 import { useAuthStore } from './src/store';
 import { colors } from './src/utils/colors';
@@ -84,7 +85,7 @@ export default function App() {
               <View>
                 <Text style={styles.accountTitle}>Olá, {currentUser.name.split(' ')[0]}</Text>
                 <Text style={styles.accountDescription}>
-                  Sua tela inicial agora reúne promoções, serviços recomendados, status do veículo e atalhos para as ações principais.
+                  Sua tela inicial agora reúne promoções, histórico de serviços, status do veículo e atalhos para as ações principais.
                 </Text>
               </View>
               <Pressable style={styles.outlineButton} onPress={logout}>
@@ -92,6 +93,7 @@ export default function App() {
               </Pressable>
             </View>
             <HomeScreen customerName={currentUser.name} />
+            <HistoryScreen />
             <QuoteRequestScreen customerName={currentUser.name} vehicles={currentUser.vehicles} />
           </>
         )}
