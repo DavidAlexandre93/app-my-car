@@ -218,6 +218,68 @@ export const mockDashboardData: DashboardData = {
       read: true,
     },
   ],
+  screenSuggestions: [
+    {
+      id: 'screen-1',
+      title: '1. Splash Screen',
+      subtitle: 'Primeiro contato com a marca Impacto Prime.',
+      highlights: ['Logo da Impacto Prime', 'Tela curta de abertura', 'Transição para login'],
+    },
+    {
+      id: 'screen-2',
+      title: '2. Login / Cadastro',
+      subtitle: 'Acesso rápido com credenciais simples.',
+      highlights: ['Entrada por e-mail ou telefone', 'Campo de senha', 'Recuperação de acesso'],
+    },
+    {
+      id: 'screen-3',
+      title: '3. Home',
+      subtitle: 'Resumo geral da experiência do cliente.',
+      highlights: ['Promoções em destaque', 'Status atual do carro', 'Atalhos principais'],
+    },
+    {
+      id: 'screen-4',
+      title: '4. Meus Veículos',
+      subtitle: 'Gestão completa da frota do cliente.',
+      highlights: ['Lista de veículos cadastrados', 'Informações principais por veículo', 'Botão para adicionar veículo'],
+    },
+    {
+      id: 'screen-5',
+      title: '5. Acompanhar Serviço',
+      subtitle: 'Transparência total durante o atendimento.',
+      highlights: ['Status atual do serviço', 'Timeline do processo', 'Observações da oficina'],
+    },
+    {
+      id: 'screen-6',
+      title: '6. Loja / Catálogo',
+      subtitle: 'Consulta de produtos e serviços disponíveis.',
+      highlights: ['Pneus', 'Peças', 'Filtros por categoria'],
+    },
+    {
+      id: 'screen-7',
+      title: '7. Solicitar Orçamento',
+      subtitle: 'Canal rápido para pedir cotações.',
+      highlights: ['Formulário simples', 'Descrição do serviço', 'Envio ao admin'],
+    },
+    {
+      id: 'screen-8',
+      title: '8. Histórico',
+      subtitle: 'Consulta de serviços já realizados.',
+      highlights: ['Serviços realizados', 'Datas', 'Valores ou observações'],
+    },
+    {
+      id: 'screen-9',
+      title: '9. Notificações',
+      subtitle: 'Mensagens importantes centralizadas no app.',
+      highlights: ['Promoções', 'Carro pronto', 'Lembretes de revisão'],
+    },
+    {
+      id: 'screen-10',
+      title: '10. Perfil',
+      subtitle: 'Dados cadastrais e preferências do cliente.',
+      highlights: ['Dados do cliente', 'Veículos vinculados', 'Preferências de notificação'],
+    },
+  ],
   adminTasks: [
     {
       id: 'adm-1',

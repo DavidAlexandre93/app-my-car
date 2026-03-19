@@ -17,6 +17,7 @@ import {
   CatalogItem,
   DashboardData,
   FeatureHighlight,
+  AppScreenSuggestion,
   KPI,
   Promotion,
   ServiceHistoryItem,
@@ -92,6 +93,24 @@ export function HomeScreen() {
             <View key={item.id} style={styles.kpiCard}>
               <Text style={styles.kpiValue}>{item.value}</Text>
               <Text style={styles.kpiLabel}>{item.label}</Text>
+            </View>
+          ))}
+        </View>
+      </SectionCard>
+
+      <SectionCard title="Telas sugeridas do app" subtitle="Estrutura base do app do cliente com foco em navegação clara" rightLabel={`${data.screenSuggestions.length} telas`}>
+        <View style={styles.screenGrid}>
+          {data.screenSuggestions.map((screen: AppScreenSuggestion) => (
+            <View key={screen.id} style={styles.screenCard}>
+              <Text style={styles.screenTitle}>{screen.title}</Text>
+              <Text style={styles.screenSubtitle}>{screen.subtitle}</Text>
+              <View style={styles.screenHighlights}>
+                {screen.highlights.map((highlight) => (
+                  <View key={highlight} style={styles.screenHighlightPill}>
+                    <Text style={styles.screenHighlightText}>{highlight}</Text>
+                  </View>
+                ))}
+              </View>
             </View>
           ))}
         </View>
@@ -371,6 +390,45 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
     flexWrap: 'wrap',
+  },
+  screenGrid: {
+    gap: 12,
+  },
+  screenCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+    gap: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  screenTitle: {
+    color: colors.text,
+    fontWeight: '800',
+    fontSize: 16,
+  },
+  screenSubtitle: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  screenHighlights: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  screenHighlightPill: {
+    backgroundColor: colors.background,
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  screenHighlightText: {
+    color: colors.accent,
+    fontSize: 12,
+    fontWeight: '600',
   },
   kpiCard: {
     flexGrow: 1,
