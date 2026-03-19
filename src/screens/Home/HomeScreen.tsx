@@ -12,7 +12,12 @@ import { fetchDashboardData, submitQuoteRequest } from '../../services/api/mockA
 import { colors } from '../../utils/colors';
 import {
   ActiveService,
+  AdminCustomer,
+  AdminNotificationCampaign,
+  AdminQuoteRequest,
+  AdminServiceUpdate,
   AdminTask,
+  AdminVehicleRecord,
   AppNotification,
   CatalogItem,
   DashboardData,
@@ -286,17 +291,142 @@ export function HomeScreen() {
         </View>
       </SectionCard>
 
-      <SectionCard title="Painel administrativo" subtitle="Área web ou interna conectada ao mesmo backend">
+      <SectionCard title="Painel administrativo" subtitle="Área interna simplificada conectada ao mesmo backend do app">
         <View style={styles.stack}>
-          {data.adminTasks.map((task: AdminTask) => (
-            <View key={task.id} style={styles.adminTaskCard}>
-              <View style={styles.vehicleHeader}>
-                <Text style={styles.listItemTitle}>{task.title}</Text>
-                <Text style={styles.adminStatus}>{task.status}</Text>
+          <Text style={styles.architectureNote}>
+            Nesta demo, o admin pode ser entregue como web em React ou como área operacional simplificada dentro da mesma base de dados. Abaixo estão os módulos essenciais pedidos para operação diária da oficina.
+          </Text>
+
+          <View style={styles.adminOverviewGrid}>
+            {data.adminTasks.map((task: AdminTask) => (
+              <View key={task.id} style={styles.adminTaskCard}>
+                <View style={styles.vehicleHeader}>
+                  <Text style={styles.listItemTitle}>{task.title}</Text>
+                  <Text style={styles.adminStatus}>{task.status}</Text>
+                </View>
+                <Text style={styles.listItemDescription}>{task.description}</Text>
               </View>
-              <Text style={styles.listItemDescription}>{task.description}</Text>
-            </View>
-          ))}
+            ))}
+          </View>
+
+          <View style={styles.adminSection}>
+            <Text style={styles.adminSectionTitle}>Lista de clientes</Text>
+            {data.adminPanel.customers.map((customer: AdminCustomer) => (
+              <View key={customer.id} style={styles.adminRowCard}>
+                <View style={styles.listItemText}>
+                  <Text style={styles.listItemTitle}>{customer.name}</Text>
+                  <Text style={styles.listItemDescription}>{customer.contact}</Text>
+                </View>
+                <View style={styles.adminMeta}>
+                  <Text style={styles.highlight}>{customer.segment}</Text>
+                  <Text style={styles.metaLabel}>{customer.vehicles} veículo(s)</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.adminSection}>
+            <Text style={styles.adminSectionTitle}>Lista de veículos</Text>
+            {data.adminPanel.vehicles.map((vehicle: AdminVehicleRecord) => (
+              <View key={vehicle.id} style={styles.adminRowCard}>
+                <View style={styles.listItemText}>
+                  <Text style={styles.listItemTitle}>{vehicle.model}</Text>
+                  <Text style={styles.listItemDescription}>{vehicle.owner}</Text>
+                </View>
+                <View style={styles.adminMeta}>
+                  <Text style={styles.highlight}>{vehicle.plate}</Text>
+                  <Text style={styles.metaLabel}>{vehicle.serviceStatus}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.adminSection}>
+            <Text style={styles.adminSectionTitle}>Solicitações de orçamento</Text>
+            {data.adminPanel.quoteRequests.map((quote: AdminQuoteRequest) => (
+              <View key={quote.id} style={styles.adminRowCard}>
+                <View style={styles.listItemText}>
+                  <Text style={styles.listItemTitle}>{quote.customerName} • {quote.vehicleLabel}</Text>
+                  <Text style={styles.listItemDescription}>{quote.request}</Text>
+                </View>
+                <Text style={styles.adminStatus}>{quote.status}</Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.adminSection}>
+            <Text style={styles.adminSectionTitle}>Atualização de status do serviço</Text>
+            {data.adminPanel.serviceUpdates.map((update: AdminServiceUpdate) => (
+              <View key={update.id} style={styles.adminRowCard}>
+                <View style={styles.listItemText}>
+                  <Text style={styles.listItemTitle}>{update.vehicleLabel}</Text>
+                  <Text style={styles.listItemDescription}>{update.nextAction}</Text>
+                </View>
+                <Text style={styles.highlight}>{update.currentStage}</Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.adminSection}>
+            <Text style={styles.adminSectionTitle}>Cadastro de promoções</Text>
+            {data.adminPanel.promotions.map((promotion: Promotion) => (
+              <View key={promotion.id} style={styles.adminRowCard}>
+                <View style={styles.listItemText}>
+                  <Text style={styles.listItemTitle}>{promotion.title}</Text>
+                  <Text style={styles.listItemDescription}>{promotion.description}</Text>
+                </View>
+                <View style={styles.adminMeta}>
+                  <Text style={styles.highlight}>{promotion.highlight}</Text>
+                  <Text style={styles.metaLabel}>{promotion.cta}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.adminSection}>
+            <Text style={styles.adminSectionTitle}>Envio de notificações</Text>
+            {data.adminPanel.notificationCampaigns.map((campaign: AdminNotificationCampaign) => (
+              <View key={campaign.id} style={styles.adminRowCard}>
+                <View style={styles.listItemText}>
+                  <Text style={styles.listItemTitle}>{campaign.title}</Text>
+                  <Text style={styles.listItemDescription}>{campaign.audience} • {campaign.channel}</Text>
+                </View>
+                <Text style={styles.adminStatus}>{campaign.status}</Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.adminSection}>
+            <Text style={styles.adminSectionTitle}>Cadastro de pneus e peças</Text>
+            {data.adminPanel.catalogItems.map((item: CatalogItem) => (
+              <View key={item.id} style={styles.adminRowCard}>
+                <View style={styles.listItemText}>
+                  <Text style={styles.listItemTitle}>{item.name}</Text>
+                  <Text style={styles.listItemDescription}>{item.category} • {item.description}</Text>
+                </View>
+                <View style={styles.adminMeta}>
+                  <Text style={styles.highlight}>{item.price}</Text>
+                  <Text style={styles.metaLabel}>{item.stock}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.adminSection}>
+            <Text style={styles.adminSectionTitle}>Consulta do histórico de serviços</Text>
+            {data.adminPanel.serviceHistory.map((entry: ServiceHistoryItem) => (
+              <View key={entry.id} style={styles.adminRowCard}>
+                <View style={styles.listItemText}>
+                  <Text style={styles.listItemTitle}>{entry.title}</Text>
+                  <Text style={styles.listItemDescription}>{entry.details}</Text>
+                </View>
+                <View style={styles.adminMeta}>
+                  <Text style={styles.metaLabel}>{entry.date}</Text>
+                  <Text style={styles.highlight}>{entry.amount}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
         </View>
       </SectionCard>
     </View>
@@ -638,6 +768,31 @@ const styles = StyleSheet.create({
     color: colors.accent,
     fontSize: 12,
     marginTop: 4,
+  },
+  adminOverviewGrid: {
+    gap: 12,
+  },
+  adminSection: {
+    gap: 10,
+    marginTop: 2,
+  },
+  adminSectionTitle: {
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: '800',
+  },
+  adminRowCard: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+  },
+  adminMeta: {
+    alignItems: 'flex-end',
+    gap: 6,
   },
   adminTaskCard: {
     backgroundColor: colors.surfaceAlt,

@@ -92,6 +92,56 @@ export type KPI = {
   value: string;
 };
 
+export type AdminCustomer = {
+  id: string;
+  name: string;
+  contact: string;
+  vehicles: number;
+  segment: string;
+};
+
+export type AdminVehicleRecord = {
+  id: string;
+  plate: string;
+  model: string;
+  owner: string;
+  serviceStatus: string;
+};
+
+export type AdminQuoteRequest = {
+  id: string;
+  customerName: string;
+  vehicleLabel: string;
+  request: string;
+  status: string;
+};
+
+export type AdminServiceUpdate = {
+  id: string;
+  vehicleLabel: string;
+  currentStage: string;
+  nextAction: string;
+};
+
+export type AdminNotificationCampaign = {
+  id: string;
+  title: string;
+  audience: string;
+  channel: string;
+  status: string;
+};
+
+export type AdminPanelData = {
+  customers: AdminCustomer[];
+  vehicles: AdminVehicleRecord[];
+  quoteRequests: AdminQuoteRequest[];
+  serviceUpdates: AdminServiceUpdate[];
+  promotions: Promotion[];
+  notificationCampaigns: AdminNotificationCampaign[];
+  catalogItems: CatalogItem[];
+  serviceHistory: ServiceHistoryItem[];
+};
+
 export type DashboardData = {
   customer: {
     name: string;
@@ -109,4 +159,5 @@ export type DashboardData = {
   history: ServiceHistoryItem[];
   notifications: AppNotification[];
   adminTasks: AdminTask[];
+  adminPanel: AdminPanelData;
 };
