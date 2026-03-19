@@ -710,6 +710,28 @@ Para seguir exatamente a stack pedida, a próxima etapa de implementação deve 
 * Firebase Cloud Messaging
 * painel admin em React.js com Material UI
 
+
+## Build e publicação com Expo / EAS
+
+Para evitar o erro exibido no Expo/EAS (`Google Service Account Keys cannot be set up in --non-interactive mode`), o fluxo do projeto ficou separado assim:
+
+* `preview`: build interna para testes/distribuição rápida;
+* `production`: build de produção com versão remota;
+* `submit.production.android.track = internal`: quando houver auto-submit, o envio usa a trilha interna da Play Store, compatível com pipelines não interativos.
+
+### Importante para o Android
+
+Antes de usar **auto-submit** no EAS, ainda é obrigatório cadastrar uma **Google Service Account Key** no projeto Expo/EAS, porque esse segredo não pode ser criado automaticamente em modo não interativo.
+
+Passos recomendados:
+
+1. Execute `eas credentials --platform android`;
+2. Escolha o perfil `production`;
+3. Faça upload do JSON da conta de serviço do Google Play;
+4. Depois rode o build/submissão novamente.
+
+Se a intenção for apenas testar no **Expo Go**, prefira `eas build --platform android --profile preview` (ou `npx expo start`) em vez de um build de produção com auto-submit para a Play Store.
+
 ## Scripts úteis
 
 ```bash
