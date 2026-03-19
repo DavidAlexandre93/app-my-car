@@ -8,13 +8,13 @@ import {
   View,
 } from 'react-native';
 import { SectionCard } from '../../components/SectionCard';
+import { CatalogScreen } from '../Catalog';
 import { fetchDashboardData, submitQuoteRequest } from '../../services/api/mockApi';
 import { colors } from '../../utils/colors';
 import {
   ActiveService,
   AdminTask,
   AppNotification,
-  CatalogItem,
   DashboardData,
   FeatureHighlight,
   KPI,
@@ -221,21 +221,7 @@ export function HomeScreen() {
         </View>
       </SectionCard>
 
-      <SectionCard title="Loja / catálogo" subtitle="Pneus, peças e serviços com botão de orçamento">
-        <View style={styles.stack}>
-          {data.catalog.map((item: CatalogItem) => (
-            <View key={item.id} style={styles.catalogCard}>
-              <Text style={styles.catalogCategory}>{item.category}</Text>
-              <Text style={styles.listItemTitle}>{item.name}</Text>
-              <Text style={styles.listItemDescription}>{item.description}</Text>
-              <View style={styles.catalogFooter}>
-                <Text style={styles.catalogPrice}>{item.price}</Text>
-                <Text style={styles.metaLabel}>{item.stock}</Text>
-              </View>
-            </View>
-          ))}
-        </View>
-      </SectionCard>
+      <CatalogScreen items={data.catalog} vehicle={activeVehicle} />
 
       <SectionCard title="Solicitar orçamento" subtitle="Fluxo: cliente solicita → admin analisa → cliente recebe retorno">
         <TextInput
@@ -551,29 +537,6 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 13,
     fontWeight: '800',
-  },
-  catalogCard: {
-    backgroundColor: colors.surfaceAlt,
-    borderRadius: 20,
-    padding: 16,
-    gap: 6,
-  },
-  catalogCategory: {
-    color: colors.info,
-    fontSize: 12,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-  },
-  catalogFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 6,
-    gap: 12,
-  },
-  catalogPrice: {
-    color: colors.primary,
-    fontSize: 15,
-    fontWeight: '700',
   },
   input: {
     minHeight: 110,
