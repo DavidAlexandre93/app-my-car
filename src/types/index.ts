@@ -79,6 +79,14 @@ export type FeatureHighlight = {
   description: string;
 };
 
+export type FunctionalRequirement = {
+  id: string;
+  title: string;
+  description: string;
+  appArea: string;
+  status: 'Disponível no MVP' | 'Disponível na demo' | 'Fluxo administrativo';
+};
+
 export type AdminTask = {
   id: string;
   title: string;
@@ -102,6 +110,7 @@ export type DashboardData = {
   kpis: KPI[];
   shortcuts: Shortcut[];
   featureHighlights: FeatureHighlight[];
+  requirements: FunctionalRequirement[];
   vehicles: Vehicle[];
   activeServices: ActiveService[];
   promotions: Promotion[];
