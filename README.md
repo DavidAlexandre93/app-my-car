@@ -535,13 +535,13 @@ Os requisitos funcionais definidos para o aplicativo são:
 
 ## Requisitos não funcionais
 
-* Aplicação multiplataforma.
-* Interface intuitiva e responsiva.
-* Segurança no tráfego de dados.
-* Suporte a notificações push.
-* Escalabilidade para novas funcionalidades.
-* Código organizado e de fácil manutenção.
-* Compatibilidade com Android e iOS.
+* App multiplataforma com React Native.
+* Interface simples e intuitiva.
+* Tempo de resposta rápido.
+* Segurança de dados e autenticação.
+* Notificações push.
+* Integração com backend via API REST.
+* Escalável para futuras funcionalidades.
 
 ---
 
