@@ -52,6 +52,24 @@ Por meio do app, o cliente pode:
 
 Além da experiência do cliente, o sistema também prevê uma área administrativa para que a oficina gerencie os atendimentos, atualize o status dos serviços, receba pedidos de orçamento e envie notificações.
 
+### Objetivo resumido do aplicativo
+
+**Cliente**
+
+* receber notificações de promoções;
+* acompanhar o status do serviço do carro em tempo real;
+* ser notificado quando o veículo estiver pronto para retirada;
+* consultar e solicitar orçamento de pneus, peças e serviços;
+* visualizar o histórico de serviços realizados;
+* receber lembretes periódicos de revisão, como a cada 3 meses.
+
+**Empresa / área administrativa**
+
+* gerenciar atendimentos;
+* controlar orçamentos;
+* atualizar status de serviços;
+* disparar notificações promocionais, transacionais e recorrentes.
+
 ---
 
 ## Objetivo do projeto

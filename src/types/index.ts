@@ -1,3 +1,25 @@
+export type AppObjective = {
+  id: string;
+  audience: string;
+  title: string;
+  description: string;
+};
+
+export type ReminderCadence = {
+  id: string;
+  title: string;
+  cadence: string;
+  trigger: string;
+  description: string;
+};
+
+export type AdminWorkspaceItem = {
+  id: string;
+  owner: string;
+  title: string;
+  description: string;
+};
+
 export type Vehicle = {
   id: string;
   plate: string;
@@ -7,6 +29,35 @@ export type Vehicle = {
   mileage: number;
   notes: string;
   statusLabel: string;
+};
+
+export type CustomerProfile = {
+  name: string;
+  phone: string;
+  email: string;
+};
+
+export type AuthUser = CustomerProfile & {
+  id: string;
+  password: string;
+  vehicles: Vehicle[];
+};
+
+export type LoginPayload = {
+  email: string;
+  password: string;
+};
+
+export type RegisterPayload = CustomerProfile & {
+  password: string;
+};
+
+export type VehiclePayload = {
+  plate: string;
+  brand: string;
+  model: string;
+  year: string;
+  mileage: string;
 };
 
 export type ServiceStatusStep = {
@@ -86,6 +137,13 @@ export type FeatureHighlight = {
   description: string;
 };
 
+export type AppScreenSuggestion = {
+  id: string;
+  title: string;
+  subtitle: string;
+  highlights: string[];
+};
+
 export type AdminTask = {
   id: string;
   title: string;
@@ -99,7 +157,22 @@ export type KPI = {
   value: string;
 };
 
+export type AppModule = {
+  id: string;
+  name: string;
+  description: string;
+  responsibilities: string[];
+};
+
+export type DomainEntity = {
+  id: string;
+  name: string;
+  description: string;
+  keyFields: string[];
+};
+
 export type DashboardData = {
+  objectives: AppObjective[];
   customer: {
     name: string;
     unit: string;
@@ -107,6 +180,8 @@ export type DashboardData = {
     memberSince: string;
   };
   kpis: KPI[];
+  appModules: AppModule[];
+  domainEntities: DomainEntity[];
   shortcuts: Shortcut[];
   featureHighlights: FeatureHighlight[];
   vehicles: Vehicle[];
@@ -115,5 +190,8 @@ export type DashboardData = {
   catalog: CatalogItem[];
   history: ServiceHistoryItem[];
   notifications: AppNotification[];
+  reminderCadences: ReminderCadence[];
+  adminWorkspace: AdminWorkspaceItem[];
   adminTasks: AdminTask[];
+  screenSuggestions: AppScreenSuggestion[];
 };
