@@ -52,6 +52,24 @@ Por meio do app, o cliente pode:
 
 Além da experiência do cliente, o sistema também prevê uma área administrativa para que a oficina gerencie os atendimentos, atualize o status dos serviços, receba pedidos de orçamento e envie notificações.
 
+### Objetivo resumido do aplicativo
+
+**Cliente**
+
+* receber notificações de promoções;
+* acompanhar o status do serviço do carro em tempo real;
+* ser notificado quando o veículo estiver pronto para retirada;
+* consultar e solicitar orçamento de pneus, peças e serviços;
+* visualizar o histórico de serviços realizados;
+* receber lembretes periódicos de revisão, como a cada 3 meses.
+
+**Empresa / área administrativa**
+
+* gerenciar atendimentos;
+* controlar orçamentos;
+* atualizar status de serviços;
+* disparar notificações promocionais, transacionais e recorrentes.
+
 ---
 
 ## Objetivo do projeto
@@ -146,7 +164,7 @@ Exemplo de fluxo de status:
 
 ### 5. Notificação de retirada
 
-Quando o serviço for concluído, o cliente recebe uma notificação informando que o veículo está pronto para ser retirado.
+Quando o serviço for concluído, o cliente recebe uma notificação informando que o veículo está pronto para ser retirado. A mensagem também pode apresentar valor final, horário de funcionamento da unidade e observações do técnico para dar mais contexto no momento da retirada.
 
 ### 6. Catálogo de pneus e peças
 
@@ -175,33 +193,27 @@ O sistema pode notificar o cliente a cada 3 meses para lembrar sobre a necessida
 
 ## Fluxos principais do usuário
 
-### Fluxo 1: acompanhar serviço do veículo
+### Fluxo 1 — acompanhamento do serviço
 
-1. O cliente leva o veículo até a oficina.
-2. A equipe registra a entrada do carro no sistema.
-3. O status do atendimento é atualizado ao longo do processo.
-4. O cliente acompanha as etapas pelo aplicativo.
-5. Ao final, recebe a notificação de retirada.
+1. Cliente leva o carro à oficina.
+2. Admin cadastra entrada do veículo.
+3. Status é atualizado no sistema.
+4. Cliente acompanha pelo app.
+5. Quando finalizar, recebe notificação de retirada.
 
-### Fluxo 2: solicitar orçamento
+### Fluxo 2 — solicitação de orçamento
 
-1. O cliente acessa a área de produtos e serviços.
-2. Seleciona um item ou tipo de serviço.
-3. Preenche os detalhes da solicitação.
-4. Envia o pedido para a equipe administrativa.
-5. A oficina analisa e entra em contato com o cliente.
+1. Cliente entra na área de pneus/peças.
+2. Seleciona item ou serviço.
+3. Clica em solicitar orçamento.
+4. Pedido vai para o admin.
+5. Admin analisa e responde.
 
-### Fluxo 3: consultar histórico de manutenção
+### Fluxo 3 — revisão periódica
 
-1. O cliente acessa a área de histórico.
-2. Seleciona o veículo desejado.
-3. Visualiza todos os serviços já realizados, com data e descrição.
-
-### Fluxo 4: lembrete de revisão
-
-1. A oficina finaliza um serviço no sistema.
-2. O app registra a data da última manutenção.
-3. Após 3 meses, o cliente recebe uma notificação sugerindo nova revisão.
+1. Serviço concluído e salvo no histórico.
+2. Sistema registra data da última revisão.
+3. Após 3 meses, cliente recebe lembrete automático.
 
 ---
 
@@ -580,12 +592,11 @@ O sistema poderá trabalhar com diferentes tipos de notificação:
 
 ## Diferenciais do projeto
 
-* acompanhamento do serviço em tempo real;
-* centralização do histórico do veículo;
-* comunicação mais clara entre cliente e oficina;
-* estímulo à recorrência com lembretes de revisão;
-* aumento de oportunidades de venda com catálogo e promoções;
-* proposta moderna e escalável para oficinas mecânicas.
+* aumenta a confiança do cliente;
+* melhora a comunicação entre oficina e consumidor;
+* gera mais retorno com promoções e revisões recorrentes;
+* organiza o histórico do veículo;
+* digitaliza o processo de orçamento e acompanhamento.
 
 ---
 
