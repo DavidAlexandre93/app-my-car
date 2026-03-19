@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { colors } from '../theme/colors';
+import { colors } from '../utils/colors';
 
 type SectionCardProps = PropsWithChildren<{
   title: string;

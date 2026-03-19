@@ -1,0 +1,1 @@
+export const VehiclesScreen = 'Vehicles';

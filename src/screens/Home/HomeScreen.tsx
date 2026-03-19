@@ -7,9 +7,9 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { SectionCard } from '../components/SectionCard';
-import { fetchDashboardData, submitQuoteRequest } from '../services/mockApi';
-import { colors } from '../theme/colors';
+import { SectionCard } from '../../components/SectionCard';
+import { fetchDashboardData, submitQuoteRequest } from '../../services/api/mockApi';
+import { colors } from '../../utils/colors';
 import {
   ActiveService,
   AdminTask,
@@ -23,7 +23,7 @@ import {
   ServiceStatusStep,
   Shortcut,
   Vehicle,
-} from '../types';
+} from '../../types';
 
 export function HomeScreen() {
   const [data, setData] = useState<DashboardData | null>(null);
