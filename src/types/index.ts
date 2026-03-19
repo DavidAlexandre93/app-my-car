@@ -92,6 +92,14 @@ export type KPI = {
   value: string;
 };
 
+export type UserFlow = {
+  id: string;
+  title: string;
+  summary: string;
+  steps: string[];
+  outcome: string;
+};
+
 export type DashboardData = {
   customer: {
     name: string;
@@ -102,6 +110,7 @@ export type DashboardData = {
   kpis: KPI[];
   shortcuts: Shortcut[];
   featureHighlights: FeatureHighlight[];
+  userFlows: UserFlow[];
   vehicles: Vehicle[];
   activeServices: ActiveService[];
   promotions: Promotion[];

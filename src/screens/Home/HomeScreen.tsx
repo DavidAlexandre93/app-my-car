@@ -22,6 +22,7 @@ import {
   ServiceHistoryItem,
   ServiceStatusStep,
   Shortcut,
+  UserFlow,
   Vehicle,
 } from '../../types';
 
@@ -142,6 +143,26 @@ export function HomeScreen() {
             <View key={feature.id} style={styles.featureItem}>
               <Text style={styles.listItemTitle}>{feature.title}</Text>
               <Text style={styles.listItemDescription}>{feature.description}</Text>
+            </View>
+          ))}
+        </View>
+      </SectionCard>
+
+      <SectionCard title="Fluxos principais do usuário" subtitle="Jornadas centrais do cliente e do admin dentro do MVP">
+        <View style={styles.stack}>
+          {data.userFlows.map((flow: UserFlow) => (
+            <View key={flow.id} style={styles.flowCard}>
+              <Text style={styles.listItemTitle}>{flow.title}</Text>
+              <Text style={styles.listItemDescription}>{flow.summary}</Text>
+              <View style={styles.flowSteps}>
+                {flow.steps.map((step, index) => (
+                  <View key={`${flow.id}-${index + 1}`} style={styles.flowStepItem}>
+                    <Text style={styles.flowStepIndex}>{index + 1}</Text>
+                    <Text style={styles.flowStepText}>{step}</Text>
+                  </View>
+                ))}
+              </View>
+              <Text style={styles.flowOutcome}>{flow.outcome}</Text>
             </View>
           ))}
         </View>
@@ -453,6 +474,42 @@ const styles = StyleSheet.create({
     borderLeftColor: colors.primary,
     paddingLeft: 12,
     gap: 4,
+  },
+  flowCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 20,
+    padding: 16,
+    gap: 10,
+  },
+  flowSteps: {
+    gap: 8,
+  },
+  flowStepItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+  },
+  flowStepIndex: {
+    width: 22,
+    height: 22,
+    borderRadius: 999,
+    backgroundColor: colors.primary,
+    color: '#171717',
+    textAlign: 'center',
+    fontSize: 12,
+    fontWeight: '800',
+    lineHeight: 22,
+  },
+  flowStepText: {
+    flex: 1,
+    color: colors.text,
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  flowOutcome: {
+    color: colors.accent,
+    fontSize: 13,
+    fontWeight: '600',
   },
   vehicleCard: {
     backgroundColor: colors.surfaceAlt,
