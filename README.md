@@ -90,10 +90,11 @@ O **Impacto Prime App** propõe uma plataforma mobile para aproximar o cliente d
 
 A solução é composta por:
 
-* **Aplicativo do cliente** em React Native;
-* **Painel administrativo** para gestão das operações;
-* **Backend/API** para integração de dados;
-* **Sistema de notificações push** para alertas e promoções.
+* **Aplicativo do cliente** em React Native com **Expo**, **TypeScript**, **React Navigation**, **Axios** e **Zustand**;
+* **Painel administrativo** em **React.js** com **Material UI**;
+* **Backend/API** preferencialmente em **Firebase** para a demo inicial, com trilha de evolução para **Node.js + Express ou NestJS**;
+* **Sistema de notificações push** com **Firebase Cloud Messaging (FCM)**;
+* **Autenticação** com **Firebase Auth** no protótipo, preservando compatibilidade com **JWT** em uma futura API própria.
 
 ---
 
@@ -276,39 +277,62 @@ Esse painel pode ser implementado como aplicação web em React.
 
 ## Arquitetura da solução
 
-A arquitetura sugerida para o projeto é dividida em três partes principais:
+Para atender ao stack solicitado e acelerar a entrega de uma demo funcional, a arquitetura recomendada para este projeto fica assim:
 
-### 1. App Mobile
+### Mobile do cliente
 
-Responsável pela experiência do cliente.
+* **React Native**
+* **Expo** para acelerar setup, builds e testes do MVP
+* **TypeScript** para tipagem e manutenção
+* **React Navigation** para fluxo entre autenticação, home, veículos, status, histórico e perfil
+* **Axios** para padronizar comunicação com API/serviços
+* **Zustand** para estado global leve, simples e fácil de escalar
 
-### 2. Backend / API
+### Backend do MVP
 
-Responsável por:
+Para a primeira demo, a opção mais rápida e adequada é:
 
-* autenticação;
-* persistência de dados;
-* regras de negócio;
-* comunicação com o painel administrativo;
-* disparo de notificações.
+* **Firebase**
+* **Firestore** para persistência inicial
+* **Firebase Auth** para login/cadastro
+* **Firebase Cloud Messaging (FCM)** para notificações de promoções, carro pronto e lembretes
 
-### 3. Painel Administrativo
+### Evolução para produção
 
-Responsável pela operação da oficina e atualização das informações mostradas no app.
+Quando o projeto exigir regras mais complexas, integrações com ERP, multiunidade, auditoria, filas e relatórios, a evolução natural é:
 
-### Fluxo geral
+* **Node.js + Express** ou **NestJS**
+* **PostgreSQL**
+* **JWT** para autenticação desacoplada do provedor mobile
 
-```text
-Cliente (App React Native)
-        ↓
-     API / Backend
-        ↓
-Banco de dados + Serviço de notificações
-        ↑
-Painel Admin (Web)
-```
+### Painel administrativo
 
----
+Para o time interno da oficina, o recomendado é um painel separado em:
+
+* **React.js**
+* **Material UI**
+
+Esse painel deve compartilhar a mesma fonte de dados do app mobile e permitir:
+
+* cadastro e atualização de serviços;
+* resposta a solicitações de orçamento;
+* publicação de promoções;
+* envio de campanhas;
+* acompanhamento do histórico dos clientes;
+* gestão de veículos, atendimentos e notificações.
+
+### Decisão recomendada para esta fase
+
+Como o objetivo do projeto é uma **demo funcional rápida**, a recomendação principal é:
+
+* **React Native + Expo + TypeScript** no app;
+* **React Navigation** para navegação;
+* **Axios** para camada de requests;
+* **Zustand** para estado global;
+* **Firebase + Firestore + Firebase Auth + FCM** no backend do MVP;
+* **React.js + Material UI** no painel administrativo.
+
+Assim, o projeto atende ao stack solicitado com menor tempo de implementação e mantém um caminho claro para migrar depois para **Node.js/NestJS + PostgreSQL + JWT** se necessário.
 
 ## Tecnologias utilizadas
 
@@ -319,33 +343,26 @@ Painel Admin (Web)
 * TypeScript
 * React Navigation
 * Axios
-* React Query, Zustand ou Redux
+* Zustand
 
-### Backend
+### Backend do protótipo
+
+* Firebase
+* Firestore
+* Firebase Auth
+* Firebase Cloud Messaging (FCM)
+
+### Backend de evolução
 
 * Node.js
 * Express ou NestJS
-* JWT para autenticação
-* Firebase Cloud Messaging para notificações
-
-### Banco de dados
-
 * PostgreSQL
-  ou
-* Firebase Firestore
+* JWT
 
-### Admin
+### Painel administrativo
 
 * React.js
-* Ant Design ou Material UI
-
-### Infraestrutura
-
-* GitHub
-* Vercel para landing page e/ou painel web
-* Expo para pré-visualização mobile
-
----
+* Material UI
 
 ## Estrutura do projeto
 
@@ -592,38 +609,39 @@ Essa abordagem mantém o demo simples para apresentação, sem exigir backend re
 
 ### Pré-requisitos
 
-* Node.js instalado
+* Node.js 18+
 * npm ou yarn
-* Expo CLI ou ambiente Expo configurado
-* emulador Android/iOS ou dispositivo físico com Expo Go
+* Expo CLI via `npx expo`
 
 ### Instalação
 
 ```bash
-git clone <URL_DO_REPOSITORIO>
-cd impacto-prime-app
 npm install
 ```
 
-### Executando o projeto
+> Observação: o `package.json` já está preparado para o stack solicitado, incluindo `React Navigation`, `Axios` e `Zustand`.
+
+### Executar o app
 
 ```bash
-npm start
+npm run start
 ```
 
-ou
+Depois, você pode abrir em:
 
-```bash
-npx expo start
-```
+* Android Emulator
+* iOS Simulator
+* Expo Go
+* navegador com `npm run web`
 
-Após iniciar, será possível:
+### Stack alvo do MVP
 
-* abrir no navegador;
-* abrir no emulador;
-* escanear o QR Code com o Expo Go no celular.
+Para seguir exatamente a stack pedida, a próxima etapa de implementação deve conectar esta interface a:
 
----
+* Firebase Auth
+* Firestore
+* Firebase Cloud Messaging
+* painel admin em React.js com Material UI
 
 ## Scripts úteis
 
