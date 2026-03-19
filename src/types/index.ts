@@ -37,6 +37,14 @@ export type CustomerProfile = {
   email: string;
 };
 
+export type VehiclePayload = {
+  plate: string;
+  brand: string;
+  model: string;
+  year: string;
+  mileage: string;
+};
+
 export type AuthUser = CustomerProfile & {
   id: string;
   password: string;
@@ -50,14 +58,7 @@ export type LoginPayload = {
 
 export type RegisterPayload = CustomerProfile & {
   password: string;
-};
-
-export type VehiclePayload = {
-  plate: string;
-  brand: string;
-  model: string;
-  year: string;
-  mileage: string;
+  vehicle?: VehiclePayload;
 };
 
 export type ServiceStatusStep = {
@@ -168,6 +169,43 @@ export type KPI = {
   value: string;
 };
 
+export type AppModule = {
+  id: string;
+  name: string;
+  description: string;
+  responsibilities: string[];
+};
+
+export type DomainEntity = {
+  id: string;
+  name: string;
+  description: string;
+  keyFields: string[];
+};
+
+export type FunctionalRequirement = {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  appArea: string;
+};
+
+export type UserFlow = {
+  id: string;
+  title: string;
+  summary: string;
+  steps: string[];
+  outcome: string;
+};
+
+export type AppScreenSuggestion = {
+  id: string;
+  title: string;
+  subtitle: string;
+  highlights: string[];
+};
+
 export type AdminCustomer = {
   id: string;
   name: string;
@@ -229,6 +267,9 @@ export type DashboardData = {
   kpis: KPI[];
   appModules: AppModule[];
   domainEntities: DomainEntity[];
+  requirements: FunctionalRequirement[];
+  screenSuggestions: AppScreenSuggestion[];
+  userFlows: UserFlow[];
   shortcuts: Shortcut[];
   featureHighlights: FeatureHighlight[];
   revisionReminder: RevisionReminder;

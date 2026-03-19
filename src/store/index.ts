@@ -7,7 +7,7 @@ type AuthStore = {
   register: (payload: RegisterPayload) => { success: boolean; message: string };
   login: (payload: LoginPayload) => { success: boolean; message: string };
   logout: () => void;
-  updateProfile: (payload: CustomerProfile) => void;
+  updateProfile: (payload: CustomerProfile) => { success: boolean; message: string };
   addVehicle: (payload: VehiclePayload) => { success: boolean; message: string };
 };
 
@@ -33,6 +33,27 @@ const initialUser: AuthUser = {
 
 const normalizePlate = (plate: string) => plate.toUpperCase().replace(/[^A-Z0-9]/g, '');
 
+const createVehicleFromPayload = (payload: VehiclePayload): Vehicle | null => {
+  const normalizedPlate = normalizePlate(payload.plate);
+  const year = Number(payload.year);
+  const mileage = Number(payload.mileage);
+
+  if (!normalizedPlate || !payload.brand.trim() || !payload.model.trim() || !year || Number.isNaN(mileage)) {
+    return null;
+  }
+
+  return {
+    id: `vehicle-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    plate: normalizedPlate,
+    brand: payload.brand.trim(),
+    model: payload.model.trim(),
+    year,
+    mileage,
+    notes: 'Cadastro realizado pelo cliente no aplicativo.',
+    statusLabel: 'Aguardando atendimento',
+  };
+};
+
 export const useAuthStore = create<AuthStore>((set) => ({
   users: [initialUser],
   currentUser: null,
@@ -41,6 +62,16 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
     if (!payload.name.trim() || !payload.phone.trim() || !email || !payload.password.trim()) {
       return { success: false, message: 'Preencha nome, telefone, e-mail e senha para criar sua conta.' };
+    }
+
+    if (payload.vehicle) {
+      const vehicle = createVehicleFromPayload(payload.vehicle);
+      if (!vehicle) {
+        return {
+          success: false,
+          message: 'Para cadastrar o primeiro veículo, informe placa, marca, modelo, ano e quilometragem válidos.',
+        };
+      }
     }
 
     let created = false;
@@ -53,16 +84,21 @@ export const useAuthStore = create<AuthStore>((set) => ({
         return state;
       }
 
+      const firstVehicle = payload.vehicle ? createVehicleFromPayload(payload.vehicle) : null;
       const newUser: AuthUser = {
         id: `customer-${Date.now()}`,
         name: payload.name.trim(),
         phone: payload.phone.trim(),
         email,
         password: payload.password,
-        vehicles: [],
+        vehicles: firstVehicle ? [firstVehicle] : [],
       };
 
       created = true;
+      message = firstVehicle
+        ? 'Conta criada com sucesso e primeiro veículo vinculado ao cliente.'
+        : 'Conta criada com sucesso.';
+
       return {
         users: [...state.users, newUser],
         currentUser: newUser,
@@ -95,7 +131,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
     return { success, message };
   },
   logout: () => set({ currentUser: null }),
-  updateProfile: (payload) =>
+  updateProfile: (payload) => {
+    let success = false;
+    let message = 'Faça login para atualizar os dados do cliente.';
+
     set((state) => {
       if (!state.currentUser) {
         return state;
@@ -108,17 +147,21 @@ export const useAuthStore = create<AuthStore>((set) => ({
         email: payload.email.trim().toLowerCase(),
       };
 
+      success = true;
+      message = 'Dados do cliente atualizados com sucesso.';
+
       return {
         currentUser: updatedUser,
         users: state.users.map((user) => (user.id === updatedUser.id ? updatedUser : user)),
       };
-    }),
-  addVehicle: (payload) => {
-    const normalizedPlate = normalizePlate(payload.plate);
-    const year = Number(payload.year);
-    const mileage = Number(payload.mileage);
+    });
 
-    if (!normalizedPlate || !payload.model.trim() || !payload.brand.trim() || !year || Number.isNaN(mileage)) {
+    return { success, message };
+  },
+  addVehicle: (payload) => {
+    const vehicle = createVehicleFromPayload(payload);
+
+    if (!vehicle) {
       return { success: false, message: 'Informe placa, marca, modelo, ano e quilometragem válidos.' };
     }
 
@@ -131,22 +174,11 @@ export const useAuthStore = create<AuthStore>((set) => ({
         return state;
       }
 
-      const alreadyExists = state.currentUser.vehicles.some((vehicle) => vehicle.plate === normalizedPlate);
+      const alreadyExists = state.currentUser.vehicles.some((item) => item.plate === vehicle.plate);
       if (alreadyExists) {
         message = 'Este veículo já está cadastrado para este cliente.';
         return state;
       }
-
-      const vehicle: Vehicle = {
-        id: `vehicle-${Date.now()}`,
-        plate: normalizedPlate,
-        brand: payload.brand.trim(),
-        model: payload.model.trim(),
-        year,
-        mileage,
-        notes: 'Cadastro realizado pelo cliente no aplicativo.',
-        statusLabel: 'Aguardando atendimento',
-      };
 
       const updatedUser = {
         ...state.currentUser,

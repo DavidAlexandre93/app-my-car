@@ -11,7 +11,7 @@ export function VehiclesScreen() {
   const [model, setModel] = useState('');
   const [year, setYear] = useState('');
   const [mileage, setMileage] = useState('');
-  const [feedback, setFeedback] = useState('');
+  const [feedback, setFeedback] = useState('Cadastre um ou mais veículos para este cliente.');
 
   const handleSubmit = () => {
     const result = addVehicle({ plate, brand, model, year, mileage });
@@ -29,10 +29,10 @@ export function VehiclesScreen() {
   return (
     <View style={styles.card}>
       <View style={styles.header}>
-        <View>
+        <View style={styles.headerCopy}>
           <Text style={styles.title}>Veículos do cliente</Text>
           <Text style={styles.description}>
-            Cadastre um ou mais veículos informando placa, marca, modelo, ano e quilometragem.
+            Adicione novos veículos com placa do carro, marca, modelo, ano e quilometragem para manter o histórico organizado.
           </Text>
         </View>
         <View style={styles.counter}>
@@ -41,7 +41,7 @@ export function VehiclesScreen() {
         </View>
       </View>
 
-      <TextInput style={styles.input} value={plate} onChangeText={setPlate} placeholder="Placa" placeholderTextColor={colors.textMuted} autoCapitalize="characters" />
+      <TextInput style={styles.input} value={plate} onChangeText={setPlate} placeholder="Placa do carro" placeholderTextColor={colors.textMuted} autoCapitalize="characters" />
       <TextInput style={styles.input} value={brand} onChangeText={setBrand} placeholder="Marca" placeholderTextColor={colors.textMuted} />
       <TextInput style={styles.input} value={model} onChangeText={setModel} placeholder="Modelo" placeholderTextColor={colors.textMuted} />
       <View style={styles.row}>
@@ -83,6 +83,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 12,
   },
+  headerCopy: {
+    flex: 1,
+  },
   title: {
     color: colors.text,
     fontSize: 20,
@@ -93,7 +96,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     marginTop: 4,
-    maxWidth: 240,
   },
   counter: {
     minWidth: 80,
@@ -144,6 +146,7 @@ const styles = StyleSheet.create({
   feedback: {
     color: colors.accent,
     fontSize: 13,
+    lineHeight: 18,
   },
   list: {
     gap: 10,

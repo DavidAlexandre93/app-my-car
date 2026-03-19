@@ -1,10 +1,18 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { useAuthStore } from '../../store';
 import { colors } from '../../utils/colors';
 
 type RegisterFormProps = {
   onSwitch: () => void;
+};
+
+const initialVehicle = {
+  plate: '',
+  brand: '',
+  model: '',
+  year: '',
+  mileage: '',
 };
 
 export function RegisterScreen({ onSwitch }: RegisterFormProps) {
@@ -13,24 +21,66 @@ export function RegisterScreen({ onSwitch }: RegisterFormProps) {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [feedback, setFeedback] = useState('Crie sua conta para vincular um ou mais veículos.');
+  const [includeVehicle, setIncludeVehicle] = useState(true);
+  const [vehicle, setVehicle] = useState(initialVehicle);
+  const [feedback, setFeedback] = useState('Crie sua conta e já vincule o primeiro veículo do cliente.');
+
+  const updateVehicleField = (field: keyof typeof initialVehicle, value: string) => {
+    setVehicle((current) => ({ ...current, [field]: value }));
+  };
 
   const handleSubmit = () => {
-    const result = register({ name, phone, email, password });
+    const result = register({
+      name,
+      phone,
+      email,
+      password,
+      vehicle: includeVehicle ? vehicle : undefined,
+    });
+
     setFeedback(result.message);
+
+    if (result.success) {
+      setName('');
+      setPhone('');
+      setEmail('');
+      setPassword('');
+      setVehicle(initialVehicle);
+    }
   };
 
   return (
     <View style={styles.card}>
       <Text style={styles.title}>Criar conta</Text>
       <Text style={styles.description}>
-        Cadastro rápido do cliente com nome, telefone, e-mail e senha para iniciar a jornada digital na oficina.
+        Cadastro do cliente com nome, telefone e e-mail, além da opção de já registrar placa, modelo, ano e quilometragem do primeiro veículo.
       </Text>
 
       <TextInput style={styles.input} placeholder="Nome" placeholderTextColor={colors.textMuted} value={name} onChangeText={setName} />
       <TextInput style={styles.input} placeholder="Telefone" placeholderTextColor={colors.textMuted} keyboardType="phone-pad" value={phone} onChangeText={setPhone} />
       <TextInput style={styles.input} placeholder="E-mail" placeholderTextColor={colors.textMuted} autoCapitalize="none" keyboardType="email-address" value={email} onChangeText={setEmail} />
       <TextInput style={styles.input} placeholder="Senha" placeholderTextColor={colors.textMuted} secureTextEntry value={password} onChangeText={setPassword} />
+
+      <View style={styles.switchRow}>
+        <View style={styles.switchCopy}>
+          <Text style={styles.switchTitle}>Cadastrar primeiro veículo agora</Text>
+          <Text style={styles.switchDescription}>Ative para já informar placa, marca, modelo, ano e quilometragem.</Text>
+        </View>
+        <Switch value={includeVehicle} onValueChange={setIncludeVehicle} trackColor={{ false: colors.border, true: colors.primary }} thumbColor={colors.background} />
+      </View>
+
+      {includeVehicle ? (
+        <View style={styles.vehicleBlock}>
+          <Text style={styles.sectionTitle}>Dados do veículo</Text>
+          <TextInput style={styles.input} placeholder="Placa do carro" placeholderTextColor={colors.textMuted} autoCapitalize="characters" value={vehicle.plate} onChangeText={(value) => updateVehicleField('plate', value)} />
+          <TextInput style={styles.input} placeholder="Marca" placeholderTextColor={colors.textMuted} value={vehicle.brand} onChangeText={(value) => updateVehicleField('brand', value)} />
+          <TextInput style={styles.input} placeholder="Modelo" placeholderTextColor={colors.textMuted} value={vehicle.model} onChangeText={(value) => updateVehicleField('model', value)} />
+          <View style={styles.row}>
+            <TextInput style={[styles.input, styles.halfInput]} placeholder="Ano" placeholderTextColor={colors.textMuted} keyboardType="number-pad" value={vehicle.year} onChangeText={(value) => updateVehicleField('year', value)} />
+            <TextInput style={[styles.input, styles.halfInput]} placeholder="Quilometragem" placeholderTextColor={colors.textMuted} keyboardType="number-pad" value={vehicle.mileage} onChangeText={(value) => updateVehicleField('mileage', value)} />
+          </View>
+        </View>
+      ) : null}
 
       <Pressable style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Cadastrar cliente</Text>
@@ -72,6 +122,50 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     color: colors.text,
+  },
+  switchRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+    alignItems: 'center',
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: 14,
+  },
+  switchCopy: {
+    flex: 1,
+    gap: 4,
+  },
+  switchTitle: {
+    color: colors.text,
+    fontWeight: '700',
+  },
+  switchDescription: {
+    color: colors.textMuted,
+    fontSize: 12,
+    lineHeight: 18,
+  },
+  vehicleBlock: {
+    gap: 12,
+    padding: 14,
+    borderRadius: 18,
+    backgroundColor: colors.surfaceAlt,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  sectionTitle: {
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  row: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  halfInput: {
+    flex: 1,
   },
   button: {
     backgroundColor: colors.primary,

@@ -667,9 +667,9 @@ export const mockDashboardData: DashboardData = {
       { id: 'camp-3', title: 'Promoção pneus premium', audience: 'SUVs e sedãs médios', channel: 'Push + e-mail', status: 'Rascunho' },
     ],
     catalogItems: [
-      { id: 'adm-cat-1', name: 'Pneu Pirelli Scorpion', category: 'Pneus', description: 'SKU interno habilitado para cotação e venda.', price: 'R$ 829,00', stock: '14 unidades' },
-      { id: 'adm-cat-2', name: 'Amortecedor Cofap Turbo Gas', category: 'Peças', description: 'Item com alerta de estoque mínimo.', price: 'R$ 389,00', stock: '5 unidades' },
-      { id: 'adm-cat-3', name: 'Kit revisão 10 mil km', category: 'Serviços', description: 'Pacote interno disponível para campanhas sazonais.', price: 'R$ 499,00', stock: 'Oferta ativa' },
+      { id: 'adm-cat-1', name: 'Pneu Pirelli Scorpion', category: 'Pneus', imageUrl: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=900&q=80', description: 'SKU interno habilitado para cotação e venda.', price: 'R$ 829,00', stock: '14 unidades' },
+      { id: 'adm-cat-2', name: 'Amortecedor Cofap Turbo Gas', category: 'Peças', imageUrl: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=900&q=80', description: 'Item com alerta de estoque mínimo.', price: 'R$ 389,00', stock: '5 unidades' },
+      { id: 'adm-cat-3', name: 'Kit revisão 10 mil km', category: 'Serviços', imageUrl: 'https://images.unsplash.com/photo-1517524206127-48bbd363f3d7?auto=format&fit=crop&w=900&q=80', description: 'Pacote interno disponível para campanhas sazonais.', price: 'R$ 499,00', stock: 'Oferta ativa' },
     ],
     serviceHistory: [
       { id: 'adm-his-1', vehicleId: 'adm-veh-1', title: 'Revisão 40 mil km', date: '05 fev 2026', details: 'Histórico completo consultável pelo admin e pelo cliente.', amount: 'R$ 1.120,00' },

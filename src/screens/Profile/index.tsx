@@ -18,15 +18,15 @@ export function ProfileScreen() {
   }, [currentUser]);
 
   const handleSave = () => {
-    updateProfile({ name, phone, email });
-    setFeedback('Dados do cliente atualizados com sucesso.');
+    const result = updateProfile({ name, phone, email });
+    setFeedback(result.message);
   };
 
   return (
     <View style={styles.card}>
       <Text style={styles.title}>Dados do cliente</Text>
       <Text style={styles.description}>
-        Nome, telefone e e-mail ficam centralizados para facilitar contato da oficina sobre aprovações e retirada.
+        Nome, telefone e e-mail ficam centralizados para facilitar contato da oficina sobre aprovações, retirada e novos serviços.
       </Text>
       <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Nome" placeholderTextColor={colors.textMuted} />
       <TextInput style={styles.input} value={phone} onChangeText={setPhone} placeholder="Telefone" placeholderTextColor={colors.textMuted} keyboardType="phone-pad" />

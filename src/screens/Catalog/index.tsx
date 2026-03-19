@@ -2,12 +2,18 @@ import { useMemo, useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SectionCard } from '../../components/SectionCard';
 import { submitQuoteRequest } from '../../services/api/mockApi';
-import { CatalogItem, Vehicle } from '../../types';
+import { CatalogItem, QuoteCategory, Vehicle } from '../../types';
 import { colors } from '../../utils/colors';
 
 type CatalogScreenProps = {
   items: CatalogItem[];
   vehicle: Vehicle;
+};
+
+const normalizeCategory = (category: string): QuoteCategory => {
+  const value = category.toLowerCase() as QuoteCategory;
+  const allowed: QuoteCategory[] = ['pneus', 'peças', 'revisão', 'troca de óleo', 'freio', 'suspensão', 'outro serviço'];
+  return allowed.includes(value) ? value : 'outro serviço';
 };
 
 export function CatalogScreen({ items, vehicle }: CatalogScreenProps) {
@@ -32,7 +38,7 @@ export function CatalogScreen({ items, vehicle }: CatalogScreenProps) {
     setSelectedItemId(item.id);
     const response = await submitQuoteRequest({
       vehicleId: vehicle.id,
-      type: item.category,
+      categories: [normalizeCategory(item.category)],
       description: `Solicito orçamento para ${item.name}. ${item.description}`,
     });
 
