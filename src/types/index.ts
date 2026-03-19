@@ -130,6 +130,13 @@ export type FeatureHighlight = {
   description: string;
 };
 
+export type AppScreenSuggestion = {
+  id: string;
+  title: string;
+  subtitle: string;
+  highlights: string[];
+};
+
 export type AdminTask = {
   id: string;
   title: string;
@@ -179,4 +186,5 @@ export type DashboardData = {
   reminderCadences: ReminderCadence[];
   adminWorkspace: AdminWorkspaceItem[];
   adminTasks: AdminTask[];
+  screenSuggestions: AppScreenSuggestion[];
 };
