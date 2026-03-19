@@ -3,7 +3,9 @@ import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-nat
 import { SectionCard } from '../../components/SectionCard';
 import { fetchDashboardData } from '../../services/api/mockApi';
 import {
+  getPickupNotifications,
   getPromotionNotifications,
+  pickupNotificationExample,
   promotionCampaignPlans,
   promotionNotificationCategories,
   promotionPushExample,
@@ -24,6 +26,10 @@ export function NotificationsScreen() {
 
   const promoNotifications = useMemo(
     () => (data ? getPromotionNotifications(data.notifications) : []),
+    [data],
+  );
+  const pickupNotifications = useMemo(
+    () => (data ? getPickupNotifications(data.notifications) : []),
     [data],
   );
 
@@ -71,6 +77,45 @@ export function NotificationsScreen() {
           <Text style={styles.exampleLabel}>Push promocional</Text>
           <Text style={styles.exampleText}>“{promotionPushExample}”</Text>
         </View>
+      </SectionCard>
+
+      <SectionCard
+        title="Notificação de veículo pronto para retirada"
+        subtitle="Quando o serviço for concluído, o cliente recebe um aviso com contexto para buscar o carro."
+      >
+        <View style={styles.pickupCard}>
+          <Text style={styles.exampleLabel}>Push transacional</Text>
+          <Text style={styles.exampleText}>“{pickupNotificationExample.message}”</Text>
+
+          <View style={styles.pickupFieldList}>
+            {pickupNotificationExample.optionalFields.map((field) => (
+              <View key={field.label} style={styles.pickupFieldCard}>
+                <Text style={styles.pickupFieldLabel}>{field.label}</Text>
+                <Text style={styles.pickupFieldValue}>{field.value}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.notificationRow}>
+          {pickupNotifications.map((notification) => (
+            <View key={notification.id} style={styles.notificationCard}>
+              <Text style={styles.notificationDate}>{notification.date}</Text>
+              <Text style={styles.notificationTitle}>{notification.title}</Text>
+              <Text style={styles.notificationMessage}>{notification.message}</Text>
+              {notification.details?.finalAmount ? (
+                <Text style={styles.notificationDetail}>Valor final: {notification.details.finalAmount}</Text>
+              ) : null}
+              {notification.details?.businessHours ? (
+                <Text style={styles.notificationDetail}>Funcionamento: {notification.details.businessHours}</Text>
+              ) : null}
+              {notification.details?.technicianNotes ? (
+                <Text style={styles.notificationDetail}>Técnico: {notification.details.technicianNotes}</Text>
+              ) : null}
+              <Text style={styles.notificationStatus}>{notification.read ? 'Lida' : 'Nova'}</Text>
+            </View>
+          ))}
+        </ScrollView>
       </SectionCard>
 
       <SectionCard title="Tecnologia sugerida" subtitle="Recomendação para entrega das notificações push no app.">
@@ -190,6 +235,37 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     fontWeight: '700',
   },
+  pickupCard: {
+    backgroundColor: colors.background,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: 18,
+    gap: 12,
+  },
+  pickupFieldList: {
+    gap: 10,
+  },
+  pickupFieldCard: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: 14,
+    gap: 4,
+  },
+  pickupFieldLabel: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
+  pickupFieldValue: {
+    color: colors.text,
+    fontSize: 13,
+    lineHeight: 19,
+    fontWeight: '600',
+  },
   techCard: {
     backgroundColor: colors.surfaceAlt,
     borderRadius: 18,
@@ -252,6 +328,12 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontSize: 13,
     lineHeight: 19,
+  },
+  notificationDetail: {
+    color: colors.text,
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: '600',
   },
   notificationStatus: {
     color: colors.success,

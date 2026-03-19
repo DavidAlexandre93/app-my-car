@@ -12,6 +12,35 @@ export type PushChannelRecommendation = {
   useCases: string[];
 };
 
+export type PickupNotificationExample = {
+  title: string;
+  message: string;
+  optionalFields: {
+    label: string;
+    value: string;
+  }[];
+};
+
+export const pickupNotificationExample: PickupNotificationExample = {
+  title: 'Veículo pronto para retirada',
+  message: 'Seu veículo já está pronto para retirada na Impacto Prime: Taboão da Serra.',
+  optionalFields: [
+    { label: 'Valor final', value: 'R$ 1.280,00' },
+    {
+      label: 'Horário de funcionamento',
+      value: 'Segunda a sexta, das 8h às 18h • Sábado, das 8h às 12h',
+    },
+    {
+      label: 'Observações do técnico',
+      value:
+        'Alinhamento concluído e pressão dos pneus revisada. Recomendado retorno em 5.000 km para inspeção preventiva.',
+    },
+  ],
+};
+
+export const getPickupNotifications = (notifications: AppNotification[]) =>
+  notifications.filter((notification) => notification.type === 'pickup');
+
 export type PromotionCampaignPlan = {
   id: string;
   title: string;
