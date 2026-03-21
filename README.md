@@ -715,22 +715,28 @@ Para seguir exatamente a stack pedida, a próxima etapa de implementação deve 
 
 Para evitar o erro exibido no Expo/EAS (`Google Service Account Keys cannot be set up in --non-interactive mode`), o fluxo do projeto ficou separado assim:
 
-* `preview`: build interna para testes/distribuição rápida;
-* `production`: build de produção com versão remota;
-* `submit.production.android.track = internal`: quando houver auto-submit, o envio usa a trilha interna da Play Store, compatível com pipelines não interativos.
+* `expoGo`: build interna para testes rápidos no contexto do Expo Go;
+* `preview`: build interna para distribuição rápida sem publicar na Play Store;
+* `production`: build de produção com versão remota.
 
 ### Importante para o Android
 
-Antes de usar **auto-submit** no EAS, ainda é obrigatório cadastrar uma **Google Service Account Key** no projeto Expo/EAS, porque esse segredo não pode ser criado automaticamente em modo não interativo.
+O erro do print acontece quando o pipeline tenta fazer **auto-submit** para a Play Store. Esse passo não é necessário para testar no **Expo Go** e falha em modo não interativo sem uma **Google Service Account Key** já cadastrada no projeto Expo/EAS.
 
-Passos recomendados:
+Se você quiser publicar na Play Store depois, siga estes passos antes de reativar o auto-submit:
 
 1. Execute `eas credentials --platform android`;
-2. Escolha o perfil `production`;
+2. Configure as credenciais do app Android;
 3. Faça upload do JSON da conta de serviço do Google Play;
 4. Depois rode o build/submissão novamente.
 
-Se a intenção for apenas testar no **Expo Go**, prefira `eas build --platform android --profile preview` (ou `npx expo start`) em vez de um build de produção com auto-submit para a Play Store.
+Se a intenção for apenas testar no **Expo Go**, use um dos comandos abaixo em vez de um build de produção com auto-submit para a Play Store:
+
+```bash
+npm run build:android:expo-go
+npm run build:android:preview
+npx expo start
+```
 
 ## Scripts úteis
 
