@@ -738,6 +738,39 @@ npm run build:android:preview
 npx expo start
 ```
 
+### Importante para o iOS
+
+No iOS, o erro mais comum em build não interativo no EAS é este:
+
+```text
+Distribution Certificate is not validated for non-interactive builds.
+Failed to set up credentials.
+Credentials are not set up. Run this command again in interactive mode.
+```
+
+Isso significa que o problema principal **não é o Expo Go**. O warning do Expo Go aparece no log, mas o build falha porque as **credenciais de assinatura do iOS** ainda não estão válidas para rodar em modo não interativo no EAS.
+
+Antes de disparar o build de produção do iOS, execute localmente de forma interativa:
+
+```bash
+npx eas credentials --platform ios
+```
+
+Depois:
+
+1. valide ou recrie o **Distribution Certificate**;
+2. confirme ou regenere o **Provisioning Profile**;
+3. verifique se a conta Apple está corretamente conectada ao projeto Expo/EAS;
+4. rode o build novamente.
+
+Se a intenção for apenas testar sem publicação, prefira:
+
+```bash
+npm run build:ios:preview
+```
+
+Além disso, o projeto agora declara `ios.infoPlist.ITSAppUsesNonExemptEncryption=false` no `app.json`, eliminando o aviso sobre export compliance quando o app não usa criptografia fora das isenções padrão da Apple.
+
 ## Scripts úteis
 
 ```bash
@@ -745,6 +778,8 @@ npm start
 npm run android
 npm run ios
 npm run web
+npm run build:ios:preview
+npm run build:ios:production
 ```
 
 > Os scripts podem variar conforme a configuração adotada no projeto.

@@ -21,7 +21,10 @@
       }
     },
     "ios": {
-      "bundleIdentifier": "com.impactoprime.app"
+      "bundleIdentifier": "com.impactoprime.app",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.impactoprime.app"
