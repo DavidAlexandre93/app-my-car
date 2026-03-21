@@ -26,5 +26,11 @@
         "APP_ENV": "production"
       }
     }
+  },
+  "submit": {
+    "production": {
+      "android": {},
+      "ios": {}
+    }
   }
 }
