@@ -29,5 +29,13 @@
     "@babel/core": "^7.25.2",
     "@types/react": "~19.0.10",
     "typescript": "~5.8.3"
+  },
+  "expo": {
+    "install": {
+      "exclude": [
+        "react-native",
+        "react-native-safe-area-context"
+      ]
+    }
   }
 }
