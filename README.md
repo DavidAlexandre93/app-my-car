@@ -756,7 +756,7 @@ Isso significa que o problema principal **não é o Expo Go**. O warning do Expo
 Antes de disparar o build de produção do iOS, execute localmente de forma interativa:
 
 ```bash
-npx eas credentials --platform ios
+npm run credentials:ios
 ```
 
 Depois:
@@ -766,11 +766,26 @@ Depois:
 3. verifique se a conta Apple está corretamente conectada ao projeto Expo/EAS;
 4. rode o build novamente.
 
+Fluxo recomendado:
+
+```bash
+# 1) preparar/validar credenciais Apple no Expo/EAS
+npm run credentials:ios
+
+# 2) gerar o build sem submissão automática
+npm run build:ios:production
+
+# 3) somente depois de confirmar que o build funcionou, usar auto-submit
+npm run build:ios:submit
+```
+
 Se a intenção for apenas testar sem publicação, prefira:
 
 ```bash
 npm run build:ios:preview
 ```
+
+> `npm run build:ios:submit` ainda depende das mesmas credenciais iOS já estarem configuradas e válidas para uso não interativo.
 
 Além disso, o projeto agora declara `ios.infoPlist.ITSAppUsesNonExemptEncryption=false` no `app.json`, eliminando o aviso sobre export compliance quando o app não usa criptografia fora das isenções padrão da Apple.
 
@@ -783,6 +798,9 @@ npm run ios
 npm run web
 npm run build:ios:preview
 npm run build:ios:production
+npm run build:ios:submit
+npm run credentials:ios
+npm run credentials:android
 ```
 
 > Os scripts podem variar conforme a configuração adotada no projeto.
