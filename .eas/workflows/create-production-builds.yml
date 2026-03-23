@@ -1,11 +1,15 @@
-name: Create Production Builds
+name: Create Release Builds
 
 jobs:
   build_android:
+    name: Build Android Preview
     type: build
     params:
       platform: android
+      profile: preview
   build_ios:
+    name: Build iOS Production
     type: build
     params:
       platform: ios
+      profile: production

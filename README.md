@@ -723,14 +723,17 @@ Para evitar o erro exibido no Expo/EAS (`Google Service Account Keys cannot be s
 
 O erro do print acontece quando o pipeline tenta fazer **auto-submit** para a Play Store. Esse passo não é necessário para testar no **Expo Go** e falha em modo não interativo sem uma **Google Service Account Key** já cadastrada no projeto Expo/EAS.
 
+Por isso, o workflow automatizado do repositório agora gera **Android preview builds** e mantém **iOS production builds**. Assim o Android continua validando o app no CI sem tentar publicar na Play Store antes da configuração das credenciais de publicação.
+
 Se você quiser publicar na Play Store depois, siga estes passos antes de reativar o auto-submit:
 
 1. Execute `eas credentials --platform android`;
 2. Configure as credenciais do app Android;
 3. Faça upload do JSON da conta de serviço do Google Play;
-4. Depois rode o build/submissão novamente.
+4. Rode manualmente `npm run build:android:production`;
+5. Depois execute a submissão para a Play Store com as credenciais já configuradas.
 
-Se a intenção for apenas testar no **Expo Go**, use um dos comandos abaixo em vez de um build de produção com auto-submit para a Play Store:
+Se a intenção for apenas testar no **Expo Go** ou validar o Android no pipeline, use um dos comandos abaixo:
 
 ```bash
 npm run build:android:expo-go
