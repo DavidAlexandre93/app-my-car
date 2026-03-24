@@ -730,14 +730,17 @@ Se você quiser publicar na Play Store depois, siga estes passos antes de reativ
 1. Execute `eas credentials --platform android`;
 2. Configure as credenciais do app Android;
 3. Faça upload do JSON da conta de serviço do Google Play;
-4. Rode manualmente `npm run build:android:production`;
-5. Depois execute a submissão para a Play Store com as credenciais já configuradas.
+4. Gere o artefato com `npm run build:android:production`;
+5. Faça a submissão separadamente com `npm run submit:android:production`.
+
+> Em CI não interativo, evite `--auto-submit-with-profile production` no Android enquanto a Service Account não estiver previamente configurada no Expo/EAS.
 
 Se a intenção for apenas testar no **Expo Go** ou validar o Android no pipeline, use um dos comandos abaixo:
 
 ```bash
 npm run build:android:expo-go
 npm run build:android:preview
+npm run build:android:production:ci
 npx expo start
 ```
 
@@ -799,6 +802,8 @@ npm run web
 npm run build:ios:preview
 npm run build:ios:production
 npm run build:ios:submit
+npm run build:android:production:ci
+npm run submit:android:production
 npm run credentials:ios
 npm run credentials:android
 ```
