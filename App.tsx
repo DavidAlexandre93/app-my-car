@@ -17,6 +17,7 @@ import { useAuthStore } from './src/store';
 import { colors } from './src/utils/colors';
 import { useDashboardData } from './src/hooks/useDashboardData';
 import { AppStackParamList, AuthStackParamList, RootTabParamList, routeLabels } from './src/navigation';
+import { runtimeConfig, isNonProductionEnvironment } from './src/config/runtimeConfig';
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const AppTabs = createBottomTabNavigator<RootTabParamList>();
@@ -103,7 +104,9 @@ function AppShell() {
             name="MainTabs"
             component={AppTabsNavigator}
             options={{
-              headerTitle: 'Impacto Prime',
+              headerTitle: isNonProductionEnvironment
+                ? `Impacto Prime (${runtimeConfig.appEnv.toUpperCase()})`
+                : 'Impacto Prime',
               headerRight: () => (
                 <Pressable onPress={logout} style={styles.logoutButton}>
                   <Text style={styles.logoutButtonText}>Sair</Text>
