@@ -694,6 +694,29 @@ Depois, você pode abrir em:
 
 O projeto já está vinculado ao EAS com o `projectId` `c15bbf4a-6423-4579-b407-ab4020da5bfd` no `app.json`, então você não precisa rodar novamente o `eas init` para conectar este app ao painel do Expo.
 
+Para rodar no **Expo Go**, o `app.json` pode ficar com o mínimo abaixo (além dos blocos `ios` e `android` já usados neste projeto):
+
+* `name`
+* `slug`
+* `scheme`
+* `version`
+
+Exemplo:
+
+```json
+{
+  "expo": {
+    "name": "MeuApp",
+    "slug": "meu-app",
+    "scheme": "meuapp",
+    "version": "1.0.0",
+    "orientation": "portrait"
+  }
+}
+```
+
+> Se o app depender de código nativo customizado ou plugins nativos fora do Expo Go, use **development build** (`developmentClient`) em vez de Expo Go.
+
 Se quiser publicar builds depois, use por exemplo:
 
 ```bash
@@ -715,15 +738,16 @@ Para seguir exatamente a stack pedida, a próxima etapa de implementação deve 
 
 Para evitar o erro exibido no Expo/EAS (`Google Service Account Keys cannot be set up in --non-interactive mode`), o fluxo do projeto ficou separado assim:
 
-* `expoGo`: build interna para testes rápidos no contexto do Expo Go;
+* `development`: build interna com `developmentClient` para recursos nativos não suportados no Expo Go;
 * `preview`: build interna para distribuição rápida sem publicar na Play Store;
-* `production`: build de produção com versão remota.
+* `production`: build de produção com versão remota;
+* `productionNoSubmit`: build de produção sem auto-submit (ideal para CI não interativo).
 
 ### Importante para o Android
 
 O erro do print acontece quando o pipeline tenta fazer **auto-submit** para a Play Store. Esse passo não é necessário para testar no **Expo Go** e falha em modo não interativo sem uma **Google Service Account Key** já cadastrada no projeto Expo/EAS.
 
-Por isso, o workflow automatizado do repositório agora gera **Android preview builds** e mantém **iOS production builds**. Assim o Android continua validando o app no CI sem tentar publicar na Play Store antes da configuração das credenciais de publicação.
+Por isso, o workflow automatizado do repositório agora gera **Android production builds sem submit automático** e mantém **iOS production builds**. Assim o Android continua validando o app no CI sem tentar publicar na Play Store antes da configuração das credenciais de publicação.
 
 Se você quiser publicar na Play Store depois, siga estes passos antes de reativar o auto-submit:
 
@@ -738,7 +762,8 @@ Se você quiser publicar na Play Store depois, siga estes passos antes de reativ
 Se a intenção for apenas testar no **Expo Go** ou validar o Android no pipeline, use um dos comandos abaixo:
 
 ```bash
-npm run build:android:expo-go
+npm run start:expo-go
+npm run build:android:development
 npm run build:android:preview
 npm run build:android:production:ci
 npx expo start
