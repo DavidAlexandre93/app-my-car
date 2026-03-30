@@ -8,12 +8,6 @@
       "developmentClient": true,
       "distribution": "internal"
     },
-    "expoGo": {
-      "distribution": "internal",
-      "env": {
-        "APP_ENV": "preview"
-      }
-    },
     "preview": {
       "distribution": "internal",
       "env": {
@@ -21,6 +15,12 @@
       }
     },
     "production": {
+      "autoIncrement": true,
+      "env": {
+        "APP_ENV": "production"
+      }
+    },
+    "productionNoSubmit": {
       "autoIncrement": true,
       "env": {
         "APP_ENV": "production"
