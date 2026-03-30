@@ -6,6 +6,7 @@ import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { LoginScreen } from './src/screens/Login';
 import { RegisterScreen } from './src/screens/Register';
 import { HomeScreen } from './src/screens/Home';
+import { EASBuildScreen } from './src/screens/EASBuild';
 import { HistoryScreen } from './src/screens/History';
 import { QuoteRequestScreen } from './src/screens/QuoteRequest';
 import { VehiclesScreen } from './src/screens/Vehicles';
@@ -73,6 +74,7 @@ function AppTabsNavigator() {
       }}
     >
       <AppTabs.Screen name="Home" component={HomeScreen} options={{ title: routeLabels.Home }} />
+      <AppTabs.Screen name="EASBuild" component={EASBuildScreen} options={{ title: routeLabels.EASBuild }} />
       <AppTabs.Screen name="Vehicles" component={VehiclesScreen} options={{ title: routeLabels.Vehicles }} />
       <AppTabs.Screen name="ServiceStatus" component={ServiceStatusScreen} options={{ title: routeLabels.ServiceStatus }} />
       <AppTabs.Screen name="Catalog" component={CatalogRouteScreen} options={{ title: routeLabels.Catalog }} />

@@ -2,6 +2,7 @@ export const appRoutes = [
   'Login',
   'Register',
   'Home',
+  'EASBuild',
   'Vehicles',
   'ServiceStatus',
   'Catalog',
@@ -20,6 +21,7 @@ export type AuthStackParamList = {
 
 export type RootTabParamList = {
   Home: undefined;
+  EASBuild: undefined;
   Vehicles: undefined;
   ServiceStatus: undefined;
   Catalog: undefined;
@@ -37,6 +39,7 @@ export const routeLabels: Record<AppRoute, string> = {
   Login: 'Login',
   Register: 'Cadastro',
   Home: 'Home',
+  EASBuild: 'EAS Build',
   Vehicles: 'Meus Veículos',
   ServiceStatus: 'Acompanhar Serviço',
   Catalog: 'Loja / Catálogo',
