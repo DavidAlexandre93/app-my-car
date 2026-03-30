@@ -33,14 +33,22 @@ const initialUser: AuthUser = {
 
 const normalizePlate = (plate: string) => plate.toUpperCase().replace(/[^A-Z0-9]/g, '');
 
-const createVehicleFromPayload = (payload: VehiclePayload): Vehicle | null => {
+const isVehiclePayloadValid = (payload: VehiclePayload) => {
   const normalizedPlate = normalizePlate(payload.plate);
   const year = Number(payload.year);
   const mileage = Number(payload.mileage);
 
-  if (!normalizedPlate || !payload.brand.trim() || !payload.model.trim() || !year || Number.isNaN(mileage)) {
+  return Boolean(normalizedPlate && payload.brand.trim() && payload.model.trim() && year && !Number.isNaN(mileage));
+};
+
+const createVehicleFromPayload = (payload: VehiclePayload): Vehicle | null => {
+  if (!isVehiclePayloadValid(payload)) {
     return null;
   }
+
+  const normalizedPlate = normalizePlate(payload.plate);
+  const year = Number(payload.year);
+  const mileage = Number(payload.mileage);
 
   return {
     id: `vehicle-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
@@ -64,14 +72,11 @@ export const useAuthStore = create<AuthStore>((set) => ({
       return { success: false, message: 'Preencha nome, telefone, e-mail e senha para criar sua conta.' };
     }
 
-    if (payload.vehicle) {
-      const vehicle = createVehicleFromPayload(payload.vehicle);
-      if (!vehicle) {
-        return {
-          success: false,
-          message: 'Para cadastrar o primeiro veículo, informe placa, marca, modelo, ano e quilometragem válidos.',
-        };
-      }
+    if (payload.vehicle && !isVehiclePayloadValid(payload.vehicle)) {
+      return {
+        success: false,
+        message: 'Para cadastrar o primeiro veículo, informe placa, marca, modelo, ano e quilometragem válidos.',
+      };
     }
 
     let created = false;
